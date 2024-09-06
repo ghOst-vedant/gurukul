@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Teacher {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  role       String   @default("TEACHER")
+  name       String
+  email      String
+  password   String
+  classrooms String[] @db.ObjectId
+  forums     String[] @db.ObjectId
+  courses    String[] @db.ObjectId
+  posts      String[] @db.ObjectId
+}
+
+model Student {
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  role             String     @default("STUDENT")
+  name             String
+  email            String
+  password         String
+  classrooms       String[]   @db.ObjectId
+  forums           String[]   @db.ObjectId
+  courses          String[]   @db.ObjectId
+  posts            String[]   @db.ObjectId
+  pomodoroSessions Pomodoro[]
+  tests            String[]   @db.ObjectId
+}
+
+model Classroom {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  teacherId String   @db.ObjectId
+  notes     String[]
+  forums    String[] @db.ObjectId
+  students  String[] @db.ObjectId
+}
+
+model Forum {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  chats     String[]
+  teacherId String   @db.ObjectId
+  studentId String[] @db.ObjectId
+}
+
+model Chat {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  forumId     String? @db.ObjectId
+  classroomId String? @db.ObjectId
+  uId         String  @db.ObjectId
+  message     String
+}
+
+model Course {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  type          String
+  teacherId     String   @db.ObjectId
+  students      String[] @db.ObjectId
+  courseContent String[]
+  curriculum    String[]
+}
+
+model Test {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  descriptiveQuestions String[]
+  date                 DateTime
+  courseId             String   @db.ObjectId
+  result               String[] @db.ObjectId
+  Student              String[] @db.ObjectId
+}
+
+model Post {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  description String?
+  media       String?
+  teacherId   String? @db.ObjectId
+  studentId   String? @db.ObjectId
+}
+
+model Pomodoro {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  studentId String   @db.ObjectId
+  time      DateTime
+  Student   Student  @relation(fields: [studentId], references: [id])
+}
