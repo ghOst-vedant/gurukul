@@ -67,7 +67,7 @@ model Course {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   type          String
   teacherId     String   @db.ObjectId
-  students      String[] @db.ObjectId
+  students      String[] @default([]) @db.ObjectId
   courseContent String[]
   curriculum    String[]
 }
