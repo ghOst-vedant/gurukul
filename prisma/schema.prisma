@@ -40,11 +40,12 @@ model Student {
 }
 
 model Classroom {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  teacherId String   @db.ObjectId
-  notes     String[]
-  forums    String[] @db.ObjectId
-  students  String[] @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  ClassroomName String
+  teacherId     String   @db.ObjectId
+  notes         String[] @default([])
+  forums        String[] @default([]) @db.ObjectId
+  students      String[] @default([]) @db.ObjectId
 }
 
 model Forum {
