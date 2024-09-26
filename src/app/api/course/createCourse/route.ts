@@ -7,22 +7,6 @@ import { extractAndVerifyToken, verifyToken } from "@/lib/token";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    // const token = req.headers.get("Authorization")?.split(" ")[1];
-    // if (!token) {
-    //   return NextResponse.json(
-    //     { message: "Missing authorization token." },
-    //     { status: 401 }
-    //   );
-    // }
-    // let decode;
-    // try {
-    //   decode = verifyToken(token) as { role: string; id: string };
-    // } catch (err) {
-    //   return NextResponse.json(
-    //     { message: "Invalid or expired token." },
-    //     { status: 401 }
-    //   );
-    // }
     let decode;
     try {
       decode = extractAndVerifyToken(req) as { role: string; id: string };

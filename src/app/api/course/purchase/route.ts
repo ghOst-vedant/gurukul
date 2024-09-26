@@ -18,6 +18,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
     const studentInfo: purchaseInfo = await req.json();
+    // if payment got successful
     const bought = true;
     if (!bought) {
       return NextResponse.json(
@@ -27,16 +28,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 400 }
       );
     }
+    // update in the course document
     await db.course.update({
       where: { id: studentInfo.courseId },
       data: {
         students: {
-          push: studentInfo.studentId,
+          push: decode.id,
         },
       },
     });
+    // update in student document
     await db.student.update({
-      where: { id: studentInfo.studentId },
+      where: { id: decode.id },
       data: {
         courses: {
           push: studentInfo.courseId,
