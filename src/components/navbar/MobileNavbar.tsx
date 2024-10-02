@@ -47,10 +47,10 @@ export function MobileNavbar() {
   ];
   return (
     <>
-      <nav className="flex justify-between py-3 px-4 shadow-md">
+      <nav className="flex justify-between py-3 px-4 bg-white shadow-md fixed w-full">
         <Image
           src={gurukul_book_logo}
-          className="h-12 w-fit"
+          className="h-10 w-fit"
           alt="Brand logo"
         />
         <div className="flex gap-4 items-center justify-center">
