@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import {Inter} from "@next/font/google"
 import "./globals.css";
 import DesktopNavbar from "@/components/navbar/DesktopNavbar";
 import { MobileNavbar } from "@/components/navbar/MobileNavbar";
 import Providers from "./store/StoreProvider";
+
+const inter = Inter({subsets:["latin"]});
 
 export const metadata: Metadata = {
   title: "Gurukul - Ai Powered LMS",
@@ -16,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={inter.className}>
         <span className={`lg:hidden`}><MobileNavbar /></span>
         <span className={`hidden lg:block`}><DesktopNavbar /></span>
         <Providers>{children}</Providers>
