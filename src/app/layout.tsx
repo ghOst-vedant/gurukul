@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import DesktopNavbar from "@/components/navbar/DesktopNavbar";
 import { MobileNavbar } from "@/components/navbar/MobileNavbar";
+import Providers from "./store/StoreProvider";
 
 export const metadata: Metadata = {
   title: "Gurukul - Ai Powered LMS",
@@ -16,9 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <DesktopNavbar />
-        <MobileNavbar />
-        {children}
+        <span className={`lg:hidden`}><MobileNavbar /></span>
+        <span className={`hidden lg:block`}><DesktopNavbar /></span>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
