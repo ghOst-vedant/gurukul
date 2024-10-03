@@ -7,6 +7,7 @@ import { CourseCard } from "@/components/cards/CourseCard";
 import { TestimonialCard } from "@/components/cards/TestimonialCard";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
+import home_ad_img from "@/assets/images/home_ad_img.png";
 
 const Home = () => {
   const learnersData = [
@@ -97,7 +98,7 @@ const Home = () => {
       </div>
 
       {/* Course Section */}
-      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8  ">
+      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8 mt-4">
         <div className="flex flex-col gap-4 px-4 sm:items-center">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-2">
             Your next step to
@@ -146,6 +147,34 @@ const Home = () => {
             <CourseCard />
           </span>
         </div>
+      </div>
+
+      {/* Ad Section */}
+      <div className="bg-light_green mt-6 flex flex-col gap-6 shadow-[12px_0px_12px_0px_rgba(0,0,0,0.8)] lg:flex-row lg:pt-10 lg:px-36 lg:items-center lg:justify-center lg:gap-0 lg:mt-10">
+        <div className="px-4 sm:px-10 pt-10 sm:py-14 lg:pb-24 flex flex-col gap-4 sm:gap-6 sm:items-center lg:items-start lg:px-0">
+          <h3 className="text-2xl sm:text-3xl lg:text-4xl sm:w-[80%] lg:w-full sm:text-center text-black font-semibold lg:leading-[48px] lg:text-start">
+            Advance your personal and professional aspirations with{" "}
+            <span className="text-3xl sm:text-4xl lg:text-5xl text-blue">
+              Gurukul
+            </span>
+          </h3>
+          <div className="flex mt-3 gap-2">
+            <button className="text-md hover:text-white hover:bg-blue rounded-full px-5 py-2 border-2 border-blue font-medium sm:text-xl sm:px-7 sm:py-3">
+              Join for Free
+            </button>
+            <Link
+              href="/categories"
+              className="text-md text-white bg-blue rounded-full px-5 py-2 hover:border-2 hover:border-blue hover:bg-transparent hover:text-black font-medium sm:text-xl sm:px-7 sm:py-3"
+            >
+              Browse Courses
+            </Link>
+          </div>
+        </div>
+        <Image
+          src={home_ad_img}
+          alt="ad image"
+          className="w-[80%] sm:w-[60%] self-end sm:hidden lg:block lg:w-[35%]"
+        />
       </div>
 
       {/* Testimonial Section */}
