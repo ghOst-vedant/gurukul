@@ -177,6 +177,22 @@ const Home = () => {
         />
       </div>
 
+      {/* Top Course Section */}
+      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8 mt-4 lg:mt-10">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-4">
+          <span className="text-blue">Kickstart Your Learning</span> with Top
+          Courses
+        </h2>
+        <div className="mt-5 overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center px-4 sm:px-6">
+          <span className="flex gap-5">
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+          </span>
+        </div>
+      </div>
+
       {/* Testimonial Section */}
       <div className="flex items-center gap-5 p-4">
         {/* <TestimonialCard />
