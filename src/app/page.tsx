@@ -1,12 +1,13 @@
 import Image from "next/image";
-import hero_img from "../assets/images/hero_img.png";
-import search from "../assets/icons/search.svg";
+import Link from "next/link";
 import { LearnerDataCard } from "@/components/cards/learnerDataCard";
-import { FiSearch } from "react-icons/fi";
 import { CourseCard } from "@/components/cards/CourseCard";
 import { TestimonialCard } from "@/components/cards/TestimonialCard";
+
+import { FiSearch } from "react-icons/fi";
 import { FaArrowRight } from "react-icons/fa";
-import Link from "next/link";
+
+import hero_img from "../assets/images/hero_img.png";
 import home_ad_img from "@/assets/images/home_ad_img.png";
 
 const Home = () => {
@@ -140,7 +141,7 @@ const Home = () => {
           </div>
         </div>
         <div className="mt-5 overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center px-4 sm:px-6">
-          <span className="flex gap-5">
+          <span className="flex gap-5 py-2">
             <CourseCard />
             <CourseCard />
             <CourseCard />
@@ -150,7 +151,7 @@ const Home = () => {
       </div>
 
       {/* Ad Section */}
-      <div className="bg-light_green mt-6 flex flex-col gap-6 shadow-[12px_0px_12px_0px_rgba(0,0,0,0.8)] lg:flex-row lg:pt-10 lg:px-36 lg:items-center lg:justify-center lg:gap-0 lg:mt-10">
+      <div className="bg-light_green mt-6 flex flex-col gap-6 shadow-[12px_0px_12px_0px_rgba(0,0,0,0.8)] sm:shadow-[12px_0px_12px_0px_rgba(0,0,0,0.4)] lg:flex-row lg:pt-10 lg:px-36 lg:items-center lg:justify-center lg:gap-0 lg:mt-10">
         <div className="px-4 sm:px-10 pt-10 sm:py-14 lg:pb-24 flex flex-col gap-4 sm:gap-6 sm:items-center lg:items-start lg:px-0">
           <h3 className="text-2xl sm:text-3xl lg:text-4xl sm:w-[80%] lg:w-full sm:text-center text-black font-semibold lg:leading-[48px] lg:text-start">
             Advance your personal and professional aspirations with{" "}
@@ -164,7 +165,7 @@ const Home = () => {
             </button>
             <Link
               href="/categories"
-              className="text-md text-white bg-blue rounded-full px-5 py-2 hover:border-2 hover:border-blue hover:bg-transparent hover:text-black font-medium sm:text-xl sm:px-7 sm:py-3"
+              className="text-md text-white bg-blue rounded-full px-5 py-2 border-2 border-blue hover:bg-transparent hover:text-black font-medium sm:text-xl sm:px-7 sm:py-3"
             >
               Browse Courses
             </Link>
@@ -184,7 +185,7 @@ const Home = () => {
           Courses
         </h2>
         <div className="mt-5 overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center px-4 sm:px-6">
-          <span className="flex gap-5">
+          <span className="flex gap-5 py-2">
             <CourseCard />
             <CourseCard />
             <CourseCard />
@@ -194,10 +195,33 @@ const Home = () => {
       </div>
 
       {/* Testimonial Section */}
-      <div className="flex items-center gap-5 p-4">
-        {/* <TestimonialCard />
-        <TestimonialCard /> */}
+      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8 mt-4 lg:mt-10">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-4">
+          <span className="text-blue">Listen to experiences</span> shared by
+          others
+        </h2>
+        <span className="flex flex-col gap-1 mt-5">
+          <div className="overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center px-4 sm:px-6">
+            <span className="flex gap-5 py-2">
+              <TestimonialCard />
+              <TestimonialCard />
+              <TestimonialCard />
+              <TestimonialCard />
+            </span>
+          </div>
+          <div className="overflow-x-scroll lg:overflow-x-hidden lg:justify-center px-4 sm:px-6 sm:hidden">
+            <span className="flex gap-5 py-2">
+              <TestimonialCard />
+              <TestimonialCard />
+              <TestimonialCard />
+              <TestimonialCard />
+            </span>
+          </div>
+        </span>
       </div>
+
+      {/* Footer */}
+      <div></div>
     </div>
   );
 };
