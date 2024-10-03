@@ -1,7 +1,10 @@
 import Image from "next/image";
 import hero_img from "../assets/images/hero_img.png";
+import search from "../assets/icons/search.svg";
 import { LearnerDataCard } from "@/components/cards/learnerDataCard";
+import { FiSearch } from "react-icons/fi";
 import { CourseCard } from "@/components/cards/CourseCard";
+import { TestimonialCard } from "@/components/cards/TestimonialCard";
 
 const Home = () => {
   const learnersData = [
@@ -92,10 +95,52 @@ const Home = () => {
       </div>
 
       {/* Course Section */}
+      <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4 px-4">
+          <h2 className="text-2xl font-semibold text-center text-black px-2">
+            Your next step to
+            <span className="text-blue"> Get future ready</span>
+          </h2>
+          <p className="text-center">
+            From foundational skills to advanced subjects, our platform supports
+            your holistic educational growth
+          </p>
+        </div>
+        <div className="flex justify-between items-center mt-2 gap-3 pl-4">
+          <button className="rounded-full p-3 bg-blue lg:hidden">
+            <FiSearch size={20} color="white" />
+          </button>
+          <div className="overflow-x-scroll">
+            <span className="flex gap-3">
+              <button className="min-w-fit border-blue rounded-full px-5 py-2 border-[2px] sm:text-xl sm:px-7 sm:py-3">
+                All
+              </button>
+              {learnersData.map((data, index) => (
+                <button
+                  className="min-w-fit hover:border-blue rounded-full px-5 py-2 border-[2px] border-black/40 sm:text-xl sm:px-7 sm:py-3"
+                  key={index}
+                >
+                  {data.domain}
+                </button>
+              ))}
+            </span>
+          </div>
+        </div>
+        <div className="mt-5 overflow-x-scroll px-4">
+          <span className="flex gap-5">
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+          </span>
+        </div>
+      </div>
+
+      {/* Testimonial Section */}
       <div className="flex items-center gap-5 p-4">
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
+        {/* <TestimonialCard />
+        <TestimonialCard /> */}
       </div>
     </div>
   );
