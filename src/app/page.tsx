@@ -5,6 +5,8 @@ import { LearnerDataCard } from "@/components/cards/learnerDataCard";
 import { FiSearch } from "react-icons/fi";
 import { CourseCard } from "@/components/cards/CourseCard";
 import { TestimonialCard } from "@/components/cards/TestimonialCard";
+import { FaArrowRight } from "react-icons/fa";
+import Link from "next/link";
 
 const Home = () => {
   const learnersData = [
@@ -95,40 +97,49 @@ const Home = () => {
       </div>
 
       {/* Course Section */}
-      <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-4 px-4">
-          <h2 className="text-2xl font-semibold text-center text-black px-2">
+      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8  ">
+        <div className="flex flex-col gap-4 px-4 sm:items-center">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-2">
             Your next step to
             <span className="text-blue"> Get future ready</span>
           </h2>
-          <p className="text-center">
+          <p className="text-center sm:text-lg sm:w-[70vw]">
             From foundational skills to advanced subjects, our platform supports
             your holistic educational growth
           </p>
         </div>
-        <div className="flex justify-between items-center mt-2 gap-3 pl-4">
+        <div className="flex justify-between items-center mt-2 gap-4 pl-4 sm:pl-6">
           <button className="rounded-full p-3 bg-blue lg:hidden">
-            <FiSearch size={20} color="white" />
+            <FiSearch color="white" className="text-xl sm:text-3xl" />
           </button>
-          <div className="overflow-x-scroll">
+          <input
+            type="text"
+            name="desktopNavSearch"
+            id="desktopNavSearch"
+            placeholder="Search course..."
+            className="border-black/60 rounded-full border-2 font-medium text-lg px-5 py-[6px] focus:outline-none text-black/60 w-[25vw] hidden lg:block"
+          />
+          <div className="overflow-x-scroll lg:overflow-x-hidden">
             <span className="flex gap-3">
-              <button className="min-w-fit border-blue rounded-full px-5 py-2 border-[2px] sm:text-xl sm:px-7 sm:py-3">
-                All
-              </button>
-              {learnersData.map((data, index) => (
+              {learnersData.slice(0, 4).map((data, index) => (
                 <button
-                  className="min-w-fit hover:border-blue rounded-full px-5 py-2 border-[2px] border-black/40 sm:text-xl sm:px-7 sm:py-3"
+                  className="min-w-fit hover:border-blue rounded-full px-5 py-2 border-[2px] border-black/40 sm:text-lg lg:text-base sm:px-7 sm:py-3 lg:px-5 lg:py-2"
                   key={index}
                 >
                   {data.domain}
                 </button>
               ))}
+              <Link
+                href="/categories"
+                className="flex items-center justify-center gap-2 min-w-fit border-blue font-semibold text-blue rounded-full px-5 py-2 border-[2px] sm:text-lg lg:text-base sm:px-7 sm:py-3 lg:px-5 lg:py-2 hover:text-white hover:bg-blue"
+              >
+                <span>View all</span> <FaArrowRight />
+              </Link>
             </span>
           </div>
         </div>
-        <div className="mt-5 overflow-x-scroll px-4">
+        <div className="mt-5 overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center px-4 sm:px-6">
           <span className="flex gap-5">
-            <CourseCard />
             <CourseCard />
             <CourseCard />
             <CourseCard />
