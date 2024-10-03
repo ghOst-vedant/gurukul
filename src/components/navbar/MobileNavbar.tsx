@@ -47,7 +47,7 @@ export function MobileNavbar() {
   ];
   return (
     <>
-      <nav className="flex justify-between py-3 px-4 bg-white shadow-md fixed w-full">
+      <nav className="flex justify-between py-3 px-4 bg-white shadow-md fixed w-full z-10">
         <Image
           src={gurukul_book_logo}
           className="h-10 w-fit"

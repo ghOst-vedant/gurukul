@@ -8,7 +8,7 @@ const DesktopNavbar = () => {
   const pathName = usePathname();
 
   return (
-    <nav className="flex justify-between py-3 px-16 shadow-md overflow-x-hidden bg-white fixed w-full">
+    <nav className="flex justify-between py-3 px-16 shadow-md overflow-x-hidden bg-white fixed w-full z-10">
       <Link href="/">
         <Image src={gurukul_logo} className="h-12 w-fit" alt="Brand logo" />
       </Link>
