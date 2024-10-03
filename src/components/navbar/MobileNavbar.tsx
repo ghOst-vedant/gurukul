@@ -5,8 +5,8 @@ import gurukul_logo from "../../../public/gurukul_logo.png";
 import menu from "@/assets/icons/menu.png";
 import close from "@/assets/icons/close.png";
 import arrow from "@/assets/icons/arrow.png";
-import search from "@/assets/icons/search.png";
 import Link from "next/link";
+import { FiSearch } from "react-icons/fi";
 import { useState } from "react";
 
 export function MobileNavbar() {
@@ -54,7 +54,7 @@ export function MobileNavbar() {
           alt="Brand logo"
         />
         <div className="flex gap-4 items-center justify-center">
-          <Image src={search} alt="search icon" className="h-8 w-fit" />
+          <FiSearch size={30} />
           <Image
             src={menu}
             className="h-7 w-fit cursor-pointer"
