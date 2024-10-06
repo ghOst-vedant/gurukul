@@ -3,12 +3,14 @@ import Link from "next/link";
 import { LearnerDataCard } from "@/components/cards/learnerDataCard";
 import { CourseCard } from "@/components/cards/CourseCard";
 import { TestimonialCard } from "@/components/cards/TestimonialCard";
+import Marquee from "@/components/ui/marquee";
 
 import { FiSearch } from "react-icons/fi";
 import { FaArrowRight } from "react-icons/fa";
 
 import hero_img from "../assets/images/hero_img.png";
 import home_ad_img from "@/assets/images/home_ad_img.png";
+import userProfile from "@/assets/images/user.png";
 
 const Home = () => {
   const learnersData = [
@@ -50,6 +52,65 @@ const Home = () => {
     },
   ];
 
+  const testimonials = [
+    {
+      name: "Theresa Webb",
+      image: userProfile,
+      role: "Web development bootcamp",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together, technology and consultant soft skills... to help drive their careers forward.",
+    },
+    {
+      name: "Md Tahir Shikalgar",
+      image: userProfile,
+      role: "UI/UX designing",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together.",
+    },
+    {
+      name: "Theresa Webb",
+      image: userProfile,
+      role: "Web development bootcamp",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together, technology and consultant soft skills... to help drive their careers forward.",
+    },
+    {
+      name: "Md Tahir Shikalgar",
+      image: userProfile,
+      role: "UI/UX designing",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together.",
+    },
+    {
+      name: "Theresa Webb",
+      image: userProfile,
+      role: "Web development bootcamp",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together, technology and consultant soft skills... to help drive their careers forward.",
+    },
+    {
+      name: "Md Tahir Shikalgar",
+      image: userProfile,
+      role: "UI/UX designing",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together.",
+    },
+    {
+      name: "Theresa Webb",
+      image: userProfile,
+      role: "Web development bootcamp",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together, technology and consultant soft skills... to help drive their careers forward.",
+    },
+    {
+      name: "Md Tahir Shikalgar",
+      image: userProfile,
+      role: "UI/UX designing",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together.",
+    },
+  ];
+
   return (
     <div className="overflow-x-hidden flex flex-col gap-16">
       {/* Hero section */}
@@ -87,13 +148,15 @@ const Home = () => {
         </p>
         <div className="overflow-x-hidden">
           <span className="flex gap-5 py-2">
-            {learnersData.map((learnerData, index) => (
-              <LearnerDataCard
-                key={index}
-                number={learnerData.number}
-                domain={learnerData.domain}
-              />
-            ))}
+            <Marquee pauseOnHover className="[--duration:20s]">
+              {learnersData.map((learnerData, index) => (
+                <LearnerDataCard
+                  key={index}
+                  number={learnerData.number}
+                  domain={learnerData.domain}
+                />
+              ))}
+            </Marquee>
           </span>
         </div>
       </div>
@@ -195,29 +258,65 @@ const Home = () => {
       </div>
 
       {/* Testimonial Section */}
-      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8 mt-4 lg:mt-10 mb-20 lg:mb-28">
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-4">
+      <div className="flex flex-col gap-5 sm:gap-8 lg:gap-8 mt-4 lg:mt-10 mb-20 lg:mb-28">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-4 sm:px-6">
           <span className="text-blue">Listen to experiences</span> shared by
           others
         </h2>
-        <span className="flex flex-col gap-1 mt-5">
-          <div className="overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center px-4 sm:px-6">
+        {/*Marquee for only mobile */}
+        <span className="flex flex-col mt-5 sm:hidden">
+          <div className="overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center">
             <span className="flex gap-5 py-2">
-              <TestimonialCard />
-              <TestimonialCard />
-              <TestimonialCard />
-              <TestimonialCard />
+              <Marquee pauseOnHover className="[--duration:10s]">
+                {testimonials
+                  .slice(0, testimonials.length / 2)
+                  .map((testimonial, index) => (
+                    <TestimonialCard
+                      key={index}
+                      name={testimonial.name}
+                      image=""
+                      role={testimonial.role}
+                      testimonial={testimonial.testimonial}
+                    />
+                  ))}
+              </Marquee>
             </span>
           </div>
-          <div className="overflow-x-scroll lg:overflow-x-hidden lg:justify-center px-4 sm:px-6 sm:hidden">
+          <div className="overflow-x-scroll lg:overflow-x-hidden lg:justify-center">
             <span className="flex gap-5 py-2">
-              <TestimonialCard />
-              <TestimonialCard />
-              <TestimonialCard />
-              <TestimonialCard />
+              <Marquee reverse pauseOnHover className="[--duration:10s]">
+                {testimonials
+                  .slice(testimonials.length / 2, testimonials.length)
+                  .map((testimonial, index) => (
+                    <TestimonialCard
+                      key={index}
+                      name={testimonial.name}
+                      image=""
+                      role={testimonial.role}
+                      testimonial={testimonial.testimonial}
+                    />
+                  ))}
+              </Marquee>
             </span>
           </div>
         </span>
+
+        {/* Marquee for tablet and desktop */}
+        <div className="overflow-x-scroll lg:overflow-x-hidden lg:justify-center hidden sm:block">
+          <span className="flex gap-5 py-2">
+            <Marquee pauseOnHover className="[--duration:20s]">
+              {testimonials.map((testimonial, index) => (
+                <TestimonialCard
+                  key={index}
+                  name={testimonial.name}
+                  image=""
+                  role={testimonial.role}
+                  testimonial={testimonial.testimonial}
+                />
+              ))}
+            </Marquee>
+          </span>
+        </div>
       </div>
     </div>
   );

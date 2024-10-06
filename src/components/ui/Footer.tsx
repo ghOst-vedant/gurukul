@@ -12,13 +12,22 @@ export function Footer() {
         <span className="flex justify-between sm:gap-16 lg:gap-32">
           <span className="flex flex-col gap-2">
             <p className="mb-2">Important Links</p>
-            <Link href="/explore" className="text-white/80 hover:text-blue">
+            <Link
+              href="/explore"
+              className="text-white/80 hover:ml-1 transition-all"
+            >
               - Explore
             </Link>
-            <Link href="/categories" className="text-white/80 hover:text-blue">
+            <Link
+              href="/categories"
+              className="text-white/80 hover:ml-1 transition-all"
+            >
               - Categories
             </Link>
-            <Link href="/contact-us" className="text-white/80 hover:text-blue">
+            <Link
+              href="/contact-us"
+              className="text-white/80 hover:ml-1 transition-all"
+            >
               - Contact us
             </Link>
           </span>
@@ -26,13 +35,13 @@ export function Footer() {
             <p className="mb-2">Legal</p>
             <Link
               href="/terms-and-conditions"
-              className="text-white/80 hover:text-blue"
+              className="text-white/80 hover:ml-1 transition-all"
             >
               - Terms & Conditions
             </Link>
             <Link
               href="/privacy-policy"
-              className="text-white/80 hover:text-blue"
+              className="text-white/80 hover:ml-1 transition-all"
             >
               - Privacy Policy
             </Link>
