@@ -195,7 +195,7 @@ const Home = () => {
       </div>
 
       {/* Testimonial Section */}
-      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8 mt-4 lg:mt-10">
+      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8 mt-4 lg:mt-10 mb-20 lg:mb-28">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-4">
           <span className="text-blue">Listen to experiences</span> shared by
           others
@@ -219,9 +219,6 @@ const Home = () => {
           </div>
         </span>
       </div>
-
-      {/* Footer */}
-      <div></div>
     </div>
   );
 };
