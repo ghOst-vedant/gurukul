@@ -18,3 +18,9 @@ export interface addToClassroom {
   classroomId: string;
   students: string[];
 }
+export interface testimonials {
+  studentId: string;
+  studentName: string;
+  rating: number;
+  review: string;
+}

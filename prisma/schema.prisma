@@ -96,3 +96,11 @@ model Pomodoro {
   time      DateTime
   Student   Student  @relation(fields: [studentId], references: [id])
 }
+
+model Testimonials {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  studentId   String @db.ObjectId
+  rating      Int
+  review      String
+  studentName String
+}
