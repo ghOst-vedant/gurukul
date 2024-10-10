@@ -1,113 +1,325 @@
 import Image from "next/image";
+import Link from "next/link";
+import { LearnerDataCard } from "@/components/cards/learnerDataCard";
+import { CourseCard } from "@/components/cards/CourseCard";
+import { TestimonialCard } from "@/components/cards/TestimonialCard";
+import Marquee from "@/components/ui/marquee";
 
-export default function Home() {
+import { FiSearch } from "react-icons/fi";
+import { FaArrowRight } from "react-icons/fa";
+
+import hero_img from "../assets/images/hero_img.png";
+import home_ad_img from "@/assets/images/home_ad_img.png";
+import userProfile from "@/assets/images/user.png";
+
+const Home = () => {
+  const learnersData = [
+    {
+      number: 1.2,
+      domain: "Web Development",
+    },
+    {
+      number: 2.2,
+      domain: "UI/UX Designing",
+    },
+    {
+      number: 3.2,
+      domain: "Cloud Computing",
+    },
+    {
+      number: 4.2,
+      domain: "Cyber Security",
+    },
+    {
+      number: 5.2,
+      domain: "Blockchain",
+    },
+    {
+      number: 6.2,
+      domain: "Machine Learning",
+    },
+    {
+      number: 7.2,
+      domain: "Artificial Intelligence",
+    },
+    {
+      number: 8.2,
+      domain: "Frontend Development",
+    },
+    {
+      number: 9.2,
+      domain: "Backend Development",
+    },
+  ];
+
+  const testimonials = [
+    {
+      name: "Theresa Webb",
+      image: userProfile,
+      role: "Web development bootcamp",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together, technology and consultant soft skills... to help drive their careers forward.",
+    },
+    {
+      name: "Md Tahir Shikalgar",
+      image: userProfile,
+      role: "UI/UX designing",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together.",
+    },
+    {
+      name: "Theresa Webb",
+      image: userProfile,
+      role: "Web development bootcamp",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together, technology and consultant soft skills... to help drive their careers forward.",
+    },
+    {
+      name: "Md Tahir Shikalgar",
+      image: userProfile,
+      role: "UI/UX designing",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together.",
+    },
+    {
+      name: "Theresa Webb",
+      image: userProfile,
+      role: "Web development bootcamp",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together, technology and consultant soft skills... to help drive their careers forward.",
+    },
+    {
+      name: "Md Tahir Shikalgar",
+      image: userProfile,
+      role: "UI/UX designing",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together.",
+    },
+    {
+      name: "Theresa Webb",
+      image: userProfile,
+      role: "Web development bootcamp",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together, technology and consultant soft skills... to help drive their careers forward.",
+    },
+    {
+      name: "Md Tahir Shikalgar",
+      image: userProfile,
+      role: "UI/UX designing",
+      testimonial:
+        "With Gurukul Business employees were able to marry the two together.",
+    },
+  ];
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
+    <div className="overflow-x-hidden flex flex-col gap-16">
+      {/* Hero section */}
+      <div className="bg-light_green pt-28 flex flex-col gap-8 sm:items-center lg:flex-row lg:justify-between lg:gap-0 lg:pt-24">
+        <span className="flex flex-col gap-3 sm:gap-5 px-5 sm:w-[70%] sm:text-center sm:items-center lg:text-left lg:items-start lg:w-[50%] lg:pl-16 lg:pr-0 lg:mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-black lg:pt-0">
+            <span className="text-blue font-bold">AI-Powered</span> Learning,
+            Tailored Just for You
+          </h1>
+          <p className="text-md sm:text-xl lg:w-[70%]">
+            Gurukul provides the tools and support to help you succeed. Start
+            your journey today and experience education like never before.
+          </p>
+          <div className="flex mt-3 gap-2">
+            <button className="text-md hover:text-white hover:bg-blue rounded-full px-5 py-2 border-2 border-blue font-medium sm:text-xl sm:px-7 sm:py-3">
+              Join for Free
+            </button>
+            <button className="text-md text-white bg-blue rounded-full px-5 py-2 hover:border-2 hover:border-blue hover:bg-transparent hover:text-black font-medium sm:text-xl sm:px-7 sm:py-3">
+              Browse Courses
+            </button>
+          </div>
+        </span>
         <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+          src={hero_img}
+          alt="hero_img"
+          className="w-full sm:w-[70%] lg:w-[50%]"
         />
       </div>
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      {/* No. of learner section */}
+      <div className="flex flex-col px-4 gap-6 lg:gap-10">
+        <p className="text-center lg:text-lg">
+          School kid or an Industry Professional, we have covered everything for
+          you
+        </p>
+        <div className="overflow-x-hidden">
+          <span className="flex gap-5 py-2">
+            <Marquee pauseOnHover className="[--duration:20s]">
+              {learnersData.map((learnerData, index) => (
+                <LearnerDataCard
+                  key={index}
+                  number={learnerData.number}
+                  domain={learnerData.domain}
+                />
+              ))}
+            </Marquee>
+          </span>
+        </div>
       </div>
-    </main>
+
+      {/* Course Section */}
+      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8 mt-4">
+        <div className="flex flex-col gap-4 px-4 sm:items-center">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-2">
+            Your next step to
+            <span className="text-blue"> Get future ready</span>
+          </h2>
+          <p className="text-center sm:text-lg sm:w-[70vw]">
+            From foundational skills to advanced subjects, our platform supports
+            your holistic educational growth
+          </p>
+        </div>
+        <div className="flex justify-between items-center mt-2 gap-4 pl-4 sm:pl-6">
+          <button className="rounded-full p-3 bg-blue lg:hidden">
+            <FiSearch color="white" className="text-xl sm:text-3xl" />
+          </button>
+          <input
+            type="text"
+            name="desktopNavSearch"
+            id="desktopNavSearch"
+            placeholder="Search course..."
+            className="border-black/60 rounded-full border-2 font-medium text-lg px-5 py-[6px] focus:outline-none text-black/60 w-[25vw] hidden lg:block"
+          />
+          <div className="overflow-x-scroll lg:overflow-x-hidden">
+            <span className="flex gap-3">
+              {learnersData.slice(0, 4).map((data, index) => (
+                <button
+                  className="min-w-fit hover:border-blue rounded-full px-5 py-2 border-[2px] border-black/40 sm:text-lg lg:text-base sm:px-7 sm:py-3 lg:px-5 lg:py-2"
+                  key={index}
+                >
+                  {data.domain}
+                </button>
+              ))}
+              <Link
+                href="/categories"
+                className="flex items-center justify-center gap-2 min-w-fit border-blue font-semibold text-blue rounded-full px-5 py-2 border-[2px] sm:text-lg lg:text-base sm:px-7 sm:py-3 lg:px-5 lg:py-2 hover:text-white hover:bg-blue"
+              >
+                <span>View all</span> <FaArrowRight />
+              </Link>
+            </span>
+          </div>
+        </div>
+        <div className="mt-5 overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center px-4 sm:px-6">
+          <span className="flex gap-5 py-2">
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+          </span>
+        </div>
+      </div>
+
+      {/* Ad Section */}
+      <div className="bg-light_green mt-6 flex flex-col gap-6 shadow-[12px_0px_12px_0px_rgba(0,0,0,0.8)] sm:shadow-[12px_0px_12px_0px_rgba(0,0,0,0.4)] lg:flex-row lg:pt-10 lg:px-36 lg:items-center lg:justify-center lg:gap-0 lg:mt-10">
+        <div className="px-4 sm:px-10 pt-10 sm:py-14 lg:pb-24 flex flex-col gap-4 sm:gap-6 sm:items-center lg:items-start lg:px-0">
+          <h3 className="text-2xl sm:text-3xl lg:text-4xl sm:w-[80%] lg:w-full sm:text-center text-black font-semibold lg:leading-[48px] lg:text-start">
+            Advance your personal and professional aspirations with{" "}
+            <span className="text-3xl sm:text-4xl lg:text-5xl text-blue">
+              Gurukul
+            </span>
+          </h3>
+          <div className="flex mt-3 gap-2">
+            <button className="text-md hover:text-white hover:bg-blue rounded-full px-5 py-2 border-2 border-blue font-medium sm:text-xl sm:px-7 sm:py-3">
+              Join for Free
+            </button>
+            <Link
+              href="/categories"
+              className="text-md text-white bg-blue rounded-full px-5 py-2 border-2 border-blue hover:bg-transparent hover:text-black font-medium sm:text-xl sm:px-7 sm:py-3"
+            >
+              Browse Courses
+            </Link>
+          </div>
+        </div>
+        <Image
+          src={home_ad_img}
+          alt="ad image"
+          className="w-[80%] sm:w-[60%] self-end sm:hidden lg:block lg:w-[35%]"
+        />
+      </div>
+
+      {/* Top Course Section */}
+      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8 mt-4 lg:mt-10">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-4">
+          <span className="text-blue">Kickstart Your Learning</span> with Top
+          Courses
+        </h2>
+        <div className="mt-5 overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center px-4 sm:px-6">
+          <span className="flex gap-5 py-2">
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+          </span>
+        </div>
+      </div>
+
+      {/* Testimonial Section */}
+      <div className="flex flex-col gap-5 sm:gap-8 lg:gap-8 mt-4 lg:mt-10 mb-20 lg:mb-28">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-4 sm:px-6">
+          <span className="text-blue">Listen to experiences</span> shared by
+          others
+        </h2>
+        {/*Marquee for only mobile */}
+        <span className="flex flex-col mt-5 sm:hidden">
+          <div className="overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center">
+            <span className="flex gap-5 py-2">
+              <Marquee pauseOnHover className="[--duration:10s]">
+                {testimonials
+                  .slice(0, testimonials.length / 2)
+                  .map((testimonial, index) => (
+                    <TestimonialCard
+                      key={index}
+                      name={testimonial.name}
+                      image=""
+                      role={testimonial.role}
+                      testimonial={testimonial.testimonial}
+                    />
+                  ))}
+              </Marquee>
+            </span>
+          </div>
+          <div className="overflow-x-scroll lg:overflow-x-hidden lg:justify-center">
+            <span className="flex gap-5 py-2">
+              <Marquee reverse pauseOnHover className="[--duration:10s]">
+                {testimonials
+                  .slice(testimonials.length / 2, testimonials.length)
+                  .map((testimonial, index) => (
+                    <TestimonialCard
+                      key={index}
+                      name={testimonial.name}
+                      image=""
+                      role={testimonial.role}
+                      testimonial={testimonial.testimonial}
+                    />
+                  ))}
+              </Marquee>
+            </span>
+          </div>
+        </span>
+
+        {/* Marquee for tablet and desktop */}
+        <div className="overflow-x-scroll lg:overflow-x-hidden lg:justify-center hidden sm:block">
+          <span className="flex gap-5 py-2">
+            <Marquee pauseOnHover className="[--duration:20s]">
+              {testimonials.map((testimonial, index) => (
+                <TestimonialCard
+                  key={index}
+                  name={testimonial.name}
+                  image=""
+                  role={testimonial.role}
+                  testimonial={testimonial.testimonial}
+                />
+              ))}
+            </Marquee>
+          </span>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default Home;
