@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/prisma";
-import jwt from "jsonwebtoken";
-import { config } from "@/lib/config";
 import { courseInterface } from "@/lib/interfaces";
 import { extractAndVerifyToken, verifyToken } from "@/lib/token";
 
