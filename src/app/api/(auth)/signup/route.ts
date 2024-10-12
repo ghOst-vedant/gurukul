@@ -2,9 +2,7 @@ import { hashPassword } from "@/lib/bcrypt";
 import { db } from "@/lib/prisma";
 import { signUpSchema } from "@/lib/zod";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { generateToken } from "@/lib/token";
-import { create } from "domain";
 interface UserRequestBody {
   name: string;
   email: string;
