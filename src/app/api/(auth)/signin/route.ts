@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import { comparePassword, hashPassword } from "@/lib/bcrypt";
 import { db } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
