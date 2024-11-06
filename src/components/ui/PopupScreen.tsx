@@ -1,12 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
+import { popupAtom } from "@/app/recoil/Atoms/popupAtom";
+import { useEffect } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 const PopupScreen = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useRecoilState(popupAtom);
 
   useEffect(() => {
     const timer = setTimeout(() => {

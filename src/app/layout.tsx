@@ -5,6 +5,7 @@ import DesktopNavbar from "@/components/navbar/DesktopNavbar";
 import { MobileNavbar } from "@/components/navbar/MobileNavbar";
 import { Footer } from "@/components/ui/Footer";
 import { UnderprogressPopup } from "@/components/ui/UnderprogressPopup";
+import RecoilContextProvider from "@/components/ui/RecoilContextProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,15 +23,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <UnderprogressPopup />
-        <span className={`lg:hidden`}>
-          <MobileNavbar />
-        </span>
-        <span className={`hidden lg:block`}>
-          <DesktopNavbar />
-        </span>
-        {children}
-        <Footer />
+        <RecoilContextProvider>
+          <UnderprogressPopup />
+          <span className={`lg:hidden`}>
+            <MobileNavbar />
+          </span>
+          <span className={`hidden lg:block`}>
+            <DesktopNavbar />
+          </span>
+          {children}
+          <Footer />
+        </RecoilContextProvider>
       </body>
     </html>
   );
