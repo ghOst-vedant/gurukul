@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import DesktopNavbar from "@/components/navbar/DesktopNavbar";
 import { MobileNavbar } from "@/components/navbar/MobileNavbar";
-import Providers from "./store/StoreProvider";
 import { Footer } from "@/components/ui/Footer";
 import { UnderprogressPopup } from "@/components/ui/UnderprogressPopup";
 
@@ -30,7 +29,7 @@ export default function RootLayout({
         <span className={`hidden lg:block`}>
           <DesktopNavbar />
         </span>
-        <Providers>{children}</Providers>
+        {children}
         <Footer />
       </body>
     </html>
