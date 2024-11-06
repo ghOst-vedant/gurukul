@@ -6,6 +6,7 @@ import { MobileNavbar } from "@/components/navbar/MobileNavbar";
 import { Footer } from "@/components/ui/Footer";
 import { UnderprogressPopup } from "@/components/ui/UnderprogressPopup";
 import RecoilContextProvider from "@/components/ui/RecoilContextProvider";
+import Login from "@/components/cards/Login";
 
 const inter = Inter({ subsets: ["latin"] });
 
