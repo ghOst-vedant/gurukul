@@ -6,10 +6,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   try {
     let decode;
     try {
-      decode = extractAndVerifyToken(req) as {
-        role: string;
-        id: string;
-      };
+      decode = extractAndVerifyToken(req);
     } catch (error) {
       return NextResponse.json(
         { error: (error as Error).message },

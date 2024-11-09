@@ -4,12 +4,16 @@ export interface classroomInterface {
   notes: string[];
   forums: string[];
 }
-export interface decodedToken {}
+export interface decodedToken {
+  id: string;
+  role: string;
+  iat: number; // issued at time
+  exp: number; // expiration time
+}
 export interface courseInterface {
   content: string[];
   curriculum: string[];
   type: string;
-  students: string[];
 }
 export interface purchaseInfo {
   courseId: string;

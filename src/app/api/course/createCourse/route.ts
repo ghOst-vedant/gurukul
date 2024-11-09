@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/prisma";
 import { courseInterface } from "@/lib/interfaces";
 import { extractAndVerifyToken, verifyToken } from "@/lib/token";
+import { ObjectId } from "mongodb";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     let decode;
     try {
-      decode = extractAndVerifyToken(req) as { role: string; id: string };
+      decode = extractAndVerifyToken(req);
     } catch (err) {
       return NextResponse.json({ message: err }, { status: 401 });
     }
@@ -34,6 +35,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     });
     return NextResponse.json({ message: createdCourse }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: error }, { status: 500 });
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 500 }
+    );
   }
 }

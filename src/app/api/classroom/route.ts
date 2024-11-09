@@ -3,11 +3,11 @@ import { db } from "@/lib/prisma";
 import { extractAndVerifyToken } from "@/lib/token";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     let decode;
     try {
-      decode = extractAndVerifyToken(req) as { role: string; id: string };
+      decode = extractAndVerifyToken(req);
     } catch (error) {
       return NextResponse.json(
         {
@@ -40,15 +40,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
     );
   }
 }
-
-export async function PATCH(req: NextRequest, res: NextResponse) {
+export async function PATCH(req: NextRequest) {
   try {
     let decode;
     try {
-      decode = extractAndVerifyToken(req) as {
-        role: string;
-        id: string;
-      };
+      decode = extractAndVerifyToken(req);
     } catch (error) {
       return NextResponse.json(
         { error: (error as Error).message },
@@ -70,6 +66,30 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
       {
         error: (error as Error).message,
       },
+      { status: 500 }
+    );
+  }
+}
+export async function GET(req: NextRequest) {
+  try {
+    let decode;
+    try {
+      decode = extractAndVerifyToken(req);
+    } catch (error) {
+      return NextResponse.json(
+        {
+          Error: (error as Error).message,
+        },
+        { status: 401 }
+      );
+    }
+    const classRooms = await db.classroom.findMany({
+      where: { teacherId: decode.id },
+    });
+    return NextResponse.json(classRooms, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: (error as Error).message },
       { status: 500 }
     );
   }
