@@ -3,7 +3,7 @@ import underDevelopmentImage from "@/assets/images/underDevelopment.png";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { popupAtom } from "@/app/recoil/Atoms/underDevelopmentPopup";
+import { popupAtom } from "../../recoil/Atoms/underDevelopmentPopup";
 
 export function UnderprogressPopup() {
   const [showPopup, setShowPopup] = useRecoilState(popupAtom);
