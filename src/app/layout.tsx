@@ -4,8 +4,9 @@ import "./globals.css";
 import DesktopNavbar from "@/components/navbar/DesktopNavbar";
 import { MobileNavbar } from "@/components/navbar/MobileNavbar";
 import { Footer } from "@/components/ui/Footer";
-import { UnderprogressPopup } from "@/components/ui/UnderprogressPopup";
+import { UnderprogressPopup } from "@/components/popups/UnderprogressPopup";
 import RecoilContextProvider from "@/components/ui/RecoilContextProvider";
+import Login from "@/components/popups/Login";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <RecoilContextProvider>
           <UnderprogressPopup />
+          <Login />
           <span className={`lg:hidden`}>
             <MobileNavbar />
           </span>
