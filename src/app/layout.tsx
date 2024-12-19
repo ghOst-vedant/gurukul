@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <RecoilContextProvider>
-          <UnderprogressPopup />
+          {/* <UnderprogressPopup /> */}
           <Login />
           <span className={`lg:hidden`}>
             <MobileNavbar />
