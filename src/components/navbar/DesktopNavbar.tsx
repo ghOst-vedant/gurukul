@@ -11,7 +11,7 @@ const DesktopNavbar = () => {
   const setLoginPopup = useSetRecoilState(loginPopupAtom);
 
   return (
-    <nav className="flex justify-between py-3 px-16 shadow-md overflow-x-hidden bg-white fixed w-full z-10">
+    <nav className="lg:px-[3vw] flex justify-between py-3 shadow-md overflow-x-hidden bg-white fixed w-full z-10">
       <Link href="/">
         <Image src={gurukul_logo} className="h-12 w-fit" alt="Brand logo" />
       </Link>

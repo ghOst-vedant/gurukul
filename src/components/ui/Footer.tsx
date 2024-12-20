@@ -8,7 +8,7 @@ import gurukul_book_logo from "../../../public/gurukul_book_logo.png";
 export function Footer() {
   return (
     <div>
-      <div className="bg-black text-white flex flex-col sm:flex-row sm:justify-between px-4 sm:px-6 lg:px-16 py-10 gap-12 lg:py-16">
+      <div className="bg-black text-white flex flex-col sm:flex-row sm:justify-between px-4 sm:px-6 lg:px-[3vw] py-10 gap-12 lg:py-16">
         <span className="flex justify-between sm:gap-16 lg:gap-32">
           <span className="flex flex-col gap-2">
             <p className="mb-2">Important Links</p>
@@ -65,7 +65,7 @@ export function Footer() {
           </span>
         </span>
       </div>
-      <div className="bg-white px-4 sm:px-6 lg:px-16 flex justify-between py-3 items-center">
+      <div className="bg-white px-4 sm:px-6 lg:px-[3vw] flex justify-between py-3 items-center">
         <Image
           src={gurukul_book_logo}
           alt="logo"
