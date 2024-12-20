@@ -11,6 +11,7 @@ import { FaArrowRight } from "react-icons/fa";
 import hero_img from "../assets/images/hero_img.png";
 import home_ad_img from "@/assets/images/home_ad_img.png";
 import userProfile from "@/assets/images/user.png";
+import CourseCarousel from "@/components/ui/CourseCarousel";
 
 const Home = () => {
   const learnersData = [
@@ -115,7 +116,7 @@ const Home = () => {
     <div className="overflow-x-hidden flex flex-col gap-16">
       {/* Hero section */}
       <div className="bg-light_green pt-28 flex flex-col gap-8 sm:items-center lg:flex-row lg:justify-between lg:gap-0 lg:pt-24">
-        <span className="flex flex-col gap-3 sm:gap-5 px-5 sm:w-[70%] sm:text-center sm:items-center lg:text-left lg:items-start lg:w-[50%] lg:pl-16 lg:pr-0 lg:mb-6">
+        <span className="flex flex-col gap-3 sm:gap-5 px-5 sm:w-[70%] sm:text-center sm:items-center lg:text-left lg:items-start lg:w-[50%] lg:pl-[3vw] lg:pr-0 lg:mb-6">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-black lg:pt-0">
             <span className="text-blue font-bold">AI-Powered</span> Learning,
             Tailored Just for You
@@ -162,7 +163,7 @@ const Home = () => {
       </div>
 
       {/* Course Section */}
-      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8 mt-4">
+      <div className="flex flex-col gap-5 sm:gap-8 lg:px-[3vw] lg:gap-8 mt-4">
         <div className="flex flex-col gap-4 px-4 sm:items-center">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-2">
             Your next step to
@@ -173,7 +174,7 @@ const Home = () => {
             your holistic educational growth
           </p>
         </div>
-        <div className="flex justify-between items-center mt-2 gap-4 pl-4 sm:pl-6">
+        <div className="flex justify-between items-center mt-2 gap-4 pl-4 sm:pl-6 lg:pl-0">
           <button className="rounded-full p-3 bg-blue lg:hidden">
             <FiSearch color="white" className="text-xl sm:text-3xl" />
           </button>
@@ -203,14 +204,15 @@ const Home = () => {
             </span>
           </div>
         </div>
-        <div className="mt-5 overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center px-4 sm:px-6">
-          <span className="flex gap-5 py-2">
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-          </span>
+        <div className="mt-5 overflow-x-scroll lg:hidden flex gap-5">
+          <CourseCard />
+          <CourseCard />
+          <CourseCard />
+          <CourseCard />
         </div>
+        <span className="mt-5 hidden lg:block">
+          <CourseCarousel />
+        </span>
       </div>
 
       {/* Ad Section */}
@@ -242,19 +244,20 @@ const Home = () => {
       </div>
 
       {/* Top Course Section */}
-      <div className="flex flex-col gap-5 sm:gap-8 lg:px-16 lg:gap-8 mt-4 lg:mt-10">
+      <div className="flex flex-col gap-5 sm:gap-8 lg:px-[3vw] lg:gap-8 mt-4 lg:mt-10">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-center text-black px-4">
           <span className="text-blue">Kickstart Your Learning</span> with Top
           Courses
         </h2>
-        <div className="mt-5 overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center px-4 sm:px-6">
-          <span className="flex gap-5 py-2">
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-          </span>
+        <div className="mt-5 overflow-x-scroll lg:hidden flex gap-5">
+          <CourseCard />
+          <CourseCard />
+          <CourseCard />
+          <CourseCard />
         </div>
+        <span className="mt-5 hidden lg:block">
+          <CourseCarousel />
+        </span>
       </div>
 
       {/* Testimonial Section */}
