@@ -16,7 +16,9 @@ const CourseCarousel = () => {
     <div className="flex gap-[2.5vw] courseViewport overflow-hidden items-center w-full justify-between">
       <button
         className={`border-2 border-blue p-1 rounded-full ${
-          index === 0 ? "opacity-50" : "opacity-100"
+          index === 0
+            ? "opacity-50"
+            : "opacity-100 hover:bg-blue hover:text-white"
         }`}
         onClick={handlePrev}
         disabled={index === 0}
@@ -42,7 +44,9 @@ const CourseCarousel = () => {
       </div>
       <button
         className={`border-2 border-blue p-1 rounded-full ${
-          index === 3 ? "opacity-50" : "opacity-100"
+          index === 3
+            ? "opacity-50"
+            : "opacity-100 hover:bg-blue hover:text-white"
         }`}
         onClick={handleNext}
         disabled={index === 3}

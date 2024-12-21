@@ -21,7 +21,7 @@ const page = () => {
   };
 
   return (
-    <div className="p-4 pb-16 pt-28 sm:p-12 sm:pt-28 lg:p-[3vw] lg:pb-24 lg:pt-32 flex flex-col gap-10 sm:gap-8 lg:gap-16">
+    <div className="p-4 pb-16 pt-28 sm:p-12 sm:pt-28 lg:p-[3vw] lg:pb-24 lg:pt-32 flex flex-col gap-10 lg:gap-16">
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-black">
           <span className="text-blue">{getCategory()} </span>Courses

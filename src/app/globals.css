@@ -30,3 +30,7 @@ body::-webkit-scrollbar-thumb {
 .custom-shadow:hover {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
 }
+
+.shadow {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}
