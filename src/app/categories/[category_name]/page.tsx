@@ -6,14 +6,13 @@ import useWindowStatus from "@/app/Custom_hooks/useWindowStatus";
 import CourseCarousel from "@/components/ui/CourseCarousel";
 import { IoOptionsOutline } from "react-icons/io5";
 import { FcAlphabeticalSortingAz } from "react-icons/fc";
-
-const page = () => {
-  const currentPage = usePathname();
-  const windowStatus = useWindowStatus();
-
+type Params = {
+  category_name: string;
+};
+const page = ({ params }: { params: Params }) => {
+  const { category_name } = params;
   const getCategory = () => {
-    const urlPath = currentPage.split("/");
-    const category = urlPath[urlPath.length - 1]
+    const category = category_name
       .split("-")
       .map((str) => str.charAt(0).toUpperCase() + str.slice(1))
       .join(" ");
