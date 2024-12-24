@@ -204,7 +204,7 @@ const Home = () => {
             </span>
           </div>
         </div>
-        <div className="mt-5 overflow-x-scroll lg:hidden flex gap-5">
+        <div className="mt-5 overflow-x-scroll lg:hidden flex gap-5 px-4 ">
           <CourseCard />
           <CourseCard />
           <CourseCard />

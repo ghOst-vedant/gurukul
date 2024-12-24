@@ -5,7 +5,7 @@ import { BookmarkCard } from "@/components/cards/BookmarkCard";
 export const Student = () => {
   return (
     <div className="flex justify-between w-full lg:flex-row flex-col">
-      <div className="lg:w-[25%] border flex flex-col justify-center items-center pt-10 rounded-3xl shadow-sm pb-3 ">
+      <div className="lg:w-[25%] border flex flex-col  items-center pt-10 rounded-3xl shadow-sm pb-3 ">
         <div className=" flex items-center justify-center flex-col gap-1 border-b-[2.5px] border-black pb-4 px-10">
           <Image
             src={student}
