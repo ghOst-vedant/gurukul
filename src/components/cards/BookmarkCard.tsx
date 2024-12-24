@@ -6,7 +6,7 @@ import { FaStar } from "react-icons/fa6";
 export const BookmarkCard = () => {
   return (
     <Link href="#">
-      <div className="border hover:shadow-md rounded-3xl flex justify-between items-center lg:px-6 px-5 lg:py-8 py-4 lg:gap-6 gap-4 min-w-[85vw] sm:min-w-[40%] sm:max-w-[40%] lg:min-w-[30vw] lg:max-w-[35vw]">
+      <div className="border hover:shadow-md rounded-3xl flex justify-between items-center lg:px-6 px-5 lg:py-6 py-4 lg:gap-6 gap-4 min-w-[85vw] sm:min-w-[40%] sm:max-w-[40%] lg:min-w-[30vw] lg:max-w-[35vw] cursor-pointer">
         <Image
           alt="Teacher Profile picture"
           className="lg:h-36 lg:block hidden h-24 w-fit rounded-full"
