@@ -1,21 +1,25 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { CurriculumSection } from "@/app/addnewcourse/page";
+import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
+import {
+  Assignment,
+  CurriculumSection,
+  Descriptive,
+  Lecture,
+  Mcq,
+} from "@/app/addnewcourse/page";
 import { IoCloudUploadOutline } from "react-icons/io5";
-import { IoIosArrowForward } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
 import { v4 as uuidv4 } from "uuid";
 import { Test } from "@/app/addnewcourse/page";
 import { MdDelete } from "react-icons/md";
-import JoditEditor from "jodit-react";
+import dynamic from "next/dynamic";
+const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 type CourseCreateCurriculumProps = {
-  // setCurrentView: Dispatch<SetStateAction<string>>;
   curriculum: CurriculumSection[];
   setCurriculum: Dispatch<SetStateAction<CurriculumSection[]>>;
 };
 
 const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
-  // setCurrentView,
   curriculum,
   setCurriculum,
 }) => {
@@ -136,11 +140,10 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                           {
                             questionId: uuidv4(),
                             questionType: "mcq",
-                            mcq: {
-                              question: "",
+                            question: {
+                              title: "",
                               options: ["", ""],
-                              userAnswer: 0,
-                              correctAnswer: -1,
+                              correctAnswer: 0,
                             },
                           },
                         ],
@@ -183,7 +186,11 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
     );
   };
 
-  const addOptionToMCQ = (sectionId: string, testId: string) => {
+  const addOptionToMCQ = (
+    sectionId: string,
+    testId: string,
+    questionId: string
+  ) => {
     setCurriculum((prev) =>
       prev.map((curriculumSection) =>
         curriculumSection.sectionId === sectionId
@@ -197,12 +204,15 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                         ...content.data,
                         questions: (content.data as Test).questions.map(
                           (question) =>
-                            question.questionType === "mcq" && question.mcq
+                            question.questionId === questionId
                               ? {
                                   ...question,
-                                  mcq: {
-                                    ...question.mcq,
-                                    options: [...question.mcq.options, ""],
+                                  question: {
+                                    ...(question.question as Mcq),
+                                    options: [
+                                      ...(question.question as Mcq).options,
+                                      "",
+                                    ],
                                   },
                                 }
                               : question
@@ -234,9 +244,8 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                           {
                             questionId: uuidv4(),
                             questionType: "descriptive",
-                            descriptive: {
-                              question: "",
-                              userAnswer: "",
+                            question: {
+                              title: "",
                               correctAnswer: "",
                             },
                           },
@@ -249,6 +258,328 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
           : curriculumSection
       )
     );
+  };
+
+  // State managements
+
+  const changeSectionTitle = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurriculum((prev) =>
+      prev.map((curriculumSection) =>
+        curriculumSection.sectionId === e.target.id
+          ? {
+              ...curriculumSection,
+              sectionTitle: e.target.value,
+            }
+          : curriculumSection
+      )
+    );
+  };
+
+  const changeLectureTitle = (
+    sectionId: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setCurriculum((prev) =>
+      prev.map((curriculumSection) =>
+        curriculumSection.sectionId === sectionId
+          ? {
+              ...curriculumSection,
+              sectionContent: curriculumSection.sectionContent.map((content) =>
+                content.id === e.target.id
+                  ? {
+                      ...content,
+                      data: {
+                        ...content.data,
+                        lectureTitle: e.target.value,
+                      },
+                    }
+                  : content
+              ),
+            }
+          : curriculumSection
+      )
+    );
+  };
+
+  const changeAssignmentTitle = (
+    sectionId: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setCurriculum((prev) =>
+      prev.map((curriculumSection) =>
+        curriculumSection.sectionId === sectionId
+          ? {
+              ...curriculumSection,
+              sectionContent: curriculumSection.sectionContent.map((content) =>
+                content.id === e.target.id
+                  ? {
+                      ...content,
+                      data: {
+                        ...content.data,
+                        assignmentTitle: e.target.value,
+                      },
+                    }
+                  : content
+              ),
+            }
+          : curriculumSection
+      )
+    );
+  };
+
+  const changeAssignmentDescription = (
+    sectionId: string,
+    contentId: string,
+    newValue: string
+  ) => {
+    setCurriculum((prev) =>
+      prev.map((curriculumSection) =>
+        curriculumSection.sectionId === sectionId
+          ? {
+              ...curriculumSection,
+              sectionContent: curriculumSection.sectionContent.map((content) =>
+                content.id === contentId
+                  ? {
+                      ...content,
+                      data: {
+                        ...content.data,
+                        content: newValue,
+                      },
+                    }
+                  : content
+              ),
+            }
+          : curriculumSection
+      )
+    );
+  };
+
+  const changeTestTitle = (
+    sectionId: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setCurriculum((prev) =>
+      prev.map((curriculumSection) =>
+        curriculumSection.sectionId === sectionId
+          ? {
+              ...curriculumSection,
+              sectionContent: curriculumSection.sectionContent.map((content) =>
+                content.id === e.target.id
+                  ? {
+                      ...content,
+                      data: {
+                        ...content.data,
+                        title: e.target.value,
+                      },
+                    }
+                  : content
+              ),
+            }
+          : curriculumSection
+      )
+    );
+  };
+
+  const changeMCQQuestionTitle = (
+    sectionId: string,
+    contentId: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setCurriculum((prev) =>
+      prev.map((curriculumSection) =>
+        curriculumSection.sectionId === sectionId
+          ? {
+              ...curriculumSection,
+              sectionContent: curriculumSection.sectionContent.map((content) =>
+                content.id === contentId
+                  ? {
+                      ...content,
+                      data: {
+                        ...(content.data as Test),
+                        questions: (content.data as Test).questions.map(
+                          (question) =>
+                            question.questionId === e.target.id
+                              ? {
+                                  ...question,
+                                  question: {
+                                    ...(question.question as Mcq),
+                                    title: e.target.value,
+                                  },
+                                }
+                              : question
+                        ),
+                      },
+                    }
+                  : content
+              ),
+            }
+          : curriculumSection
+      )
+    );
+  };
+
+  const changeMCQOptionValue = (
+    sectionId: string,
+    contentId: string,
+    questionId: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setCurriculum((prev) =>
+      prev.map((curriculumSection) =>
+        curriculumSection.sectionId === sectionId
+          ? {
+              ...curriculumSection,
+              sectionContent: curriculumSection.sectionContent.map((content) =>
+                content.id === contentId
+                  ? {
+                      ...content,
+                      data: {
+                        ...(content.data as Test),
+                        questions: (content.data as Test).questions.map(
+                          (question) =>
+                            question.questionId === questionId
+                              ? {
+                                  ...question,
+                                  question: {
+                                    ...(question.question as Mcq),
+                                    options: (
+                                      question.question as Mcq
+                                    ).options.map((option, index) =>
+                                      index === parseInt(e.target.id)
+                                        ? e.target.value
+                                        : option
+                                    ),
+                                  },
+                                }
+                              : question
+                        ),
+                      },
+                    }
+                  : content
+              ),
+            }
+          : curriculumSection
+      )
+    );
+  };
+
+  const changeMcqCorrectAnswer = (
+    sectionId: string,
+    contentId: string,
+    questionId: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setCurriculum((prev) =>
+      prev.map((curriculumSection) =>
+        curriculumSection.sectionId === sectionId
+          ? {
+              ...curriculumSection,
+              sectionContent: curriculumSection.sectionContent.map((content) =>
+                content.id === contentId
+                  ? {
+                      ...content,
+                      data: {
+                        ...(content.data as Test),
+                        questions: (content.data as Test).questions.map(
+                          (question) =>
+                            question.questionId === questionId
+                              ? {
+                                  ...question,
+                                  question: {
+                                    ...(question.question as Mcq),
+                                    correctAnswer: parseInt(e.target.id),
+                                  },
+                                }
+                              : question
+                        ),
+                      },
+                    }
+                  : content
+              ),
+            }
+          : curriculumSection
+      )
+    );
+  };
+
+  const changeDescriptiveQuestionTitle = (
+    sectionId: string,
+    contentId: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setCurriculum((prev) =>
+      prev.map((curriculumSection) =>
+        curriculumSection.sectionId === sectionId
+          ? {
+              ...curriculumSection,
+              sectionContent: curriculumSection.sectionContent.map((content) =>
+                content.id === contentId
+                  ? {
+                      ...content,
+                      data: {
+                        ...(content.data as Test),
+                        questions: (content.data as Test).questions.map(
+                          (question) =>
+                            question.questionId === e.target.id
+                              ? {
+                                  ...question,
+                                  question: {
+                                    ...(question.question as Descriptive),
+                                    title: e.target.value,
+                                  },
+                                }
+                              : question
+                        ),
+                      },
+                    }
+                  : content
+              ),
+            }
+          : curriculumSection
+      )
+    );
+  };
+
+  const changeDescriptiveExpectedAnswer = (
+    sectionId: string,
+    contentId: string,
+    e: ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setCurriculum((prev) =>
+      prev.map((curriculumSection) =>
+        curriculumSection.sectionId === sectionId
+          ? {
+              ...curriculumSection,
+              sectionContent: curriculumSection.sectionContent.map((content) =>
+                content.id === contentId
+                  ? {
+                      ...content,
+                      data: {
+                        ...(content.data as Test),
+                        questions: (content.data as Test).questions.map(
+                          (question) =>
+                            question.questionId === e.target.id
+                              ? {
+                                  ...question,
+                                  question: {
+                                    ...(question.question as Descriptive),
+                                    correctAnswer: e.target.value,
+                                  },
+                                }
+                              : question
+                        ),
+                      },
+                    }
+                  : content
+              ),
+            }
+          : curriculumSection
+      )
+    );
+  };
+
+  const saveCurriculumDetails = () => {
+    console.log(curriculum);
   };
 
   return (
@@ -273,10 +604,12 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                     <p className="font-medium">Section {index + 1} :</p>
                     <input
                       type="text"
-                      name={`section-${curriCulumSection.sectionId}`}
-                      id={`section-${curriCulumSection.sectionId}`}
+                      name={curriCulumSection.sectionId}
+                      id={curriCulumSection.sectionId}
                       placeholder="Section title here"
                       className="border-[1px] border-black/60 rounded-lg px-2 py-2 outline-none lg:w-[40%]"
+                      value={curriCulumSection.sectionTitle}
+                      onChange={changeSectionTitle}
                     />
                   </span>
                   <button
@@ -298,10 +631,17 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                             <p>{index + 1}. Lecture :</p>
                             <input
                               type="text"
-                              name={`content-${content.id}`}
-                              id={`content-${content.id}`}
+                              name={content.id}
+                              id={content.id}
                               placeholder="Lecture title here"
                               className="border-[1px] border-black/60 rounded-lg px-2 py-2 outline-none lg:w-[60%]"
+                              value={(content.data as Lecture).lectureTitle}
+                              onChange={(e) =>
+                                changeLectureTitle(
+                                  curriCulumSection.sectionId,
+                                  e
+                                )
+                              }
                             />
                           </span>
                           <div className="flex gap-2">
@@ -342,10 +682,19 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                               <p>{index + 1}. Assignment :</p>
                               <input
                                 type="text"
-                                name={`content-${content.id}`}
-                                id={`content-${content.id}`}
+                                name={content.id}
+                                id={content.id}
                                 placeholder="Assignment title here"
                                 className="border-[1px] border-black/60 rounded-lg px-2 py-2 outline-none lg:w-[50%]"
+                                value={
+                                  (content.data as Assignment).assignmentTitle
+                                }
+                                onChange={(e) =>
+                                  changeAssignmentTitle(
+                                    curriCulumSection.sectionId,
+                                    e
+                                  )
+                                }
                               />
                             </span>
                             <button
@@ -361,8 +710,14 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                             </button>
                           </div>
                           <JoditEditor
-                            value=""
-                            // onChange={}
+                            value={(content.data as Assignment).content}
+                            onChange={(newContent) =>
+                              changeAssignmentDescription(
+                                curriCulumSection.sectionId,
+                                content.id,
+                                newContent
+                              )
+                            }
                           />
                         </span>
                       )}
@@ -376,10 +731,17 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                               <p>{index + 1}. Test :</p>
                               <input
                                 type="text"
-                                name={`content-${content.id}`}
-                                id={`content-${content.id}`}
+                                name={content.id}
+                                id={content.id}
                                 placeholder="Test title here"
                                 className="border-[1px] border-black/60 rounded-lg px-2 py-2 outline-none lg:w-[50%]"
+                                value={(content.data as Test).title}
+                                onChange={(e) =>
+                                  changeTestTitle(
+                                    curriCulumSection.sectionId,
+                                    e
+                                  )
+                                }
                               />
                             </span>
                             <button
@@ -416,9 +778,19 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                                         <input
                                           type="text"
                                           name="question"
-                                          id="question"
+                                          id={question.questionId}
                                           placeholder="Question..."
                                           className="border-[1px] border-black/60 rounded-lg px-4 py-3 outline-none w-full"
+                                          value={
+                                            (question.question as Mcq).title
+                                          }
+                                          onChange={(e) =>
+                                            changeMCQQuestionTitle(
+                                              curriCulumSection.sectionId,
+                                              content.id,
+                                              e
+                                            )
+                                          }
                                         />
                                         <button
                                           className="text-black hover:text-white hover:bg-red border-[1px] border-black hover:border-red rounded-lg p-2 h-fit"
@@ -438,23 +810,48 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                                       <label htmlFor="question">
                                         Options for question {index + 1} :
                                       </label>
-                                      {question.mcq?.options.map(
+                                      {(question.question as Mcq).options.map(
                                         (option, index) => (
-                                          <span className="flex gap-2 items-center">
+                                          <span
+                                            className="flex gap-2 items-center"
+                                            key={index}
+                                          >
                                             <input
                                               type="radio"
                                               name="option"
                                               id={`${index}`}
                                               className="w-4 h-4"
+                                              checked={
+                                                index ===
+                                                (question.question as Mcq)
+                                                  .correctAnswer
+                                              }
+                                              onChange={(e) =>
+                                                changeMcqCorrectAnswer(
+                                                  curriCulumSection.sectionId,
+                                                  content.id,
+                                                  question.questionId,
+                                                  e
+                                                )
+                                              }
                                             />
                                             <input
                                               type="text"
                                               name="option"
-                                              id="option"
+                                              id={`${index}`}
                                               placeholder={`Option ${
                                                 index + 1
                                               }`}
                                               className="border-[1px] border-black/60 rounded-lg px-4 py-3 outline-none"
+                                              value={option}
+                                              onChange={(e) =>
+                                                changeMCQOptionValue(
+                                                  curriCulumSection.sectionId,
+                                                  content.id,
+                                                  question.questionId,
+                                                  e
+                                                )
+                                              }
                                             />
                                           </span>
                                         )
@@ -465,7 +862,8 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                                       onClick={() =>
                                         addOptionToMCQ(
                                           curriCulumSection.sectionId,
-                                          content.id
+                                          content.id,
+                                          question.questionId
                                         )
                                       }
                                     >
@@ -486,9 +884,20 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                                         <input
                                           type="text"
                                           name="question"
-                                          id="question"
+                                          id={question.questionId}
                                           placeholder="Question..."
                                           className="border-[1px] border-black/60 rounded-lg px-4 py-3 outline-none w-full"
+                                          value={
+                                            (question.question as Descriptive)
+                                              .title
+                                          }
+                                          onChange={(e) =>
+                                            changeDescriptiveQuestionTitle(
+                                              curriCulumSection.sectionId,
+                                              content.id,
+                                              e
+                                            )
+                                          }
                                         />
                                         <button
                                           className="text-black hover:text-white hover:bg-red border-[1px] border-black hover:border-red rounded-lg p-2 h-fit"
@@ -510,10 +919,21 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                                       </label>
                                       <textarea
                                         name="question"
-                                        id="question"
+                                        id={question.questionId}
                                         placeholder="Question..."
                                         cols={3}
                                         className="border-[1px] border-black/60 rounded-lg px-4 py-3 outline-none"
+                                        value={
+                                          (question.question as Descriptive)
+                                            .correctAnswer
+                                        }
+                                        onChange={(e) =>
+                                          changeDescriptiveExpectedAnswer(
+                                            curriCulumSection.sectionId,
+                                            content.id,
+                                            e
+                                          )
+                                        }
                                       />
                                     </span>
                                   </div>
@@ -591,8 +1011,11 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
             <FaPlus />
           </button>
         </div>
-        <button className="text-black hover:text-white hover:bg-blue border-2 border-blue rounded-full px-5 py-2 sm:px-4 sm:py-2 w-fit mx-auto">
-          <p>Save Changes</p>
+        <button
+          className="text-black hover:text-white hover:bg-blue border-2 border-blue rounded-full px-5 py-2 sm:px-4 sm:py-2 w-fit mx-auto"
+          onClick={saveCurriculumDetails}
+        >
+          Save Changes
         </button>
       </div>
     </div>
