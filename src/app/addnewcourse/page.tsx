@@ -1,10 +1,10 @@
 "use client";
 import { Dispatch, SetStateAction, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import CourseCreateBasicDetails from "@/components/ui/CourseCreateBasicDetails";
 import CourseCreateCurriculum from "@/components/ui/CourseCreateCurriculum";
+import CourseCreatePricing from "@/components/ui/CourseCreatePricing";
 
-type Lecture = {
+export type Lecture = {
   lectureTitle: string;
   content: string;
 };
@@ -14,21 +14,22 @@ export type Test = {
   questions: {
     questionId: string;
     questionType: string;
-    mcq?: {
-      question: string;
-      options: string[];
-      userAnswer: number;
-      correctAnswer: number;
-    };
-    descriptive?: {
-      question: string;
-      userAnswer: string;
-      correctAnswer: string;
-    };
+    question?: Mcq | Descriptive;
   }[];
 };
 
-type Assignment = {
+export type Mcq = {
+  title: string;
+  options: string[];
+  correctAnswer: number;
+};
+
+export type Descriptive = {
+  title: string;
+  correctAnswer: string;
+};
+
+export type Assignment = {
   assignmentTitle: string;
   content: string;
 };
@@ -103,18 +104,17 @@ const page = () => {
       </div>
       {currentview === "Basic details" && (
         <CourseCreateBasicDetails
-          // setCurrentView={setCurrentView}
           basicDetails={basicDetails}
           setBasicDetails={setBasicDetails}
         />
       )}
       {currentview === "Curriculum" && (
         <CourseCreateCurriculum
-          // setCurrentView={setCurrentView}
           curriculum={curriculum}
           setCurriculum={setCurriculum}
         />
       )}
+      {currentview === "Pricing" && <CourseCreatePricing />}
     </div>
   );
 };
