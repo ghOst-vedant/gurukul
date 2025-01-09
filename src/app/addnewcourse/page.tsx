@@ -18,6 +18,11 @@ export type Test = {
   }[];
 };
 
+export type Pricing = {
+  isCourseFree: boolean;
+  price: number;
+};
+
 export type Mcq = {
   title: string;
   options: string[];
@@ -79,6 +84,10 @@ const page = () => {
     coursePromotionalVideo: "",
   });
   const [curriculum, setCurriculum] = useState<CurriculumSection[]>([]);
+  const [pricing, setPricing] = useState<Pricing>({
+    isCourseFree: true,
+    price: 0,
+  });
 
   return (
     <div className="px-4 pb-16 pt-28 sm:p-12 sm:pt-28 lg:px-24 lg:pb-24 lg:pt-32 flex flex-col sm:flex-row gap-10 sm:gap-8 lg:gap-20">
@@ -114,7 +123,9 @@ const page = () => {
           setCurriculum={setCurriculum}
         />
       )}
-      {currentview === "Pricing" && <CourseCreatePricing />}
+      {currentview === "Pricing" && (
+        <CourseCreatePricing pricing={pricing} setPricing={setPricing} />
+      )}
     </div>
   );
 };
