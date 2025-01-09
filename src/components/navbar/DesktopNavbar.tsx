@@ -13,7 +13,6 @@ const DesktopNavbar = () => {
   const setLoginPopup = useSetRecoilState(loginPopupAtom);
   const session = useRecoilValue(userSessionAtom);
   const setSession = useSetRecoilState(userSessionAtom);
-  const user = useRecoilState(userSessionAtom);
 
   return (
     <nav className="lg:px-[3vw] flex justify-between py-3 shadow-md overflow-x-hidden bg-white fixed w-full z-10">
@@ -53,7 +52,7 @@ const DesktopNavbar = () => {
           className="border-black/60 rounded-full border-2 font-medium text-lg px-5 py-[6px] focus:outline-none text-black/60 w-[25vw]"
         />
 
-        {session === null ? (
+        {session !== null ? (
           <button
             className="text-lg hover:text-white hover:bg-blue rounded-full px-5 py-[6px] border-2 border-blue font-medium"
             onClick={async () => {

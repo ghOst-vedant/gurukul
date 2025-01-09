@@ -11,7 +11,7 @@ import { FaArrowRight } from "react-icons/fa";
 import hero_img from "../assets/images/hero_img.png";
 import home_ad_img from "@/assets/images/home_ad_img.png";
 import userProfile from "@/assets/images/user.png";
-import CourseCarousel from "@/components/ui/CourseCarousel";
+import CourseCarousel from "@/components/ui/course/CourseCarousel";
 
 const Home = async () => {
   const learnersData = [

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { CourseCard } from "../cards/CourseCard";
+import { CourseCard } from "../../cards/CourseCard";
 import { IoIosArrowBack } from "react-icons/io";
 
 const CourseCarousel = () => {

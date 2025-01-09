@@ -3,7 +3,7 @@
 import { CourseCard } from "@/components/cards/CourseCard";
 import { usePathname } from "next/navigation";
 import useWindowStatus from "@/app/Custom_hooks/useWindowStatus";
-import CourseCarousel from "@/components/ui/CourseCarousel";
+import CourseCarousel from "@/components/ui/course/CourseCarousel";
 import { IoOptionsOutline } from "react-icons/io5";
 import { FcAlphabeticalSortingAz } from "react-icons/fc";
 type Params = {

@@ -1,25 +1,16 @@
 "use client";
-
-import { useEffect } from "react";
-import { useSession } from "next-auth/react";
 import { useRecoilState } from "recoil";
+import { auth } from "../../auth";
 import { userSessionAtom } from "@/recoil/Atoms/userSession";
 
-export default function SessionSync({
-  sessionFromServer,
-}: {
-  sessionFromServer: any;
-}) {
-  const { data: clientSession } = useSession();
-  const [recoilSession, setRecoilSession] = useRecoilState(userSessionAtom);
-
-  useEffect(() => {
-    // Prioritize setting session from server if Recoil state is null
-    if (!recoilSession) {
-      const effectiveSession = sessionFromServer || clientSession;
-      setRecoilSession(effectiveSession);
+export async function SessionSync() {
+  const [session, setSession] = useRecoilState(userSessionAtom);
+  const fetchedSession = await auth();
+  if (session === null) {
+    if (fetchedSession) {
+      setSession(fetchedSession);
     }
-  }, [clientSession, sessionFromServer, recoilSession, setRecoilSession]);
+  }
 
-  return null; // No UI needed
+  return null;
 }
