@@ -4,9 +4,14 @@ import "./globals.css";
 import DesktopNavbar from "@/components/navbar/DesktopNavbar";
 import { MobileNavbar } from "@/components/navbar/MobileNavbar";
 import { Footer } from "@/components/ui/Footer";
-import { UnderprogressPopup } from "@/components/popups/UnderprogressPopup";
+
 import RecoilContextProvider from "@/components/ui/RecoilContextProvider";
 import Login from "@/components/popups/Login";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "../../auth";
+import { RecoilRoot, useRecoilState } from "recoil";
+import SessionSync from "@/lib/SessionSync";
+import { userSessionAtom } from "@/recoil/Atoms/userSession";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,27 +21,32 @@ export const metadata: Metadata = {
     "A place to study and educated yourself by learning from the best people in industry.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const sessionFromServer = await auth();
+  console.log(sessionFromServer);
+
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <RecoilContextProvider>
-          {/* <UnderprogressPopup /> */}
-          <Login />
-          <span className={`lg:hidden`}>
-            <MobileNavbar />
-          </span>
-          <span className={`hidden lg:block`}>
-            <DesktopNavbar />
-          </span>
-          {children}
-          <Footer />
-        </RecoilContextProvider>
-      </body>
-    </html>
+    <SessionProvider session={sessionFromServer}>
+      <RecoilContextProvider>
+        <SessionSync sessionFromServer={sessionFromServer} />
+        <html lang="en">
+          <body className={inter.className}>
+            <Login />
+            <span className={`lg:hidden`}>
+              <MobileNavbar />
+            </span>
+            <span className={`hidden lg:block`}>
+              <DesktopNavbar />
+            </span>
+            {children}
+            <Footer />
+          </body>
+        </html>
+      </RecoilContextProvider>
+    </SessionProvider>
   );
 }

@@ -1,4 +1,6 @@
 import { CategoryCard } from "@/components/cards/CategoryCard";
+import { userSessionAtom } from "@/recoil/Atoms/userSession";
+import { useRecoilState } from "recoil";
 
 //Category page which will be open when clicked on category button. It will simply contain all the categories.
 const Page = () => {

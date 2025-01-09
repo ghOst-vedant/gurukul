@@ -13,30 +13,83 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Teacher {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  role       String   @default("TEACHER")
-  name       String
-  email      String
-  password   String
-  classrooms String[] @db.ObjectId
-  forums     String[] @db.ObjectId
-  courses    String[] @db.ObjectId
-  posts      String[] @db.ObjectId
+model User {
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  role             String          @default("STUDENT")
+  name             String
+  email            String          @unique
+  password         String?
+  image            String?
+  emailVerified    DateTime?
+  classrooms       Classroom[]
+  forums           Forum[]
+  courses          Course[]
+  posts            Post[]
+  pomodoroSessions Pomodoro[]
+  tests            Test[]
+  accounts         Account[]
+  sessions         Session[]
+  Authenticator    Authenticator[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 }
 
-model Student {
-  id               String     @id @default(auto()) @map("_id") @db.ObjectId
-  role             String     @default("STUDENT")
-  name             String
-  email            String
-  password         String
-  classrooms       String[]   @db.ObjectId
-  forums           String[]   @db.ObjectId
-  courses          String[]   @db.ObjectId
-  posts            String[]   @db.ObjectId
-  pomodoroSessions Pomodoro[]
-  tests            String[]   @db.ObjectId
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @id @map("_id")
+  userId               String  @db.ObjectId
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, credentialID])
 }
 
 model Classroom {
@@ -46,6 +99,8 @@ model Classroom {
   notes         String[] @default([])
   forums        String[] @default([]) @db.ObjectId
   students      String[] @default([]) @db.ObjectId
+  User          User?    @relation(fields: [userId], references: [id])
+  userId        String?  @db.ObjectId
 }
 
 model Forum {
@@ -54,6 +109,8 @@ model Forum {
   chats     String[]
   teacherId String   @db.ObjectId
   studentId String[] @db.ObjectId
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?  @db.ObjectId
 }
 
 model Chat {
@@ -65,12 +122,34 @@ model Chat {
 }
 
 model Course {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  type          String
-  teacherId     String   @db.ObjectId
-  students      String[] @default([]) @db.ObjectId
-  courseContent String[]
-  curriculum    String[]
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  teacherId   String        @db.ObjectId
+  title       String
+  subtitle    String
+  description String?
+  category    String
+  imageUrl    String?       @default("https://cdn.pixabay.com/photo/2021/03/19/11/42/pencil-6107347_1280.jpg")
+  attachments Attachments[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Category    Category?     @relation(fields: [categoryId], references: [id])
+  categoryId  String?       @db.ObjectId
+  User        User?         @relation(fields: [userId], references: [id])
+  userId      String?       @db.ObjectId
+}
+
+model Category {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  name   String   @unique
+  course Course[]
+}
+
+model Attachments {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  Course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId String? @db.ObjectId
+  name     String
+  url      String
 }
 
 model Test {
@@ -80,6 +159,8 @@ model Test {
   courseId             String   @db.ObjectId
   result               String[] @db.ObjectId
   Student              String[] @db.ObjectId
+  User                 User?    @relation(fields: [userId], references: [id])
+  userId               String?  @db.ObjectId
 }
 
 model Post {
@@ -88,13 +169,15 @@ model Post {
   media       String?
   teacherId   String? @db.ObjectId
   studentId   String? @db.ObjectId
+  User        User?   @relation(fields: [userId], references: [id])
+  userId      String? @db.ObjectId
 }
 
 model Pomodoro {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   studentId String   @db.ObjectId
   time      DateTime
-  Student   Student  @relation(fields: [studentId], references: [id])
+  Student   User     @relation(fields: [studentId], references: [id])
 }
 
 model Testimonials {

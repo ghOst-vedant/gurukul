@@ -1,43 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/prisma";
-import { courseInterface } from "@/lib/interfaces";
-import { extractAndVerifyToken, verifyToken } from "@/lib/token";
-import { ObjectId } from "mongodb";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: Request) {
   try {
-    let decode;
-    try {
-      decode = extractAndVerifyToken(req);
-    } catch (err) {
-      return NextResponse.json({ message: err }, { status: 401 });
-    }
-    if (decode.role !== "TEACHER") {
-      return NextResponse.json(
-        { error: "Access denied. Only TEACHERs can create courses." },
-        { status: 403 }
-      );
-    }
-    const course: courseInterface = await req.json();
-    if (!course.content) {
-      return NextResponse.json(
-        { message: "Expected course content." },
-        { status: 400 }
-      );
-    }
+    const userId = "66db185ba5d68a48483b9ae4";
+    const { title, subtitle, category } = await req.json();
     const createdCourse = await db.course.create({
       data: {
-        teacherId: decode.id,
-        courseContent: course.content,
-        curriculum: course.curriculum,
-        type: course.type,
+        teacherId: userId,
+        title,
+        subtitle,
+        category,
       },
     });
-    return NextResponse.json({ message: createdCourse }, { status: 201 });
+    return NextResponse.json(createdCourse);
   } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 500 }
-    );
+    console.log("Course creation: ", error);
+    return new NextResponse("Internal error", { status: 500 });
   }
 }

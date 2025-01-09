@@ -9,14 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
+    "@auth/mongodb-adapter": "^3.7.4",
+    "@auth/prisma-adapter": "^2.7.4",
+    "@aws-sdk/client-s3": "^3.717.0",
+    "@aws-sdk/s3-request-presigner": "^3.717.0",
+    "@prisma/client": "^6.1.0",
     "@radix-ui/react-dialog": "^1.1.2",
     "@reduxjs/toolkit": "^2.3.0",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.446.0",
     "mongodb": "^6.10.0",
     "next": "14.2.5",
+    "next-auth": "^5.0.0-beta.25",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
@@ -36,7 +43,7 @@
     "eslint-config-next": "14.2.5",
     "jsonwebtoken": "^9.0.2",
     "postcss": "^8.4.47",
-    "prisma": "^5.22.0",
+    "prisma": "^6.1.0",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
   }

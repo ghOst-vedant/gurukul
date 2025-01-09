@@ -28,3 +28,12 @@ export interface testimonials {
   rating: number;
   review: string;
 }
+
+export interface session {
+  user: {
+    name: string;
+    email: string;
+    image: string;
+  };
+  expires: string;
+}

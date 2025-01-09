@@ -13,7 +13,7 @@ import home_ad_img from "@/assets/images/home_ad_img.png";
 import userProfile from "@/assets/images/user.png";
 import CourseCarousel from "@/components/ui/CourseCarousel";
 
-const Home = () => {
+const Home = async () => {
   const learnersData = [
     {
       number: 1.2,
