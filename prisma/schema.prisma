@@ -123,11 +123,10 @@ model Chat {
 
 model Course {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  teacherId   String        @db.ObjectId
-  title       String
-  subtitle    String
+  title       String?
+  subtitle    String?
   description String?
-  category    String
+  category    String?
   imageUrl    String?       @default("https://cdn.pixabay.com/photo/2021/03/19/11/42/pencil-6107347_1280.jpg")
   attachments Attachments[]
   createdAt   DateTime      @default(now())

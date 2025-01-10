@@ -10,7 +10,7 @@ import Login from "@/components/popups/Login";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "../../auth";
 import { RecoilRoot, useRecoilState, useSetRecoilState } from "recoil";
-import { SessionSync } from "@/lib/SessionSync";
+import SessionSync from "@/lib/SessionSync";
 import { userSessionAtom } from "@/recoil/Atoms/userSession";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,10 +26,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   return (
-    <SessionProvider>
+    <SessionProvider session={session}>
       <RecoilContextProvider>
-        <SessionSync />
+        {/* <SessionSync /> */}
         <html lang="en">
           <body className={inter.className}>
             <Login />

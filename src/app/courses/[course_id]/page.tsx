@@ -1,17 +1,9 @@
 "use client";
 import { useState } from "react";
 import { getSecureUrl } from "./actions";
+import { computeSHA256 } from "@/lib/bcrypt";
 
 const Page = () => {
-  const computeSHA256 = async (file: File) => {
-    const buffer = await file.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-    return hashHex;
-  };
   const [file, setFile] = useState<File | undefined>(undefined);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -20,8 +12,6 @@ const Page = () => {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log({ file });
     if (file) {
       const checksum = await computeSHA256(file!);
       const secureUrl = await getSecureUrl(

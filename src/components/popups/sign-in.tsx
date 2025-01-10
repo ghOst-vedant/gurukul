@@ -1,8 +1,5 @@
 "use client";
 import { login, logout } from "@/actions/auth";
-import { auth } from "../../../auth";
-import { useRecoilState } from "recoil";
-import { userSessionAtom } from "@/recoil/Atoms/userSession";
 
 export default function SignIn() {
   return (
@@ -12,6 +9,7 @@ export default function SignIn() {
         onClick={async () => {
           login("google");
         }}
+        className=" text-white font-light bg-blue border rounded-lg p-2"
       >
         Signin with Google
       </button>
