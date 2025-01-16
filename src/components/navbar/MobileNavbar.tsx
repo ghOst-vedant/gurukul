@@ -8,10 +8,17 @@ import arrow from "@/assets/icons/arrow.png";
 import Link from "next/link";
 import { FiSearch } from "react-icons/fi";
 import { useState } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { userSessionAtom } from "@/recoil/Atoms/userSession";
+import { login, logout } from "@/actions/auth";
+import { loginPopupAtom } from "@/recoil/Atoms/loginpopup";
 
 export function MobileNavbar() {
   const [categoryOpen, setCategoryOpen] = useState(false);
   let [sidebarOpen, setSidebarOpen] = useState(false);
+  const session = useRecoilValue(userSessionAtom);
+  const setSession = useSetRecoilState(userSessionAtom);
+  const setLoginPopup = useSetRecoilState(loginPopupAtom);
 
   const categories = [
     "Web Development",
@@ -48,18 +55,20 @@ export function MobileNavbar() {
   return (
     <>
       <nav className="flex justify-between py-3 px-4 bg-white shadow-md fixed w-full z-10">
-        <Image
-          src={gurukul_book_logo}
-          className="h-10 w-fit"
-          alt="Brand logo"
-        />
+        <Link href="/home" className="cursor-pointer">
+          <Image
+            src={gurukul_book_logo}
+            className="h-10 w-fit"
+            alt="Brand logo"
+          />
+        </Link>
         <div className="flex gap-4 items-center justify-center">
           <FiSearch size={30} />
           <Image
             src={menu}
             className="h-7 w-fit cursor-pointer"
             alt="Brand logo"
-            onClick={() => setSidebarOpen(true)}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
           />
         </div>
       </nav>
@@ -135,9 +144,27 @@ export function MobileNavbar() {
           >
             Explore
           </Link>
-          <button className="text-lg hover:text-white hover:bg-blue rounded-full px-5 py-[6px] border-2 border-blue font-medium text-left mt-4 w-fit">
-            Login
-          </button>
+
+          {session !== null ? (
+            <button
+              className="text-lg hover:text-white hover:bg-blue rounded-full px-5 py-[6px] border-2 border-blue font-medium text-left mt-4 w-fit"
+              onClick={async () => {
+                logout();
+                setSession(null);
+              }}
+            >
+              logout
+            </button>
+          ) : (
+            <button
+              className="text-lg hover:text-white hover:bg-blue rounded-full px-5 py-[6px] border-2 border-blue font-medium text-left mt-4 w-fit"
+              onClick={() => {
+                setLoginPopup(true);
+              }}
+            >
+              Login
+            </button>
+          )}
         </div>
       </div>
     </>

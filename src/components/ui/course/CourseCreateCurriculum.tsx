@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Assignment,
   CurriculumSection,
@@ -12,6 +12,10 @@ import { v4 as uuidv4 } from "uuid";
 import { Test } from "@/app/addnewcourse/page";
 import { MdDelete } from "react-icons/md";
 import dynamic from "next/dynamic";
+import { uploadFileToAWS } from "@/lib/awsUtil";
+import { deleteFromBucket } from "@/actions/aws";
+import { submitCourseCurriculum } from "@/actions/actions";
+
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 type CourseCreateCurriculumProps = {
@@ -23,6 +27,7 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
   curriculum,
   setCurriculum,
 }) => {
+    // const [video, setVideo] = useState<File | null>(null);
   const addSection = () => {
     const newSection: CurriculumSection = {
       sectionId: uuidv4(),
@@ -261,7 +266,6 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
   };
 
   // State managements
-
   const changeSectionTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setCurriculum((prev) =>
       prev.map((curriculumSection) =>
@@ -299,6 +303,45 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
           : curriculumSection
       )
     );
+  };
+
+  const changeLectureContent = async (
+    sectionId: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    try {
+      if (e.target.files && e.target.files[0]) {
+        const video = e.target.files[0];
+        console.log(video);
+        const videoUrl = await uploadFileToAWS(video);
+        console.log(videoUrl);
+        if (videoUrl!==null) {
+          setCurriculum((prev) =>
+            prev.map((curriculumSection) =>
+              curriculumSection.sectionId === sectionId
+                ? {
+                    ...curriculumSection,
+                    sectionContent: curriculumSection.sectionContent.map((content) =>
+                      content.id === e.target.id.replace('lectureUpload-', '')
+                        ? {
+                            ...content,
+                            data:{
+                                ...content.data,
+                                content:videoUrl
+                            }
+                          }
+                        : content
+                    ),
+                  }
+                : curriculumSection
+            )
+          );
+          console.log("Video URL uploaded and curriculum updated successfully.");
+        }
+    }
+    } catch (error) {
+      console.error("Error updating lecture content:", error);
+    }
   };
 
   const changeAssignmentTitle = (
@@ -577,11 +620,19 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
       )
     );
   };
+const handleDeleteFile = async(url:string)=>{
+if (url) {
+    const deleting = await deleteFromBucket(url);
+}
+}
+const handleSubmission=async()=>{
+try {
+    await submitCourseCurriculum(curriculum)
+} catch (error) {
+console.error("Error creating Curriculum: ",error);
 
-  const saveCurriculumDetails = () => {
-    console.log(curriculum);
-  };
-
+}
+}
   return (
     <div className="w-full shadow flex flex-col h-fit rounded-lg">
       <h2 className="text-2xl font-medium p-8 border-b-2">Curriculum</h2>
@@ -646,8 +697,9 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                           </span>
                           <div className="flex gap-2">
                             <label
+
                               htmlFor={`lectureUpload-${content.id}`}
-                              className="flex gap-2 items-center justify-center text-black hover:text-white hover:bg-gray-600 border-[1px] border-black rounded-lg px-5 py-2 sm:px-4 sm:py-2 w-fit"
+                              className=" cursor-pointer flex gap-2 items-center justify-center text-black hover:text-white hover:bg-gray-600 border-[1px] border-black rounded-lg px-5 py-2 sm:px-4 sm:py-2 w-fit"
                             >
                               <span>Upload</span>
                               <IoCloudUploadOutline className="text-xl" />
@@ -657,14 +709,16 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
                               name={`lectureUpload-${content.id}`}
                               id={`lectureUpload-${content.id}`}
                               className="hidden"
+                            onChange={(e)=>changeLectureContent(curriCulumSection.sectionId,e)}
                             />
                             <button
                               className="text-black hover:text-white hover:bg-red border-[1px] border-black hover:border-red rounded-lg p-2"
-                              onClick={() =>
+                              onClick={() =>{
+                                handleDeleteFile((content.data as Lecture).content)
                                 deleteItemFromSection(
                                   curriCulumSection.sectionId,
                                   content.id
-                                )
+                                )}
                               }
                             >
                               <MdDelete className="text-2xl" />
@@ -1013,7 +1067,8 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
         </div>
         <button
           className="text-black hover:text-white hover:bg-blue border-2 border-blue rounded-full px-5 py-2 sm:px-4 sm:py-2 w-fit mx-auto"
-          onClick={saveCurriculumDetails}
+          onClick={handleSubmission
+          }
         >
           Save Changes
         </button>

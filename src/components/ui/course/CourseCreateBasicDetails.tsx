@@ -1,6 +1,10 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { BasicDetails } from "@/app/addnewcourse/page";
+import { computeSHA256 } from "@/lib/bcrypt";
+import { getSecureUrl } from "@/actions/aws";
+import { uploadFileToAWS } from "@/lib/awsUtil";
+import { submitBasicDetails } from "@/actions/actions";
 
 type CourseCreateBasicDetailsProps = {
   basicDetails: BasicDetails;
@@ -63,10 +67,47 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
     }));
   };
 
-  const saveBasicDetails = () => {
-    console.log(basicDetails);
-  };
+  const [file, setFile] = useState<File | null>(null);
+  const [video, setVideo] = useState<File | null>(null);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setVideo(e.target.files[0]);
+    }
+  };
+  const handleFileUpload = async () => {
+    try {
+      if (file) {
+        const imageUrl = await uploadFileToAWS(file);
+        setBasicDetails((prev) => ({
+          ...prev,
+          courseImage: imageUrl as string,
+        }));
+      }
+      if (video) {
+        const videoUrl = await uploadFileToAWS(video);
+        setBasicDetails((prev) => ({
+          ...prev,
+          coursePromotionalVideo: videoUrl as string,
+        }));
+      }
+    } catch (error) {
+      console.error({ "Error Uploading files": error });
+    }
+  };
+const submitDetails = async() => {
+try {
+handleFileUpload
+await submitBasicDetails(basicDetails)
+} catch (error) {
+console.log(error);
+}
+}
   return (
     <div className="w-full shadow flex flex-col h-fit rounded-lg">
       <h2 className="text-2xl font-medium p-8 border-b-2">Basic Details</h2>
@@ -128,7 +169,7 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
                 name="language"
                 id="language"
                 className="border-[1px] border-black/60 rounded-lg px-4 py-3 outline-none"
-                value={basicDetails.language}
+                value={basicDetails.language || "English"}
                 onChange={changeLanguageInBasicDetails}
               >
                 <option value="English">English</option>
@@ -144,7 +185,7 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
                 name="difficulty"
                 id="difficulty"
                 className="border-[1px] border-black/60 rounded-lg px-4 py-3 outline-none"
-                value={basicDetails.difficulty}
+                value={basicDetails.difficulty || "Beginner Level"}
                 onChange={changeDifficultyInBasicDetails}
               >
                 <option value="Begineer-level">Beginner Level</option>
@@ -161,7 +202,7 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
                 name="category"
                 id="category"
                 className="border-[1px] border-black/60 rounded-lg px-4 py-3 outline-none"
-                value={basicDetails.category}
+                value={basicDetails.category || "Full Stack Web Development"}
                 onChange={changeCategoryInBasicDetails}
               >
                 <option value="Full Stack Web Development">
@@ -189,6 +230,7 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
                 name="courseImage"
                 id="courseImage"
                 className="hidden"
+                onChange={handleFileChange}
               />
             </span>
             <span className="flex flex-col col-span-6 gap-2">
@@ -205,13 +247,14 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
                 name="courseVideo"
                 id="courseVideo"
                 className="hidden"
+                onChange={handleVideoChange}
               />
             </span>
           </div>
           <div className="flex justify-end mt-4">
             <button
               className="text-black hover:text-white hover:bg-blue border-2 border-blue rounded-full px-5 py-2 sm:px-4 sm:py-2 mx-auto"
-              onClick={saveBasicDetails}
+              onClick={submitDetails}
             >
               Save Changes
             </button>

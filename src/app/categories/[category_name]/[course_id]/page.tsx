@@ -3,9 +3,9 @@ import { TestimonialCard } from "@/components/cards/TestimonialCard";
 import { BsPeopleFill } from "react-icons/bs";
 import userProfile from "@/assets/images/user.png";
 import InstructorCard from "@/components/cards/InstructorCard";
-import CourseTestimonialCarousel from "@/components/ui/CourseTestimonialCarousel";
+import CourseTestimonialCarousel from "@/components/ui/course/CourseTestimonialCarousel";
 import { CourseCard } from "@/components/cards/CourseCard";
-import CourseCarousel from "@/components/ui/CourseCarousel";
+import CourseCarousel from "@/components/ui/course/CourseCarousel";
 
 const Page = () => {
   const testimonials = [

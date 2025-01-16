@@ -1,3 +1,4 @@
+import { submitPricing } from "@/actions/actions";
 import { Pricing } from "@/app/addnewcourse/page";
 import React, { Dispatch, SetStateAction } from "react";
 
@@ -21,8 +22,9 @@ const CourseCreatePricing: React.FC<CourseCreatePricingProps> = ({
     }));
   };
 
-  const savePricingDetails = () => {
-    console.log(pricing);
+  const savePricingDetails = async() => {
+   await submitPricing(pricing)
+   
   };
 
   return (

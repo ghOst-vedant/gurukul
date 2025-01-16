@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import userProfile from "@/assets/images/user.png";
-import { TestimonialCard } from "../cards/TestimonialCard";
+import { TestimonialCard } from "../../cards/TestimonialCard";
 
 const CourseTestimonialCarousel = () => {
   const [index, setIndex] = useState(0);

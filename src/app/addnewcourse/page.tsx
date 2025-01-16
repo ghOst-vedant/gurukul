@@ -1,9 +1,14 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
-import CourseCreateBasicDetails from "@/components/ui/CourseCreateBasicDetails";
-import CourseCreateCurriculum from "@/components/ui/CourseCreateCurriculum";
-import CourseCreatePricing from "@/components/ui/CourseCreatePricing";
 
+import { Dispatch, SetStateAction, useState } from "react";
+import CourseCreateBasicDetails from "@/components/ui/course/CourseCreateBasicDetails";
+import CourseCreateCurriculum from "@/components/ui/course/CourseCreateCurriculum";
+import CourseCreatePricing from "@/components/ui/course/CourseCreatePricing";
+
+export type Pricing = {
+  isCourseFree: boolean;
+  price: number;
+};
 export type Lecture = {
   lectureTitle: string;
   content: string;
@@ -18,10 +23,6 @@ export type Test = {
   }[];
 };
 
-export type Pricing = {
-  isCourseFree: boolean;
-  price: number;
-};
 
 export type Mcq = {
   title: string;
@@ -60,7 +61,7 @@ export type BasicDetails = {
   coursePromotionalVideo: string;
 };
 
-const page = () => {
+const Page = () => {
   const sideLinks = [
     "Basic details",
     "Curriculum",
@@ -77,18 +78,18 @@ const page = () => {
     title: "",
     subtitle: "",
     description: "",
-    language: "",
-    difficulty: "",
-    category: "",
+    language: "English",
+    difficulty: "Beginner Level",
+    category: "Full Stack Web Development",
     courseImage: "",
     coursePromotionalVideo: "",
   });
+
   const [curriculum, setCurriculum] = useState<CurriculumSection[]>([]);
   const [pricing, setPricing] = useState<Pricing>({
     isCourseFree: true,
     price: 0,
   });
-
   return (
     <div className="px-4 pb-16 pt-28 sm:p-12 sm:pt-28 lg:px-24 lg:pb-24 lg:pt-32 flex flex-col sm:flex-row gap-10 sm:gap-8 lg:gap-20">
       <div className="sm:w-[15%] flex flex-col gap-2 h-fit">
@@ -130,4 +131,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
