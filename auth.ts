@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { JWT } from "next-auth/jwt";
+import { encode, JWT } from "next-auth/jwt";
 import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
@@ -65,10 +65,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return token;
     },
     async session({ session, token }: { session: any; token: JWT }) {
-      if (token?.id) {
-        // Add user id to session object
-        session.user.id = token.id;
-      }
+      const encodedToken = await encode({
+        token,
+        secret: process.env.AUTH_SECRET!,
+        salt: process.env.AUTH_SALT!,
+      });
+      session.token = encodedToken;
       return session;
     },
   },

@@ -4,6 +4,7 @@ import { BasicDetails } from "@/app/addnewcourse/page";
 import { computeSHA256 } from "@/lib/bcrypt";
 import { getSecureUrl } from "@/actions/aws";
 import { uploadFileToAWS } from "@/lib/awsUtil";
+import { submitBasicDetails } from "@/actions/actions";
 
 type CourseCreateBasicDetailsProps = {
   basicDetails: BasicDetails;
@@ -65,8 +66,6 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
       category: e.target.value,
     }));
   };
-  const saveBasicDetails = () => {};
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [file, setFile] = useState<File | null>(null);
   const [video, setVideo] = useState<File | null>(null);
@@ -85,7 +84,6 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
     try {
       if (file) {
         const imageUrl = await uploadFileToAWS(file);
-        console.log(imageUrl);
         setBasicDetails((prev) => ({
           ...prev,
           courseImage: imageUrl as string,
@@ -93,7 +91,6 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
       }
       if (video) {
         const videoUrl = await uploadFileToAWS(video);
-        console.log(videoUrl);
         setBasicDetails((prev) => ({
           ...prev,
           coursePromotionalVideo: videoUrl as string,
@@ -103,7 +100,14 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
       console.error({ "Error Uploading files": error });
     }
   };
-
+const submitDetails = async() => {
+try {
+handleFileUpload
+await submitBasicDetails(basicDetails)
+} catch (error) {
+console.log(error);
+}
+}
   return (
     <div className="w-full shadow flex flex-col h-fit rounded-lg">
       <h2 className="text-2xl font-medium p-8 border-b-2">Basic Details</h2>
@@ -250,7 +254,7 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
           <div className="flex justify-end mt-4">
             <button
               className="text-black hover:text-white hover:bg-blue border-2 border-blue rounded-full px-5 py-2 sm:px-4 sm:py-2 mx-auto"
-              onClick={handleFileUpload}
+              onClick={submitDetails}
             >
               Save Changes
             </button>

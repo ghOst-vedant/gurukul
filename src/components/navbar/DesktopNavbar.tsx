@@ -13,7 +13,6 @@ const DesktopNavbar = () => {
   const setLoginPopup = useSetRecoilState(loginPopupAtom);
   const session = useRecoilValue(userSessionAtom);
   const setSession = useSetRecoilState(userSessionAtom);
-
   return (
     <nav className="lg:px-[3vw] flex justify-between py-3 shadow-md overflow-x-hidden bg-white fixed w-full z-10">
       <Link href="/">

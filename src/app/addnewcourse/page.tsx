@@ -5,6 +5,10 @@ import CourseCreateBasicDetails from "@/components/ui/course/CourseCreateBasicDe
 import CourseCreateCurriculum from "@/components/ui/course/CourseCreateCurriculum";
 import CourseCreatePricing from "@/components/ui/course/CourseCreatePricing";
 
+export type Pricing = {
+  isCourseFree: boolean;
+  price: number;
+};
 export type Lecture = {
   lectureTitle: string;
   content: string;
@@ -19,10 +23,6 @@ export type Test = {
   }[];
 };
 
-export type Pricing = {
-  isCourseFree: boolean;
-  price: number;
-};
 
 export type Mcq = {
   title: string;
@@ -90,7 +90,6 @@ const Page = () => {
     isCourseFree: true,
     price: 0,
   });
-  console.log(basicDetails);
   return (
     <div className="px-4 pb-16 pt-28 sm:p-12 sm:pt-28 lg:px-24 lg:pb-24 lg:pt-32 flex flex-col sm:flex-row gap-10 sm:gap-8 lg:gap-20">
       <div className="sm:w-[15%] flex flex-col gap-2 h-fit">

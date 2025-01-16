@@ -28,7 +28,6 @@ export interface testimonials {
   rating: number;
   review: string;
 }
-
 export interface session {
   user: {
     name: string;
@@ -36,4 +35,14 @@ export interface session {
     image: string;
   };
   expires: string;
+}
+export interface CourseDetails {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  language?: string;
+  difficulty?: string;
+  category?: string;
+  courseImage?: string;
+  coursePromotionalVideo?: string;
 }

@@ -1,6 +1,6 @@
 "use server";
 
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand,DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
 const s3 = new S3Client({
@@ -19,6 +19,7 @@ const acceptedTypes = [
   "video/webm",
 ];
 const maxSize = 1024 * 1024 * 300;
+
 export async function getSecureUrl(
   name: string,
   type: string,
@@ -47,4 +48,12 @@ export async function getSecureUrl(
   });
   const signedUrl = await getSignedUrl(s3, putObject, { expiresIn: 60 });
   return { Success: { url: signedUrl } };
+}
+
+export async function deleteFromBucket(url:string) {
+    const deleteObjectCommand = new DeleteObjectCommand({
+        Bucket:process.env.AWS_BUCKET_NAME!,
+        Key:url.split("/").pop()!
+    })
+    await s3.send(deleteObjectCommand)
 }
