@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import CourseCreateBasicDetails from "@/components/ui/course/CourseCreateBasicDetails";
 import CourseCreateCurriculum from "@/components/ui/course/CourseCreateCurriculum";
 import CourseCreatePricing from "@/components/ui/course/CourseCreatePricing";
+import CourseCreatePublishCourse from "@/components/ui/course/CourseCreatePublishCourse";
 
 export type Pricing = {
   isCourseFree: boolean;
@@ -22,7 +23,6 @@ export type Test = {
     question?: Mcq | Descriptive;
   }[];
 };
-
 
 export type Mcq = {
   title: string;
@@ -126,6 +126,13 @@ const Page = () => {
       )}
       {currentview === "Pricing" && (
         <CourseCreatePricing pricing={pricing} setPricing={setPricing} />
+      )}
+      {currentview === "Publish Course" && (
+        <CourseCreatePublishCourse
+          basicDetails={basicDetails}
+          curriculum={curriculum}
+          pricing={pricing}
+        />
       )}
     </div>
   );
