@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react"
 import CourseCreateBasicDetails from "@/components/ui/course/CourseCreateBasicDetails"
 import CourseCreateCurriculum from "@/components/ui/course/CourseCreateCurriculum"
 import CourseCreatePricing from "@/components/ui/course/CourseCreatePricing"
+import CourseCreatePublishCourse from "@/components/ui/course/CourseCreatePublishCourse"
 
 export type Pricing = {
     isCourseFree: boolean
@@ -133,6 +134,13 @@ const Page = () => {
                     pricing={pricing}
                     setPricing={setPricing}
                     setView={setCurrentView}
+                />
+            )}
+            {currentview === "Publish Course" && (
+                <CourseCreatePublishCourse
+                    basicDetails={basicDetails}
+                    curriculum={curriculum}
+                    pricing={pricing}
                 />
             )}
         </div>
