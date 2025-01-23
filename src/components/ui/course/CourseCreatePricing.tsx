@@ -82,7 +82,7 @@ const CourseCreatePricing: React.FC<CourseCreatePricingProps> = ({
                     className="text-black hover:text-white hover:bg-blue border-2 border-blue rounded-full px-5 py-2 sm:px-4 sm:py-2 mx-auto mt-4"
                     onClick={savePricingDetails}
                 >
-                    Save Changes
+                    next
                 </button>
             </div>
         </div>

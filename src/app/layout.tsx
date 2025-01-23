@@ -9,10 +9,8 @@ import RecoilContextProvider from "@/components/ui/RecoilContextProvider";
 import Login from "@/components/popups/Login";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "../../auth";
-import { RecoilRoot, useRecoilState, useSetRecoilState } from "recoil";
 import SessionSync from "@/lib/SessionSync";
-import { userSessionAtom } from "@/recoil/Atoms/userSession";
-import { log } from "node:console";
+
 
 const inter = Inter({ subsets: ["latin"] });
 

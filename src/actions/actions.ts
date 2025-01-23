@@ -6,27 +6,23 @@ import {
     Pricing,
 } from "@/app/addnewcourse/page"
 import { db } from "@/lib/prisma"
+import { getSession } from "next-auth/react"
+import { auth } from "../../auth"
 
-export const submitCourseCurriculum = async (
-    courseCurriculum: CurriculumSection[]
-) => {
-    try {
-        const sections = await db.course.create({
-            data: {
-                sections: courseCurriculum,
-            },
-        })
-        return sections
-    } catch (error) {
-        console.error((error as Error).message)
-    }
-}
-export const submitBasicDetails = async (
-    basicDetails: BasicDetails,
-    curriculum: CurriculumSection[],
+type Course = {
+    basicDetails: BasicDetails
+    curriculum: CurriculumSection[]
     pricing: Pricing
-) => {
-
+}
+export const PublishCourse = async ({
+    basicDetails,
+    curriculum,
+    pricing,
+}: Course) => {
+    const session = await auth()
+    if (!session?.user) {
+        throw new Error("Not authorised")
+    }
     const {
         title,
         courseImage,
@@ -37,9 +33,11 @@ export const submitBasicDetails = async (
         difficulty,
         language,
     } = basicDetails
-
+    if (!basicDetails && pricing && curriculum) {
+        return
+    }
     try {
-        const courseDetails = await db.course.create({
+        const Course = await db.course.create({
             data: {
                 title,
                 courseImage,
@@ -49,26 +47,14 @@ export const submitBasicDetails = async (
                 subtitle,
                 difficulty,
                 language,
-                sections:curriculum,
-                isCourseFree:pricing.isCourseFree
+                sections: curriculum,
+                isCourseFree: pricing.isCourseFree,
+                price: pricing.price,
+                published: true,
             },
         })
-        return courseDetails
+        return Course
     } catch (error) {
-        console.error((error as Error).message)
-    }
-}
-export const submitPricing = async (pricing: Pricing) => {
-    const { price, isCourseFree } = pricing
-    try {
-        const priceData = await db.course.create({
-            data: {
-                isCourseFree,
-                price,
-            },
-        })
-        return priceData
-    } catch (error) {
-        console.error((error as Error).message)
+        return { error: error }
     }
 }
