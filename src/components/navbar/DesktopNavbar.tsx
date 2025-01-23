@@ -54,7 +54,7 @@ const DesktopNavbar = () => {
         {session !== null ? (
           <button
             className="text-lg hover:text-white hover:bg-blue rounded-full px-5 py-[6px] border-2 border-blue font-medium"
-            onClick={async () => {
+            onClick={ () => {
               logout();
               setSession(null);
             }}
