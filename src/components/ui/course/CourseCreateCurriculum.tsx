@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from "uuid"
 import { Test } from "@/app/addnewcourse/page"
 import { MdDelete } from "react-icons/md"
 import dynamic from "next/dynamic"
-import { uploadFileToAWS } from "@/lib/awsUtil"
+import { handleDeleteFile, uploadFileToAWS } from "@/lib/awsUtil"
 import { deleteFromBucket } from "@/actions/aws"
 import { submitCourseCurriculum } from "@/actions/actions"
 
@@ -697,11 +697,7 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
         )
     }
     //   Deleting files from the aws
-    const handleDeleteFile = async (url: string) => {
-        if (url) {
-            await deleteFromBucket(url)
-        }
-    }
+
     const handleSubmission = async () => {
         try {
             console.log(curriculum)

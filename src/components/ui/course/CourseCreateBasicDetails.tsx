@@ -1,10 +1,8 @@
 import React, { Dispatch, SetStateAction, useState } from "react"
-import { IoCloudUploadOutline } from "react-icons/io5"
+import { IoClose, IoCloudUploadOutline } from "react-icons/io5"
 import { BasicDetails } from "@/app/addnewcourse/page"
-import { computeSHA256 } from "@/lib/bcrypt"
-import { getSecureUrl } from "@/actions/aws"
-import { uploadFileToAWS } from "@/lib/awsUtil"
-import { submitBasicDetails } from "@/actions/actions"
+
+import { handleDeleteFile, uploadFileToAWS } from "@/lib/awsUtil"
 
 type CourseCreateBasicDetailsProps = {
     basicDetails: BasicDetails
@@ -72,36 +70,41 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
     const [file, setFile] = useState<File | null>(null)
     const [video, setVideo] = useState<File | null>(null)
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            setFile(e.target.files[0])
-        }
-    }
-    const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setVideo(e.target.files[0])
-        }
-    }
-    const handleFileUpload = async () => {
-        try {
-            if (file) {
-                const imageUrl = await uploadFileToAWS(file)
+            const selectedFile = e.target.files[0]
+            try {
+                const imageUrl = await uploadFileToAWS(selectedFile)
+                console.log(imageUrl)
+
                 setBasicDetails((prev) => ({
                     ...prev,
                     courseImage: imageUrl as string,
                 }))
+                console.log("Link: ", basicDetails.courseImage)
+            } catch (error) {
+                console.error("Error uploading the image:", error)
             }
-            if (video) {
-                const videoUrl = await uploadFileToAWS(video)
+        }
+    }
+    const handleVideoChange = async (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        if (e.target.files && e.target.files[0]) {
+            const selectedVideo = e.target.files[0]
+            try {
+                const videoUrl = await uploadFileToAWS(selectedVideo)
+                console.log(videoUrl)
                 setBasicDetails((prev) => ({
                     ...prev,
                     coursePromotionalVideo: videoUrl as string,
                 }))
+            } catch (error) {
+                console.error("Error uploading the image:", error)
             }
-        } catch (error) {
-            console.error({ "Error Uploading files": error })
         }
     }
+
     const submitDetails = () => {
         try {
             setView("Curriculum")
@@ -248,41 +251,95 @@ const CourseCreateBasicDetails: React.FC<CourseCreateBasicDetailsProps> = ({
                         </span>
                     </div>
                     <div className="grid grid-cols-12 gap-10">
-                        <span className="flex flex-col col-span-6 gap-2">
+                        <span className="flex flex-col col-span-6 gap-2 relative">
                             <p className="font-medium text-lg">Course Image</p>
-                            <label
-                                htmlFor="courseImage"
-                                className="font-medium text-lg bg-black/40 text-white/60 cursor-pointer rounded-lg h-40 flex flex-col gap-2 items-center justify-center"
-                            >
-                                <span>Course Image</span>
-                                <IoCloudUploadOutline className="text-5xl" />
-                            </label>
-                            <input
-                                type="file"
-                                name="courseImage"
-                                id="courseImage"
-                                className="hidden"
-                                onChange={handleFileChange}
-                            />
+                            {basicDetails.courseImage ? (
+                                <>
+                                    <img
+                                        src={basicDetails.courseImage}
+                                        alt="Course"
+                                        className="h-[50%] object-cover rounded-lg"
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            handleDeleteFile(
+                                                basicDetails.courseImage
+                                            )
+                                            setBasicDetails((prev) => ({
+                                                ...prev,
+                                                courseImage: "",
+                                            }))
+                                        }}
+                                        className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-red-600"
+                                    >
+                                        <IoClose className="text-red-600" />
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <label
+                                        htmlFor="courseImage"
+                                        className="font-medium text-lg bg-black/40 text-white/60 cursor-pointer rounded-lg h-40 flex flex-col gap-2 items-center justify-center"
+                                    >
+                                        <span>Course Image</span>
+                                        <IoCloudUploadOutline className="text-5xl" />
+                                    </label>
+                                    <input
+                                        type="file"
+                                        name="courseImage"
+                                        id="courseImage"
+                                        className="hidden"
+                                        onChange={handleFileChange}
+                                    />
+                                </>
+                            )}
                         </span>
-                        <span className="flex flex-col col-span-6 gap-2">
+                        <span className="flex flex-col col-span-6 gap-2 relative">
                             <p className="font-medium text-lg">
                                 Course Promotional Video
                             </p>
-                            <label
-                                htmlFor="courseVideo"
-                                className="font-medium text-lg bg-black/40 text-white/60 cursor-pointer rounded-lg h-40 flex flex-col gap-2 items-center justify-center"
-                            >
-                                <span>Course Promotional Video</span>
-                                <IoCloudUploadOutline className="text-5xl" />
-                            </label>
-                            <input
-                                type="file"
-                                name="courseVideo"
-                                id="courseVideo"
-                                className="hidden"
-                                onChange={handleVideoChange}
-                            />
+                            {basicDetails.coursePromotionalVideo ? (
+                                <>
+                                    <video
+                                        controls
+                                        className="w-full h-auto rounded-lg"
+                                        src={
+                                            basicDetails.coursePromotionalVideo
+                                        }
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            handleDeleteFile(
+                                                basicDetails.coursePromotionalVideo
+                                            )
+                                            setBasicDetails((prev) => ({
+                                                ...prev,
+                                                coursePromotionalVideo: "",
+                                            }))
+                                        }}
+                                        className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-red-600"
+                                    >
+                                        <IoClose className="text-red-600" />
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <label
+                                        htmlFor="courseVideo"
+                                        className="font-medium text-lg bg-black/40 text-white/60 cursor-pointer rounded-lg h-40 flex flex-col gap-2 items-center justify-center"
+                                    >
+                                        <span>Course Promotional Video</span>
+                                        <IoCloudUploadOutline className="text-5xl" />
+                                    </label>
+                                    <input
+                                        type="file"
+                                        name="courseVideo"
+                                        id="courseVideo"
+                                        className="hidden"
+                                        onChange={handleVideoChange}
+                                    />
+                                </>
+                            )}
                         </span>
                     </div>
                     <div className="flex justify-end mt-4">
