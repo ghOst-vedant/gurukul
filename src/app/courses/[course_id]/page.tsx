@@ -1,46 +1,24 @@
-"use client";
-import { useState } from "react";
-import { getSecureUrl } from "./actions";
-import { computeSHA256 } from "@/lib/bcrypt";
+"use client"
+import { getCourses } from "@/actions/getActions"
+import React, { useEffect, useState } from "react"
 
-const Page = () => {
-  const [file, setFile] = useState<File | undefined>(undefined);
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
-    }
-  };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (file) {
-      const checksum = await computeSHA256(file!);
-      const secureUrl = await getSecureUrl(
-        file?.name,
-        file?.type,
-        file?.size,
-        checksum
-      );
-      if (secureUrl.Failure !== undefined) {
-        return;
-      }
-      if (secureUrl.Success) {
-        const url = secureUrl.Success.url;
-        await fetch(url, {
-          method: "PUT",
-          body: file,
-          headers: { "Content-Type": file?.type },
-        });
-      }
-    }
-  };
-  return (
-    <form className="p-48" onSubmit={handleSubmit}>
-      <h1>Upload a File</h1>
-      <input type="file" onChange={handleFileChange} />
-      {file && <p>Selected File: {file.name}</p>}
-      <button className="px-4 py-2 bg-blue">Submit</button>
-    </form>
-  );
-};
+const page = () => {
+    const [first, setfirst] = useState<any>(null)
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const data = await getCourses()
+                console.log(data)
+                setfirst(data)
+            } catch (error) {
+                console.error("Failed to fetch courses:", error)
+            }
+        }
+        fetchCourses()
+    }, [])
+    console.log(first)
 
-export default Page;
+    return <div className="pt-40">page</div>
+}
+
+export default page

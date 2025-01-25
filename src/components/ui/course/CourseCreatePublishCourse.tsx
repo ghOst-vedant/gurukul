@@ -1,5 +1,5 @@
 "use client"
-import { PublishCourse } from "@/actions/actions"
+import { PublishCourse } from "@/actions/postActions"
 import {
     Assignment,
     BasicDetails,
