@@ -20,7 +20,7 @@ import { MdDelete } from "react-icons/md"
 import dynamic from "next/dynamic"
 import { handleDeleteFile, uploadFileToAWS } from "@/lib/awsUtil"
 import { deleteFromBucket } from "@/actions/aws"
-import { submitCourseCurriculum } from "@/actions/actions"
+import { submitCourseCurriculum } from "@/actions/postActions"
 
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false })
 

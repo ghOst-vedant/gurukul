@@ -14,6 +14,7 @@ type Course = {
     curriculum: CurriculumSection[]
     pricing: Pricing
 }
+// Publish course
 export const PublishCourse = async ({
     basicDetails,
     curriculum,
@@ -58,3 +59,4 @@ export const PublishCourse = async ({
         return { error: error }
     }
 }
+

@@ -1,4 +1,4 @@
-import { submitPricing } from "@/actions/actions"
+import { submitPricing } from "@/actions/postActions"
 import { Pricing } from "@/app/addnewcourse/page"
 import React, { Dispatch, SetStateAction } from "react"
 
