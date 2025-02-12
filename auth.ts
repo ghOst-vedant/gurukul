@@ -50,11 +50,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 )
 
                 if (!isMatch) {
-                    throw new Error("Incorrect password.")
+                    return null
                 }
 
                 if (user.role !== role) {
-                    throw new Error(`User does not have the ${role} role`)
+                    return null
                 }
 
                 return user

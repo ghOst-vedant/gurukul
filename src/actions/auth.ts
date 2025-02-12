@@ -23,31 +23,32 @@ export const getSession = async () => {
     return data
 }
 
-export const loginWithCreds = async (formData: FormData): Promise<void> => {
+export const loginWithCreds = async (
+    formData: FormData
+): Promise<{ error?: string }> => {
     const email = formData.get("email")
     const password = formData.get("password")
     const role = formData.get("role")
-    if (!email || !password) {
-        throw new Error("Missing email or password!")
-    }
 
-    const rawFormData = {
-        email,
-        password,
-        role,
+    if (!email || !password) {
+        return { error: "Missing email or password!" }
     }
 
     try {
         const details = await signIn("credentials", {
-            ...rawFormData,
+            email,
+            password,
+            role,
             redirect: false,
         })
-        // if (!details || details.error) {
-        //     throw new Error(details?.error || "Login failed")
-        // }
-        // console.log(details)
-        return details
+
+        if (details?.error) {
+            return { error: details.error }
+        }
+
+        return {}
     } catch (error) {
-        console.log("Creadential Login error:", error)
+        console.error("Credential Login error:", error)
+        return { error: "An unexpected error occurred." }
     }
 }
