@@ -1,55 +1,53 @@
-"use server";
-import { db } from "@/lib/prisma";
-import { auth, signIn, signOut } from "../../auth";
-import { revalidatePath } from "next/cache";
+"use server"
+import { auth, signIn, signOut } from "../../auth"
+import { revalidatePath } from "next/cache"
+import { getSignedInUser } from "./getActions"
 
 export const login = async (provider: string) => {
-  await signIn(provider, { redirectTo: "/" });
-  revalidatePath("/");
-};
+    await signIn(provider, { redirectTo: "/" })
+    revalidatePath("/")
+}
 
 export const logout = () => {
-  signOut({ redirectTo: "/" });
-  revalidatePath("/");
-};
+    signOut({ redirectTo: "/" })
+    revalidatePath("/")
+}
 
 export const fetchSession = async () => {
-  return await auth();
-};
+    return await auth()
+}
 
-const getUserByEmail = async (email: string) => {
-  try {
-    const user = await db.user.findUnique({
-      where: {
-        email,
-      },
-    });
-    return user;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-};
+export const getSession = async () => {
+    const session = await fetchSession()
+    const data = await getSignedInUser(session?.user?.id!)
+    return data
+}
+
 export const loginWithCreds = async (formData: FormData): Promise<void> => {
-  const email = formData.get("email");
-  const password = formData.get("password");
+    const email = formData.get("email")
+    const password = formData.get("password")
+    const role = formData.get("role")
+    if (!email || !password) {
+        throw new Error("Missing email or password!")
+    }
 
-  if (!email || !password) {
-    console.error("Missing email or password!");
-    return;
-  }
+    const rawFormData = {
+        email,
+        password,
+        role,
+    }
 
-  const rawFormData = {
-    email,
-    password,
-    role: "ADMIN",
-    redirectTo: "/",
-  };
-
-  try {
-    await signIn("credentials", { ...rawFormData, redirect: false });
-    revalidatePath("/");
-  } catch (error) {
-    console.error("Error during login:", error);
-  }
-};
+    try {
+        const details = await signIn("credentials", {
+            ...rawFormData,
+            redirect: false,
+        })
+        // if (!details || details.error) {
+        //     throw new Error(details?.error || "Login failed")
+        // }
+        // console.log(details)
+        return details
+    } catch (error) {
+        console.log("Creadential Login error:", error)
+    }
+}
