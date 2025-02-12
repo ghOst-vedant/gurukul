@@ -8,17 +8,17 @@ import arrow from "@/assets/icons/arrow.png";
 import Link from "next/link";
 import { FiSearch } from "react-icons/fi";
 import { useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userSessionAtom } from "@/recoil/Atoms/userSession";
 import { login, logout } from "@/actions/auth";
-import { loginPopupAtom } from "@/recoil/Atoms/loginpopup";
+import { popupAtom } from "@/recoil/Atoms/popupAtom";
 
 export function MobileNavbar() {
   const [categoryOpen, setCategoryOpen] = useState(false);
   let [sidebarOpen, setSidebarOpen] = useState(false);
   const session = useRecoilValue(userSessionAtom);
   const setSession = useSetRecoilState(userSessionAtom);
-  const setLoginPopup = useSetRecoilState(loginPopupAtom);
+  const setPopup = useSetRecoilState(popupAtom);
 
   const categories = [
     "Web Development",
@@ -159,7 +159,7 @@ export function MobileNavbar() {
             <button
               className="text-lg hover:text-white hover:bg-blue rounded-full px-5 py-[6px] border-2 border-blue font-medium text-left mt-4 w-fit"
               onClick={() => {
-                setLoginPopup(true);
+                setPopup("login");
               }}
             >
               Login
