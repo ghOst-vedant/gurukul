@@ -6,6 +6,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import Credentials from "next-auth/providers/credentials"
 import { db } from "@/lib/prisma"
 import { comparePassword, hashPassword } from "@/lib/bcrypt"
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
     adapter: PrismaAdapter(db),
     session: { strategy: "jwt" },
@@ -19,42 +20,43 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             credentials: {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" },
+                role: { label: "Role", type: "text" },
             },
             authorize: async (credentials) => {
                 if (
                     !credentials ||
                     !credentials.email ||
-                    !credentials.password
+                    !credentials.password ||
+                    !credentials.role
                 ) {
                     return null
                 }
 
                 const email = credentials.email as string
-                const hash = await hashPassword(credentials.password as string)
-                let user: any = await db.user.findUnique({
+                const role = credentials.role as string
+                const user = await db.user.findUnique({
                     where: {
                         email,
                     },
                 })
 
                 if (!user) {
-                    user = await db.user.create({
-                        data: {
-                            name: email.split("@")[0],
-                            email,
-                            password: hash,
-                        },
-                    })
-                } else {
-                    const isMatch = comparePassword(
-                        credentials.password as string,
-                        user.password as string
-                    )
-                    if (!isMatch) {
-                        throw new Error("Incorrect password.")
-                    }
+                    return null
                 }
-                console.log(user)
+
+                const isMatch = await comparePassword(
+                    credentials.password as string,
+                    user.password as string
+                )
+
+                if (!isMatch) {
+                    throw new Error("Incorrect password.")
+                }
+
+                if (user.role !== role) {
+                    throw new Error(`User does not have the ${role} role`)
+                }
+
                 return user
             },
         }),
@@ -67,12 +69,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 token.sub = user.id // Standard JWT `sub` claim
                 token.name = user.name // Standard JWT `name` claim
                 token.email = user.email // Optional
+                token.role = user.role // Include role in the token
             }
             return token
         },
         async session({ session, token }: { session: any; token: JWT }) {
             session.user = {
                 id: token.sub,
+                name: token.name,
+                email: token.email,
+                role: token.role, // Include role in the session
             }
             session.token = token
             return session
