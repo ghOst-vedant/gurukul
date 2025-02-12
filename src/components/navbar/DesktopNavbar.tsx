@@ -8,6 +8,7 @@ import { loginPopupAtom } from "@/recoil/Atoms/loginpopup"
 import { userSessionAtom } from "@/recoil/Atoms/userSession"
 import { fetchSession, logout } from "@/actions/auth"
 import { useEffect } from "react"
+import toast from "react-hot-toast"
 
 const DesktopNavbar = () => {
     const pathName = usePathname()
@@ -25,6 +26,7 @@ const DesktopNavbar = () => {
     const handleLogout = async () => {
         await logout()
         setSession(null)
+        toast.success("Logged out successfully")
         router.push("/")
     }
     return (
