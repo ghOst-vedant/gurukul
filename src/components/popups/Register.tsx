@@ -26,12 +26,14 @@ const Register = () => {
 
         try {
             const formData = new FormData(event.currentTarget)
+
             const userData = {
                 username: formData.get("username"),
                 email: formData.get("email"),
                 password: formData.get("password"),
                 role,
             }
+            console.log(userData)
 
             const res = await axios.post("/api/register", userData)
 

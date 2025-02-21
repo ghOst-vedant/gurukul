@@ -1,52 +1,134 @@
 "use client"
-import { getCourses, getSignedInUser } from "@/actions/getActions"
-import React, { useEffect, useState } from "react"
-import { auth } from "../../../../auth"
-import { fetchSession, getSession } from "@/actions/auth"
-import { CourseDetails } from "@/lib/interfaces"
 
-const page = () => {
-    const [first, setfirst] = useState<any>(null)
-    const [user, setUser] = useState<any>(null)
+import { useParams } from "next/navigation"
+import React, { useEffect, useState } from "react"
+
+import {
+    checkPurchased,
+    purchaseCourse,
+    verifyPayment,
+} from "@/actions/purchase"
+import { getCourseDetails } from "@/actions/getActions"
+
+const Page = () => {
+    const { course_id } = useParams()
+    const [course, setCourse] = useState<any>(null)
+    const [isPurchased, setIsPurchased] = useState<boolean | null>(null)
+    const [loading, setLoading] = useState(false)
+    const [razorpayLoaded, setRazorpayLoaded] = useState(false)
     useEffect(() => {
-        const fetchCourses = async () => {
-            try {
-                const data = await getCourses()
-                setfirst(data)
-            } catch (error) {
-                console.error("Failed to fetch courses:", error)
+        const fetchPurchaseStatus = async () => {
+            const purchased = await checkPurchased(course_id as string)
+            console.log("Purchased: ", purchased)
+            setIsPurchased(purchased)
+        }
+        const fetchCourse = async () => {
+            const data = await getCourseDetails(course_id as string)
+            if (data) {
+                setCourse(data)
             }
         }
-        const getSession = async () => {
-            const session = await fetchSession()
-            const data = await getSignedInUser(session?.user?.id!)
-            setUser(data)
+        fetchCourse()
+
+        if (course_id) fetchPurchaseStatus()
+    }, [course_id])
+
+    // Load Razorpay script
+    useEffect(() => {
+        const loadRazorpay = () => {
+            const script = document.createElement("script")
+            script.src = "https://checkout.razorpay.com/v1/checkout.js"
+            script.onload = () => setRazorpayLoaded(true)
+            script.onerror = (error) => {
+                console.error("Failed to load Razorpay script:", error)
+            }
+            document.body.appendChild(script)
         }
-        fetchCourses()
-        getSession()
+        loadRazorpay()
     }, [])
+    // Handle payment using Razorpay API
+    const handlePayment = async () => {
+        const { success, order } = await purchaseCourse(
+            course_id as string,
+            course.price
+        )
+        console.log("Succcess & Order", success, order)
+
+        if (success && order) {
+            const options = {
+                key: process.env.RAZORPAY_KEY_ID,
+                amount: order.amount, // Amount in paise
+                currency: "INR",
+                name: course.title,
+                description: "Course Purchase",
+                order_id: order.id,
+                handler: async function (response: any) {
+                    const paymentResponse = await verifyPayment(
+                        order.id,
+                        response.razorpay_payment_id
+                    )
+
+                    if (paymentResponse.success) {
+                        alert("Payment successful")
+                        setIsPurchased(true)
+                    } else {
+                        alert("Payment verification failed")
+                        setIsPurchased(false)
+                    }
+                },
+                prefill: {
+                    name: "User Name",
+                    email: "user@example.com",
+                    contact: "1234567890",
+                },
+                notes: {
+                    address: "User's address",
+                },
+                theme: {
+                    color: "#F37254",
+                },
+            }
+            const rzp1 = new window.Razorpay(options)
+            rzp1.open()
+        } else {
+            alert("Failed to initiate payment")
+        }
+    }
 
     return (
-        <div className="pt-40">
-            <h1 className="text-2xl font-bold text-center">
-                Welcome to the course page
-            </h1>
-            <div className="text-center mt-5">
-                <h2 className="text-xl font-bold">Courses</h2>
-                <div className="grid grid-cols-3 gap-4">
-                    {first?.map((course: any) => (
-                        <div key={course.id} className="border p-2 rounded-md">
-                            <img src={course.courseImage} alt="" />
-                            <h3 className="text-lg font-bold">
-                                {course.title}
-                            </h3>
-                            <p>{course.description}</p>
-                        </div>
-                    ))}
+        <div className="py-28 px-20 ">
+            <span className="text-2xl">
+                courseId:<span className="text-xl">{course_id}</span>
+            </span>
+            {isPurchased === null ? (
+                <p className="mt-4 text-gray-500">
+                    Checking purchase status...
+                </p>
+            ) : isPurchased ? (
+                <div className="mt-4">
+                    <h2 className="text-2xl font-bold">
+                        Welcome to the Course! 🎉
+                    </h2>
+                    <p className="text-gray-600">
+                        You have access to all course materials.
+                    </p>
                 </div>
-            </div>
+            ) : (
+                <div className="mt-4">
+                    <h2 className="text-2xl font-bold">Course Locked 🔒</h2>
+                    <p className="text-gray-600">
+                        You need to purchase this course to access its content.
+                    </p>
+                    <button
+                        onClick={handlePayment}
+                        className="bg-blue text-white px-4 py-2 rounded mt-2"
+                    >
+                        Buy Now
+                    </button>
+                </div>
+            )}
         </div>
     )
 }
 
-export default page
+export default Page
