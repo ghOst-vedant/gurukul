@@ -9,6 +9,7 @@ import {
     verifyPayment,
 } from "@/actions/purchase"
 import { getCourseDetails } from "@/actions/getActions"
+import CourseNavigation from "@/components/ui/CourseNavigation"
 
 const Page = () => {
     const { course_id } = useParams()
@@ -94,39 +95,83 @@ const Page = () => {
             alert("Failed to initiate payment")
         }
     }
+    const [selectedSection, setSelectedSection] = useState<string | null>(null)
+    const handleSectionSelect = (sectionId: string) => {
+        setSelectedSection(sectionId)
+    }
+
+    const selectedSectionData = course?.sections.find(
+        (section: any) => section.sectionId === selectedSection
+    )
+
+    const selectedSectionContent = selectedSectionData
+        ? selectedSectionData.sectionContent
+        : ""
 
     return (
-        <div className="py-28 px-20 ">
-            <span className="text-2xl">
-                courseId:<span className="text-xl">{course_id}</span>
-            </span>
-            {isPurchased === null ? (
-                <p className="mt-4 text-gray-500">
-                    Checking purchase status...
-                </p>
-            ) : isPurchased ? (
-                <div className="mt-4">
-                    <h2 className="text-2xl font-bold">
-                        Welcome to the Course! 🎉
-                    </h2>
-                    <p className="text-gray-600">
-                        You have access to all course materials.
+        <div className="flex py-28 px-20 ">
+            <CourseNavigation
+                sections={course?.sections || []}
+                onSectionSelect={handleSectionSelect}
+            />
+            <div className="w-3/4 pl-8">
+                <span className="text-2xl">
+                    courseId:<span className="text-xl">{course_id}</span>
+                </span>
+                {isPurchased === null ? (
+                    <p className="mt-4 text-gray-500">
+                        Checking purchase status...
                     </p>
-                </div>
-            ) : (
-                <div className="mt-4">
-                    <h2 className="text-2xl font-bold">Course Locked 🔒</h2>
-                    <p className="text-gray-600">
-                        You need to purchase this course to access its content.
-                    </p>
-                    <button
-                        onClick={handlePayment}
-                        className="bg-blue text-white px-4 py-2 rounded mt-2"
-                    >
-                        Buy Now
-                    </button>
-                </div>
-            )}
+                ) : isPurchased ? (
+                    <div className="mt-4">
+                        <h2 className="text-2xl font-bold">
+                            Welcome to the Course! 🎉
+                        </h2>
+                        <p className="text-gray-600">
+                            You have access to all course materials.
+                        </p>
+                    </div>
+                ) : (
+                    <div className="mt-4">
+                        <h2 className="text-2xl font-bold">Course Locked 🔒</h2>
+                        <p className="text-gray-600">
+                            You need to purchase this course to access its
+                            content.
+                        </p>
+                        <button
+                            onClick={handlePayment}
+                            className="bg-blue text-white px-4 py-2 rounded mt-2"
+                        >
+                            Buy Now
+                        </button>
+                    </div>
+                )}
+                {/* Render Section Content */}
+                {selectedSectionContent ? (
+                    <div className="mt-8">
+                        <h3 className="text-xl font-semibold">
+                            Section Content
+                        </h3>
+                        <div className="mt-4">
+                            {typeof selectedSectionContent === "string" ? (
+                                <p>{selectedSectionContent}</p>
+                            ) : (
+                                <pre>
+                                    {JSON.stringify(
+                                        selectedSectionContent,
+                                        null,
+                                        2
+                                    )}
+                                </pre>
+                            )}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="mt-8 text-gray-500">
+                        Please select a section to view its content.
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

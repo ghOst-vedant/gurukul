@@ -14,6 +14,8 @@ import { IoIosArrowForward } from "react-icons/io"
 import { MdOutlineOndemandVideo } from "react-icons/md"
 import { MdOutlineArticle } from "react-icons/md"
 import { FaRegQuestionCircle } from "react-icons/fa"
+import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 type CourseCreatePublishProps = {
     basicDetails: BasicDetails
@@ -27,7 +29,8 @@ const CourseCreatePublishCourse: React.FC<CourseCreatePublishProps> = ({
     pricing,
 }) => {
     const [expandSection, setExpandSection] = useState("")
-    console.log(basicDetails)
+
+    const router = useRouter()
 
     const publishCourse = async () => {
         const courseCreated = await PublishCourse({
@@ -35,7 +38,10 @@ const CourseCreatePublishCourse: React.FC<CourseCreatePublishProps> = ({
             curriculum,
             pricing,
         })
-        console.log(courseCreated)
+        if (courseCreated) {
+            toast.success("Course Published Successfully")
+            router.push("/courses")
+        }
     }
 
     return (
