@@ -34,6 +34,7 @@ const Login = () => {
             }
 
             const session = await fetchSession()
+            console.log(session)
             setSession(session)
             toast.success("Login successful")
             setPopup(null)

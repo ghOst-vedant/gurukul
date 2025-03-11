@@ -2,17 +2,32 @@
 
 import React, { useState } from "react"
 import { createComment } from "@/actions/comments"
+import io from "socket.io-client"
+import { useRecoilValue } from "recoil"
+import { userSessionAtom } from "@/recoil/Atoms/userSession"
+
+const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string)
 
 const CommentInput = ({ sectionId }: { sectionId: string }) => {
-    const [commentText, setCommentText] = useState("")
+    const user = useRecoilValue(userSessionAtom)
 
+    const [commentText, setCommentText] = useState("")
     const handleCommentSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!commentText.trim()) return
         try {
-            const comment = await createComment(sectionId, commentText)
-            console.log("Created Comment: ", comment)
-            setCommentText("") // Clear input field
+            await createComment(sectionId, commentText)
+            const comment = {
+                user: {
+                    name: user?.user?.name,
+                    id: user?.user?.id,
+                    image: user?.user?.image,
+                    email: user?.user?.email,
+                },
+                content: commentText,
+            }
+            socket.emit("new-comment", comment)
+            setCommentText("")
         } catch (error) {
             if (error instanceof Error) {
                 alert(error.message || "Failed to add comment")
