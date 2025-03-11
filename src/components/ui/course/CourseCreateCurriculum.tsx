@@ -21,6 +21,7 @@ import dynamic from "next/dynamic"
 import { handleDeleteFile, uploadFileToAWS } from "@/lib/awsUtil"
 import { deleteFromBucket } from "@/actions/aws"
 import { submitCourseCurriculum } from "@/actions/postActions"
+import toast from "react-hot-toast"
 
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false })
 
@@ -339,9 +340,10 @@ const CourseCreateCurriculum: React.FC<CourseCreateCurriculumProps> = ({
         try {
             if (e.target.files && e.target.files[0]) {
                 const video = e.target.files[0]
-                console.log(video)
                 const videoUrl = await uploadFileToAWS(video)
-                console.log(videoUrl)
+                if (videoUrl) {
+                    toast.success("Video uploaded successfully.")
+                }
                 if (videoUrl !== null) {
                     setCurriculum((prev) =>
                         prev.map((curriculumSection) =>
