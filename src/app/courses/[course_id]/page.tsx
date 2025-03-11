@@ -126,12 +126,14 @@ const Page = () => {
         : ""
 
     return (
-        <div className="flex py-28 px-20">
-            <CourseNavigation
-                sections={course?.sections || []}
-                onSectionSelect={handleSectionSelect}
-            />
-            <div className="w-3/4 pl-8">
+        <div className="flex pt-28 pb-16 px-20 w-full max-h-150">
+            <div className="sticky top-28 w-1/4 max-h-96 overflow-y-auto border  bg-gray-100 rounded-xl">
+                <CourseNavigation
+                    sections={course?.sections || []}
+                    onSectionSelect={handleSectionSelect}
+                />
+            </div>
+            <div className="w-3/4 pl-8 max-h-120 overflow-y-auto overflow-x-hidden">
                 <span className="text-2xl">
                     courseId: <span className="text-xl">{course_id}</span>
                 </span>
@@ -166,7 +168,7 @@ const Page = () => {
                 )}
 
                 {selectedSectionContent ? (
-                    <div className="mt-8">
+                    <div className="mt-8 ">
                         <h3 className="text-xl font-semibold">
                             Section Content
                         </h3>
@@ -174,7 +176,7 @@ const Page = () => {
                             {typeof selectedSectionContent === "string" ? (
                                 <p>{selectedSectionContent}</p>
                             ) : (
-                                <pre>
+                                <pre className="text-wrap">
                                     {JSON.stringify(
                                         selectedSectionContent,
                                         null,

@@ -69,6 +69,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 token.sub = user.id // Standard JWT `sub` claim
                 token.name = user.name // Standard JWT `name` claim
                 token.email = user.email // Optional
+                token.image = user.image // Optional
                 token.role = user.role // Include role in the token
             }
             return token
@@ -78,9 +79,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 id: token.sub,
                 name: token.name,
                 email: token.email,
+                image: token.image,
                 role: token.role, // Include role in the session
             }
-            session.token = token
+            // session.token = token
             return session
         },
     },
