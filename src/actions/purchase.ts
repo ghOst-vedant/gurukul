@@ -38,7 +38,12 @@ export const purchaseCourse = async (courseId: string, amount: number) => {
 }
 
 // Verify the payment using Razorpay's API
-export const verifyPayment = async (orderId: string, paymentId: string) => {
+export const verifyPayment = async (
+    orderId: string,
+    paymentId: string,
+    courseId: string,
+    userId: string
+) => {
     try {
         if (!orderId || !paymentId) {
             return { success: false, message: "Invalid request" }
@@ -53,6 +58,13 @@ export const verifyPayment = async (orderId: string, paymentId: string) => {
             await db.transaction.update({
                 where: { orderId },
                 data: { status: "success" },
+            })
+
+            await db.user.update({
+                where: { id: userId },
+                data: {
+                    courses: { push: courseId },
+                },
             })
             return { success: true, message: "Payment successful" }
         }

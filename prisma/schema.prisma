@@ -19,11 +19,11 @@ model User {
     name             String
     email            String          @unique
     password         String?
-    image            String?
+    image            String?         @default("https://gurukul-webapp.s3.ap-south-1.amazonaws.com/307ce493-b254-4b2d-8ba4-d12c080d6651.jpg")
     emailVerified    DateTime?
     classrooms       Classroom[]
     forums           Forum[]
-    courses          Course[]
+    courses          String[]        @db.ObjectId
     posts            Post[]
     pomodoroSessions Pomodoro[]
     accounts         Account[]
@@ -133,10 +133,9 @@ model Course {
     language               String?
     price                  Int?
     isCourseFree           Boolean?
-    published              Boolean @default(false)
+    published              Boolean  @default(false)
     createdAt              DateTime @default(now())
     updatedAt              DateTime @updatedAt
-    User                   User?    @relation(fields: [userId], references: [id])
     userId                 String?  @db.ObjectId
     sections               Json?
 }
@@ -150,11 +149,12 @@ model Post {
     User        User?   @relation(fields: [userId], references: [id])
     userId      String? @db.ObjectId
 }
+
 model Comment {
     id        String   @id @default(auto()) @map("_id") @db.ObjectId
     userId    String   @db.ObjectId
-    sectionId String   @db.ObjectId
-    commentText   String
+    sectionId String
+    content   String
     createdAt DateTime @default(now())
     user      User     @relation(fields: [userId], references: [id])
 }
@@ -173,19 +173,22 @@ model Testimonials {
     review      String
     studentName String
 }
+
 model UserProgress {
-    id             String   @id @default(auto()) @map("_id") @db.ObjectId
-    userId         String   @db.ObjectId
-    courseId       String   @db.ObjectId
-    progress       Float    @default(0.0) // Progress percentage (0-100)
-    completed      Boolean  @default(false) // If the user has completed the course
+    id                String   @id @default(auto()) @map("_id") @db.ObjectId
+    userId            String   @db.ObjectId
+    courseId          String   @db.ObjectId
+    progress          Float    @default(0.0) // Progress percentage (0-100)
+    completed         Boolean  @default(false) // If the user has completed the course
     completedSections String[] @default([]) // Array of completed section IDs
     completedLessons  String[] @default([]) // Array of completed lesson IDs
-    quizScores     Json? // Store quiz scores per lesson/section
-    startedAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
+    quizScores        Json? // Store quiz scores per lesson/section
+    startedAt         DateTime @default(now())
+    updatedAt         DateTime @updatedAt
+
     @@unique([userId, courseId]) // Ensures a user has only one progress entry per course
 }
+
 model Transaction {
     id        String   @id @default(auto()) @map("_id") @db.ObjectId
     userId    String
@@ -194,5 +197,4 @@ model Transaction {
     amount    Int
     status    String   @default("pending") // "pending", "success", "failed"
     createdAt DateTime @default(now())
-
-    }
+}

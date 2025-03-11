@@ -1,58 +1,43 @@
-// components/CommentInput.tsx
+"use client"
+
 import React, { useState } from "react"
+import { createComment } from "@/actions/comments"
 
-type CommentInputProps = {
-    courseId: string
-    sectionId: string
-    onCommentAdded: (newComment: string) => void
-}
+const CommentInput = ({ sectionId }: { sectionId: string }) => {
+    const [commentText, setCommentText] = useState("")
 
-const CommentInput = ({
-    courseId,
-    sectionId,
-    onCommentAdded,
-}: CommentInputProps) => {
-    const [newComment, setNewComment] = useState("")
-
-    const handleSubmit = async () => {
-        if (newComment.trim()) {
-            // Make API request to post comment
-            const response = await fetch(
-                `/api/comments/${courseId}/${sectionId}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ content: newComment }),
-                }
-            )
-
-            if (response.ok) {
-                const data = await response.json()
-                onCommentAdded(data.comment) // Trigger parent update with new comment
-                setNewComment("")
+    const handleCommentSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!commentText.trim()) return
+        try {
+            const comment = await createComment(sectionId, commentText)
+            console.log("Created Comment: ", comment)
+            setCommentText("") // Clear input field
+        } catch (error) {
+            if (error instanceof Error) {
+                alert(error.message || "Failed to add comment")
             } else {
                 alert("Failed to add comment")
             }
+            console.error("Error:", error)
         }
     }
 
     return (
-        <div className="mt-4">
+        <form onSubmit={handleCommentSubmit} className="mt-4">
             <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Add a comment"
-                className="w-full p-2 border rounded"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Write a comment..."
+                className="w-full p-2 border border-gray-300 rounded"
             />
             <button
-                onClick={handleSubmit}
-                className="bg-blue text-white px-4 py-2 rounded mt-2"
+                type="submit"
+                className="mt-2 bg-blue text-white p-2 rounded"
             >
                 Post Comment
             </button>
-        </div>
+        </form>
     )
 }
 

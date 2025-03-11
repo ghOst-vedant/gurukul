@@ -2,7 +2,6 @@
 
 import { db } from "@/lib/prisma"
 import { auth } from "../../auth"
-import { getSession } from "./auth"
 
 // Fetch comments for a course section
 export async function getComments(sectionId: string) {
@@ -28,20 +27,18 @@ export async function getComments(sectionId: string) {
 }
 
 // Add a new comment
-export async function addComment(sectionId: string, content: string) {
-    const user = await getSession() // Get authenticated user
-    if (!user) throw new Error("Unauthorized")
-
-    try {
-        return await db.comment.create({
-            data: {
-                commentText: content,
-                sectionId,
-                userId: user?.id as string,
-            },
-        })
-    } catch (error) {
-        console.error("Error adding comment:", error)
-        throw new Error("Failed to add comment")
+export const createComment = async (sectionId: string, commentText: string) => {
+    const session = await auth()
+    if (!session) {
+        throw new Error("Unauthorized")
     }
+
+    const comment = await db.comment.create({
+        data: {
+            content: commentText,
+            sectionId: sectionId as string,
+            userId: session?.user?.id as string,
+        },
+    })
+    return comment
 }
