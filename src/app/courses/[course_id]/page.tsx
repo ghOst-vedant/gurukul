@@ -15,6 +15,7 @@ import CourseNavigation from "@/components/ui/CourseNavigation"
 import CommentSection from "@/components/ui/CommentSection"
 import CommentInput from "@/components/ui/CommentInputSection"
 import { userSessionAtom } from "@/recoil/Atoms/userSession"
+import { VideoComponent } from "@/components/ui/VideoComponent"
 
 const Page = () => {
     const { course_id } = useParams()
@@ -127,31 +128,32 @@ const Page = () => {
 
     return (
         <div className="flex pt-28 pb-16 px-20 w-full max-h-150">
-            <div className="sticky top-28 w-1/4 max-h-96 overflow-y-auto border  bg-gray-100 rounded-xl">
-                <CourseNavigation
-                    sections={course?.sections || []}
-                    onSectionSelect={handleSectionSelect}
-                />
-            </div>
+            {isPurchased && (
+                <div className="sticky top-28 w-1/4 max-h-96 overflow-y-auto border  bg-gray-100 rounded-xl">
+                    <CourseNavigation
+                        sections={course?.sections || []}
+                        onSectionSelect={handleSectionSelect}
+                        
+                    />
+                </div>
+            )}
             <div className="w-3/4 pl-8 max-h-120 overflow-y-auto overflow-x-hidden">
-                <span className="text-2xl">
+                {/* <span className="text-2xl">
                     courseId: <span className="text-xl">{course_id}</span>
-                </span>
+                </span> */}
 
                 {isPurchased === null ? (
                     <p className="mt-4 text-gray-500">
                         Checking purchase status...
                     </p>
-                ) : isPurchased ? (
+                ) : isPurchased && selectedSection === null ? (
                     <div className="mt-4">
                         <h2 className="text-2xl font-bold">
-                            Welcome to the Course! 🎉
+                            Welcome to the {course.title}🎉
                         </h2>
-                        <p className="text-gray-600">
-                            You have access to all course materials.
-                        </p>
+                        <p className="text-gray-600">{course.description}</p>
                     </div>
-                ) : (
+                ) : selectedSection === null ? (
                     <div className="mt-4">
                         <h2 className="text-2xl font-bold">Course Locked 🔒</h2>
                         <p className="text-gray-600">
@@ -165,16 +167,21 @@ const Page = () => {
                             Buy Now
                         </button>
                     </div>
-                )}
+                ) : null}
 
-                {selectedSectionContent ? (
+                {isPurchased && selectedSectionContent ? (
                     <div className="mt-8 ">
                         <h3 className="text-xl font-semibold">
-                            Section Content
+                            {selectedSectionData?.sectionTitle}
                         </h3>
                         <div className="mt-4">
                             {typeof selectedSectionContent === "string" ? (
                                 <p>{selectedSectionContent}</p>
+                            ) : selectedSectionContent[0].type.toLowerCase() ===
+                              "lecture" ? (
+                                <VideoComponent
+                                    VideoContent={selectedSectionContent}
+                                />
                             ) : (
                                 <pre className="text-wrap">
                                     {JSON.stringify(
@@ -192,7 +199,7 @@ const Page = () => {
                     </div>
                 )}
 
-                {selectedSection && (
+                {isPurchased && selectedSection && (
                     <>
                         <CommentSection
                             comments={comments}
