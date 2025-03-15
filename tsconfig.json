@@ -27,6 +27,6 @@
         "**/*.tsx",
         ".next/types/**/*.ts",
         "src/Custom_hooks/useWindowStatus.ts"
-    ],
+, "src/lib/mongo.js"    ],
     "exclude": ["node_modules"]
 }

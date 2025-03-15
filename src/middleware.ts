@@ -8,6 +8,7 @@ export default async function middleware(req: NextRequest) {
   const isProtected = protectedRoutes.some((route) =>
     req.nextUrl.pathname.startsWith(route)
   );
+
   if (!session && isProtected) {
     const absoluteUrl = new URL("/", req.nextUrl.origin);
     return NextResponse.redirect(absoluteUrl.toString());

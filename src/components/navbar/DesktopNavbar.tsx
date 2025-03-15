@@ -9,20 +9,28 @@ import { fetchSession, logout } from "@/actions/auth"
 import { useEffect } from "react"
 import toast from "react-hot-toast"
 import { popupAtom } from "@/recoil/Atoms/popupAtom"
+import { getSignedInUser } from "@/actions/getActions"
+import { UserAtom } from "@/recoil/Atoms/UserAtom"
 
 const DesktopNavbar = () => {
     const pathName = usePathname()
     const setPopup = useSetRecoilState(popupAtom)
     const session = useRecoilValue(userSessionAtom)
     const setSession = useSetRecoilState(userSessionAtom)
+    const setUSer = useSetRecoilState(UserAtom)
     const router = useRouter()
     useEffect(() => {
         const updateSession = async () => {
             const sessionData = await fetchSession()
+            const getUserData = await getSignedInUser(
+                sessionData?.user?.id as string
+            )
+            setUSer(getUserData)
             setSession(sessionData)
         }
         updateSession()
     }, [setSession])
+
     const handleLogout = async () => {
         await logout()
         setSession(null)
@@ -72,12 +80,25 @@ const DesktopNavbar = () => {
                 />
 
                 {session?.user ? (
-                    <button
-                        className="text-lg hover:text-white hover:bg-blue rounded-full px-5 py-[6px] border-2 border-blue font-medium"
-                        onClick={handleLogout}
-                    >
-                        logout
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <Link href={`/profile/${session.user.id}`}>
+                            <Image
+                                src={
+                                    session.user.image || "/default-avatar.png"
+                                } // Default avatar if none is provided
+                                alt="User Avatar"
+                                width={40}
+                                height={40}
+                                className="rounded-full cursor-pointer"
+                            />
+                        </Link>
+                        <button
+                            className="text-lg hover:text-white hover:bg-blue rounded-full px-5 py-[6px] border-2 border-blue font-medium"
+                            onClick={handleLogout}
+                        >
+                            Logout
+                        </button>
+                    </div>
                 ) : (
                     <button
                         className="text-lg hover:text-white hover:bg-blue rounded-full px-5 py-[6px] border-2 border-blue font-medium"

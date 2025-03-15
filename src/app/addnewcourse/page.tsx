@@ -1,10 +1,15 @@
 "use client"
 
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import CourseCreateBasicDetails from "@/components/ui/course/CourseCreateBasicDetails"
 import CourseCreateCurriculum from "@/components/ui/course/CourseCreateCurriculum"
 import CourseCreatePricing from "@/components/ui/course/CourseCreatePricing"
 import CourseCreatePublishCourse from "@/components/ui/course/CourseCreatePublishCourse"
+import { useRecoilValue } from "recoil"
+import { userSessionAtom } from "@/recoil/Atoms/userSession"
+import { UserAtom } from "@/recoil/Atoms/UserAtom"
+import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 export type Pricing = {
     isCourseFree: boolean
@@ -62,6 +67,17 @@ export type BasicDetails = {
 }
 
 const Page = () => {
+    const user = useRecoilValue(UserAtom)
+    const router = useRouter()
+
+    // Check if the user is a Teacher
+    useEffect(() => {
+        if (user?.role !== "Teacher") {
+            toast.error("You must be a Teacher to access this page.")
+            router.push("/") // Redirect to home or another appropriate page
+        }
+    }, [user])
+
     const sideLinks = [
         "Basic details",
         "Curriculum",
@@ -91,7 +107,6 @@ const Page = () => {
         price: 0,
     })
     // const {} = a
-
     return (
         <div className="px-4 pb-16 pt-28 sm:p-12 sm:pt-28 lg:px-24 lg:pb-24 lg:pt-32 flex flex-col sm:flex-row gap-10 sm:gap-8 lg:gap-20">
             <div className="sm:w-[15%] flex flex-col gap-2 h-fit">

@@ -14,24 +14,29 @@ datasource db {
 }
 
 model User {
-    id               String          @id @default(auto()) @map("_id") @db.ObjectId
-    role             String          @default("STUDENT")
-    name             String
-    email            String          @unique
-    password         String?
-    image            String?         @default("https://gurukul-webapp.s3.ap-south-1.amazonaws.com/307ce493-b254-4b2d-8ba4-d12c080d6651.jpg")
-    emailVerified    DateTime?
-    classrooms       Classroom[]
-    forums           Forum[]
-    courses          String[]        @db.ObjectId
-    posts            Post[]
-    pomodoroSessions Pomodoro[]
-    accounts         Account[]
-    sessions         Session[]
-    Authenticator    Authenticator[]
-    comments         Comment[]
-    createdAt        DateTime        @default(now())
-    updatedAt        DateTime        @updatedAt
+    id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+    role               String          @default("STUDENT")
+    name               String
+    email              String          @unique
+    password           String?
+    image              String?         @default("https://gurukul-webapp.s3.ap-south-1.amazonaws.com/307ce493-b254-4b2d-8ba4-d12c080d6651.jpg")
+    about              String?
+    gender             String?
+    mobile             String?
+    age                Int?
+    bookmarkedTeachers String[]        @default([])
+    emailVerified      DateTime?
+    classrooms         Classroom[]
+    forums             Forum[]
+    courses            String[]        @db.ObjectId
+    posts              Post[]
+    pomodoroSessions   Pomodoro[]
+    accounts           Account[]
+    sessions           Session[]
+    Authenticator      Authenticator[]
+    comments           Comment[]
+    createdAt          DateTime        @default(now())
+    updatedAt          DateTime        @updatedAt
 }
 
 model Account {
