@@ -22,7 +22,7 @@ const CourseNavigation: React.FC<CourseNavigationProps> = ({
     const { course_id } = useParams()
 
     return (
-        <div className="p-4 ">
+        <div className="p-4 w-full">
             <h2 className="text-lg font-bold mb-4 border-b-2 border-blue">
                 Course Sections
             </h2>

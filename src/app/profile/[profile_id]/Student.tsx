@@ -5,6 +5,7 @@ import Loader from "@/components/ui/Loader"
 import { useEffect, useState } from "react"
 import { Pencil } from "lucide-react"
 import { updateUser } from "@/actions/user"
+import Link from "next/link"
 type UserData = {
     id: string
     role: string
@@ -53,7 +54,7 @@ export const Student = (data: UserData) => {
 
     const handleSave = async () => {
         try {
-            const data = await updateUser(
+            await updateUser(
                 user.id,
                 user.gender!,
                 user.name!,
@@ -61,7 +62,6 @@ export const Student = (data: UserData) => {
                 user.mobile!,
                 user.about!
             )
-            console.log(data)
             setIsEditing(false) // Optionally close the edit mode
         } catch (error) {
             console.error("Error updating user:", error)
@@ -98,7 +98,9 @@ export const Student = (data: UserData) => {
                     <h1 className="text-2xl">My Courses</h1>
                     <div className="mt-5 overflow-x-scroll  flex gap-5 p-1">
                         {user.courses.map((course) => (
-                            <CourseCard course_id={course} />
+                            <Link href={`/courses/${course}`} key={course}>
+                                <CourseCard course_id={course} />
+                            </Link>
                         ))}
                     </div>
                 </div>

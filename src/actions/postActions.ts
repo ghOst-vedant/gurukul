@@ -59,4 +59,3 @@ export const PublishCourse = async ({
         return { error: error }
     }
 }
-

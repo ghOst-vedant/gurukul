@@ -1,16 +1,16 @@
-//Specific category page
 "use client"
 import { CourseCard } from "@/components/cards/CourseCard"
-import { usePathname } from "next/navigation"
-import useWindowStatus from "@/Custom_hooks/useWindowStatus"
-import CourseCarousel from "@/components/ui/course/CourseCarousel"
 import { IoOptionsOutline } from "react-icons/io5"
 import { FcAlphabeticalSortingAz } from "react-icons/fc"
+import { useEffect, useState } from "react"
+import { getCategoryCourses } from "@/actions/getActions"
+import Link from "next/link"
 type Params = {
     category_name: string
 }
 const page = ({ params }: { params: Params }) => {
     const { category_name } = params
+    const [courses, setCourses] = useState<any>([])
     const getCategory = () => {
         const category = category_name
             .split("-")
@@ -18,6 +18,20 @@ const page = ({ params }: { params: Params }) => {
             .join(" ")
         return category
     }
+    console.log(category_name)
+
+    useEffect(() => {
+        const getCourses = async () => {
+            try {
+                const category = getCategory()
+                const res = await getCategoryCourses(category)
+                setCourses(res)
+            } catch (error) {
+                console.error("error getting catrgory course:", error)
+            }
+        }
+        getCourses()
+    }, [category_name])
 
     return (
         <div className="p-4 pb-16 pt-28 sm:p-12 sm:pt-28 lg:p-[3vw] lg:pb-24 lg:pt-32 flex flex-col gap-10 lg:gap-16">
@@ -33,14 +47,15 @@ const page = ({ params }: { params: Params }) => {
                 <h2 className="text-lg sm:text-xl lg:text-2xl">
                     Start strong with our featured courses on {getCategory()}
                 </h2>
-                <div className="mt-5 overflow-x-scroll lg:hidden flex gap-5">
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                </div>
+                {/* <div className="mt-5 overflow-x-scroll lg:hidden flex gap-5">
+                    {courses.map((course: any, key: number) => (
+                        <CourseCard key={key} course_id={course.id} />
+                    ))}
+                </div> */}
                 <span className="mt-5 hidden lg:block">
-                    <CourseCarousel />
+                    {/* {courses.map((course: any, key: number) => (
+                        <CourseCard key={key} course_id={course.id} />
+                    ))} */}
                 </span>
             </div>
             <div className="flex flex-col gap-5 sm:gap-8 lg:gap-8 mt-4">
@@ -77,20 +92,14 @@ const page = ({ params }: { params: Params }) => {
                     </span>
                 </div>
                 <div className="mt-5 flex gap-5 lg:gap-10 flex-wrap justify-evenly">
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
-                    <CourseCard />
+                    {courses.map((course: any, key: number) => (
+                        <Link
+                            href={`/categories/${category_name}/${course.id}`}
+                            key={key}
+                        >
+                            <CourseCard course_id={course.id} />
+                        </Link>
+                    ))}
                 </div>
             </div>
         </div>
