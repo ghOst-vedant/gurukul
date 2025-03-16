@@ -66,6 +66,12 @@ export const verifyPayment = async (
                     courses: { push: courseId },
                 },
             })
+            await db.course.update({
+                where: { id: courseId },
+                data: {
+                    students: { push: userId },
+                },
+            })
             return { success: true, message: "Payment successful" }
         }
         return { success: false, message: "Payment failed" }

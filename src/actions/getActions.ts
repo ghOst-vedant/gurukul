@@ -10,7 +10,6 @@ export const getCourses = async () => {
         throw new Error("Error Fetching")
     }
 }
-
 export const getCourseDetails = async (id: string) => {
     try {
         const course = await db.course.findFirst({
@@ -23,7 +22,6 @@ export const getCourseDetails = async (id: string) => {
         console.error(error)
     }
 }
-
 export const getSignedInUser = async (id: string) => {
     try {
         const user = await db.user.findFirst({
@@ -32,6 +30,19 @@ export const getSignedInUser = async (id: string) => {
             },
         })
         return user
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const getCategoryCourses = async (category: string) => {
+    try {
+        const courses = await db.course.findMany({
+            where: {
+                category,
+            },
+        })
+        return courses
     } catch (error) {
         console.error(error)
     }
