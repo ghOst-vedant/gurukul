@@ -68,8 +68,6 @@ export const Student = (data: UserData) => {
         }
     }
     useEffect(() => {
-        console.log("hello")
-
         setUser(data)
     }, [data])
     return (
@@ -98,7 +96,7 @@ export const Student = (data: UserData) => {
                     <h1 className="text-2xl">My Courses</h1>
                     <div className="mt-5 overflow-x-scroll  flex gap-5 p-1">
                         {user.courses.map((course) => (
-                            <Link href={`/courses/${course}`} key={course}>
+                            <Link href={`/categories/${course}`} key={course}>
                                 <CourseCard course_id={course} />
                             </Link>
                         ))}
