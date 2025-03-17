@@ -70,13 +70,14 @@ const Page = () => {
     const user = useRecoilValue(UserAtom)
     const router = useRouter()
 
-    // Check if the user is a Teacher
+
     useEffect(() => {
-        if (user?.role !== "Teacher") {
+
+        if (user && user.role.toLowerCase() !== "teacher") {
             toast.error("You must be a Teacher to access this page.")
-            router.push("/") // Redirect to home or another appropriate page
+            router.push("/") 
         }
-    }, [user])
+    }, [user, router])
 
     const sideLinks = [
         "Basic details",

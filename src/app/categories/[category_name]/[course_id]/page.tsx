@@ -65,7 +65,7 @@ const Page = ({ params }: pageParams) => {
                 <span className="flex items-center">
                     <BsPeopleFill className="text-xl" />
                     <p className="font-medium text-lg lg:text-xl px-2">
-                        {course?.students.length} students
+                        {course?.students?.length} students
                     </p>
                 </span>
                 <p className="text-justify lg:w-[60vw]">
@@ -84,8 +84,6 @@ const Page = ({ params }: pageParams) => {
                     className="ml-4 flex flex-wrap gap-x-8"
                 >
                     <li>{course?.sections.length} sections</li>
-                    {/* <li>{course?.sections} lectures</li>
-                    <li>65h 33m course duration</li> */}
                 </ul>
                 {isPurchased && (
                     <div className="bg-black/10 lg:w-full h-[35rem] mt-4 flex items-center justify-center rounded-xl p-6 pt-32">
@@ -106,7 +104,7 @@ const Page = ({ params }: pageParams) => {
                     </div>
                     <div className="w-full overflow-x-scroll lg:hidden">
                         <div className="flex gap-4 px-4 sm:px-12">
-                            {testimonials.map((testimonial, index) => (
+                            {testimonials?.map((testimonial, index) => (
                                 <TestimonialCard
                                     key={index}
                                     name={testimonial.name}
@@ -141,10 +139,7 @@ const Page = ({ params }: pageParams) => {
                     ))}
                 </div>
                 <span className="mt-5 hidden lg:block">
-                    <CourseCarousel
-                        category_name={category_name}
-                        courses={catCourses}
-                    />
+                    <CourseCarousel courses={catCourses} />
                 </span>
             </div>
         </div>

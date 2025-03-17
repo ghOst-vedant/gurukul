@@ -12,6 +12,7 @@ import { useEffect, useState } from "react"
 import { FaStar } from "react-icons/fa"
 import { useRecoilValue } from "recoil"
 import Loader from "../ui/Loader"
+import Link from "next/link"
 type CoursePurchaseCardProps = {
     course: any
 }
@@ -111,6 +112,12 @@ const CoursePurchaseCard = ({ course }: CoursePurchaseCardProps) => {
                         <span className="bg-gray-800 text-white px-5 py-2 rounded-full text-center">
                             Purchased
                         </span>
+                        <Link
+                            href={`/courses/${course.id}`}
+                            className="text-white bg-blue px-5 py-2 rounded-full text-center"
+                        >
+                            Access Course 📚
+                        </Link>
                     </div>
                 </>
             ) : (
