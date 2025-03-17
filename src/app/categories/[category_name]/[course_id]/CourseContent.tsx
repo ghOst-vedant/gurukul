@@ -1,63 +1,105 @@
-import CourseNavigation from "@/components/ui/CourseNavigation"
-import { VideoComponent } from "@/components/ui/VideoComponent"
-import React, { useState } from "react"
+"use client"
 
-const CourseContent = ({ courseData, brought }: any) => {
-    const [course, setCourse] = useState<any>(courseData)
-    const [isPurchased, setIsPurchased] = useState<boolean | null>(brought)
-    const [selectedSection, setSelectedSection] = useState<string | null>(null)
-    const selectedSectionData = course?.sections.find(
-        (section: any) => section.sectionId === selectedSection
-    )
-    const selectedSectionContent = selectedSectionData
-        ? selectedSectionData.sectionContent
-        : ""
-    const handleSectionSelect = (sectionId: string) => {
-        setSelectedSection(sectionId)
+import { useEffect, useState } from "react"
+import Image from "next/image"
+import { FaChevronDown, FaChevronUp } from "react-icons/fa"
+import Loader from "@/components/ui/Loader"
+import { getCourseDetails } from "@/actions/getActions"
+
+export function CourseContent({ id }: any) {
+    const [expandedSection, setExpandedSection] = useState<string | null>(null)
+    const [course, setCourse] = useState<any>()
+    useEffect(() => {
+        const fetchCourse = async () => {
+            const course = await getCourseDetails(id)
+            setCourse(course)
+        }
+        fetchCourse()
+    }, [id])
+    if (!course) {
+        return <Loader />
     }
     return (
-        <div className="flex w-full gap-5 pt-28">
-            {isPurchased && (
-                <div className="w-[30%] sticky top-10 max-h-fit flex overflow-y-auto border bg-gray-100 rounded-xl">
-                    <CourseNavigation
-                        sections={course?.sections || []}
-                        onSectionSelect={handleSectionSelect}
-                    />
-                </div>
-            )}
-            <div className="w-[70%] max-h-screen overflow-x-hidden overflow-y-auto">
-                {isPurchased && selectedSectionContent ? (
-                    <div className="">
-                        <h3 className="text-xl font-semibold">
-                            {selectedSectionData?.sectionTitle}
-                        </h3>
-                        <div className="mt-4">
-                            {typeof selectedSectionContent === "string" ? (
-                                <p>{selectedSectionContent}</p>
-                            ) : selectedSectionContent[0].type.toLowerCase() ===
-                              "lecture" ? (
-                                <VideoComponent
-                                    VideoContent={selectedSectionContent}
-                                />
-                            ) : (
-                                <pre className="text-wrap">
-                                    {JSON.stringify(
-                                        selectedSectionContent,
-                                        null,
-                                        2
+        <div className="border rounded-lg shadow-md p-4 w-full max-w-3xl">
+            <div>
+                {/* Sections */}
+                <div>
+                    <h3 className="text-lg font-semibold">Course Sections</h3>
+                    <div className="mt-2">
+                        {course?.sections.map((section: any) => (
+                            <div key={section?.sectionId} className=" py-2">
+                                <button
+                                    className="w-full flex justify-between items-center text-left font-medium py-2 px-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
+                                    onClick={() =>
+                                        setExpandedSection(
+                                            expandedSection ===
+                                                section?.sectionId
+                                                ? null
+                                                : section?.sectionId
+                                        )
+                                    }
+                                >
+                                    {section?.sectionTitle}
+                                    {expandedSection === section?.sectionId ? (
+                                        <FaChevronUp />
+                                    ) : (
+                                        <FaChevronDown />
                                     )}
-                                </pre>
-                            )}
-                        </div>
+                                </button>
+
+                                {expandedSection === section?.sectionId && (
+                                    <div className="mt-2 px-4">
+                                        {section?.sectionContent?.map(
+                                            (item: any) => (
+                                                <div
+                                                    key={item?.id}
+                                                    className="flex items-center gap-2 py-1"
+                                                >
+                                                    {item?.type ===
+                                                        "lecture" && (
+                                                        <>
+                                                            <span className="text-sm font-medium">
+                                                                📖 Lecture:
+                                                            </span>
+                                                            <span className="text-gray-700">
+                                                                {
+                                                                    item?.data
+                                                                        .lectureTitle
+                                                                }
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                    {item.type === "test" && (
+                                                        <>
+                                                            <span className="text-sm font-medium">
+                                                                📝 Test:
+                                                            </span>
+                                                            <span className="text-gray-700">
+                                                                {
+                                                                    item?.data
+                                                                        .title
+                                                                }
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                    {item?.type ===
+                                                        "assignment" && (
+                                                        <>
+                                                            <span className="text-sm font-medium">
+                                                                📌 Assignment
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
                     </div>
-                ) : (
-                    <div className="mt-8 text-gray-500">
-                        Please select a section to view its content.
-                    </div>
-                )}
+                </div>
             </div>
         </div>
     )
 }
-
-export default CourseContent
