@@ -70,6 +70,7 @@ export const Student = (data: UserData) => {
             setUser(data)
         }, [data])
     }
+    console.log(user)
     return (
         <div className="flex justify-between w-full lg:flex-row flex-col">
             <div className="lg:w-[25%] border flex flex-col  items-center pt-10 rounded-3xl shadow-sm pb-3 px-4 h-fit">
@@ -95,13 +96,12 @@ export const Student = (data: UserData) => {
                 <div>
                     <h1 className="text-2xl">My Courses</h1>
                     <div className="mt-5 overflow-x-scroll  flex gap-5 p-1">
-                        {user.courses.map((course) => (
+                        {user?.courses?.map((course) => (
                             <CourseCard
                                 course_id={course}
                                 isprofile={true}
                                 key={course}
                             />
-
                         ))}
                     </div>
                 </div>
