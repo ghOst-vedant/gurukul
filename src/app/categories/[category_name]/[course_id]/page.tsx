@@ -11,7 +11,8 @@ import { useEffect, useState } from "react"
 import { getCategoryCourses, getCourseDetails } from "@/actions/getActions"
 import Link from "next/link"
 import { checkPurchased } from "@/actions/purchase"
-import CourseContent from "./CourseContent"
+import { CourseContent } from "./CourseContent"
+import Loader from "@/components/ui/Loader"
 
 type pageParams = {
     params: {
@@ -86,10 +87,10 @@ const Page = ({ params }: pageParams) => {
                     <li>{course?.sections.length} sections</li>
                 </ul>
                 {isPurchased && (
-                    <div className="bg-black/10 lg:w-full h-[35rem] mt-4 flex items-center justify-center rounded-xl p-6 pt-32">
+                    <div className="lg:w-[40vw] h-fit mt-4 flex items-center justify-center rounded-xl p-6 ">
                         <CourseContent
-                            courseData={course}
-                            brought={isPurchased}
+                            course={course}
+                            // brought={isPurchased}
                         />
                     </div>
                 )}
