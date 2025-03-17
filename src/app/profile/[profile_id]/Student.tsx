@@ -66,10 +66,10 @@ export const Student = (data: UserData) => {
         } catch (error) {
             console.error("Error updating user:", error)
         }
+        useEffect(() => {
+            setUser(data)
+        }, [data])
     }
-    useEffect(() => {
-        setUser(data)
-    }, [data])
     return (
         <div className="flex justify-between w-full lg:flex-row flex-col">
             <div className="lg:w-[25%] border flex flex-col  items-center pt-10 rounded-3xl shadow-sm pb-3 px-4 h-fit">
@@ -96,20 +96,15 @@ export const Student = (data: UserData) => {
                     <h1 className="text-2xl">My Courses</h1>
                     <div className="mt-5 overflow-x-scroll  flex gap-5 p-1">
                         {user.courses.map((course) => (
-                            <Link href={`/categories/${course}`} key={course}>
-                                <CourseCard course_id={course} />
-                            </Link>
+                            <CourseCard
+                                course_id={course}
+                                isprofile={true}
+                                key={course}
+                            />
+
                         ))}
                     </div>
                 </div>
-                {/* <div className="mt-14">
-                    <h1 className="text-2xl font-light">Bookmarked Teachers</h1>
-                    <div className=" flex gap-10 p-2 lg:flex-wrap overflow-x-scroll">
-                        <BookmarkCard />
-                        <BookmarkCard />
-                    </div>
-                </div> */}
-
                 <div className="mt-10">
                     <div className="flex gap-6 items-center">
                         <h1 className="text-2xl font-light">Edit Profile</h1>
@@ -259,3 +254,4 @@ export const Student = (data: UserData) => {
         </div>
     )
 }
+export default Student

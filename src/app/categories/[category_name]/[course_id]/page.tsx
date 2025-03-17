@@ -139,10 +139,7 @@ const Page = ({ params }: pageParams) => {
                     ))}
                 </div>
                 <span className="mt-5 hidden lg:block">
-                    <CourseCarousel
-                        category_name={category_name}
-                        courses={catCourses}
-                    />
+                    <CourseCarousel courses={catCourses} />
                 </span>
             </div>
         </div>

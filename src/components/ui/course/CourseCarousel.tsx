@@ -5,10 +5,9 @@ import { IoIosArrowBack } from "react-icons/io"
 import Link from "next/link"
 
 type carouselProps = {
-    category_name: string
     courses: any
 }
-const CourseCarousel = ({ category_name, courses }: carouselProps) => {
+const CourseCarousel = ({ courses }: carouselProps) => {
     const [index, setIndex] = useState(0)
     const handlePrev = () => {
         setIndex((index) => index - 1)
@@ -16,7 +15,6 @@ const CourseCarousel = ({ category_name, courses }: carouselProps) => {
     const handleNext = () => {
         setIndex((index) => index + 1)
     }
-    console.log("category name: ", category_name)
 
     return (
         <div className="flex gap-[2.5vw] courseViewport overflow-hidden items-center w-full justify-between">
@@ -41,7 +39,10 @@ const CourseCarousel = ({ category_name, courses }: carouselProps) => {
                 >
                     {courses.map((course: any, key: number) => (
                         <Link
-                            href={`/categories/${category_name}/${course.id}`}
+                            href={`/categories/${course.category
+                                .split(" ")
+                                .join("-")
+                                .toLowerCase()}/${course.id}`}
                             key={key}
                         >
                             <CourseCard course_id={course.id} />
@@ -51,12 +52,12 @@ const CourseCarousel = ({ category_name, courses }: carouselProps) => {
             </div>
             <button
                 className={`border-2 border-blue p-1 rounded-full ${
-                    index === 3
+                    index === courses.length - 4
                         ? "opacity-50"
                         : "opacity-100 hover:bg-blue hover:text-white"
                 }`}
                 onClick={handleNext}
-                disabled={index === 3}
+                disabled={index === courses.length - 4}
             >
                 <IoIosArrowBack className="rotate-180 text-2xl" />
             </button>
