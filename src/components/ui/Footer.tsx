@@ -13,10 +13,10 @@ export function Footer() {
           <span className="flex flex-col gap-2">
             <p className="mb-2">Important Links</p>
             <Link
-              href="/explore"
+              href="/about"
               className="text-white/80 hover:ml-1 transition-all"
             >
-              - Explore
+              - About
             </Link>
             <Link
               href="/categories"

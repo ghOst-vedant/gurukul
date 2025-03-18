@@ -137,12 +137,12 @@ export function MobileNavbar() {
             </div>
           </span>
           <Link
-            href="/explore"
+            href="/about"
             className={`text-lg font-medium text-black py-2 ${
               categoryOpen ? "border-y-[1px]" : "border-b-[1px]"
             } border-black/40`}
           >
-            Explore
+            About
           </Link>
 
           {session !== null ? (
