@@ -17,15 +17,29 @@ import CommentInput from "@/components/ui/CommentInputSection"
 import { userSessionAtom } from "@/recoil/Atoms/userSession"
 import { VideoComponent } from "@/components/ui/VideoComponent"
 import { Test } from "@/app/addnewcourse/page"
+import Link from "next/link"
+import { UserAtom } from "@/recoil/Atoms/UserAtom"
+import { checkTest, submitAnswers } from "@/actions/assessment"
+import toast from "react-hot-toast"
 
 const Page = () => {
     const { course_id } = useParams()
-    const user = useRecoilValue(userSessionAtom)
+    const user = useRecoilValue(UserAtom)
+    const [isTestSubmitted, setIsTestSubmitted] = useState(false)
     const [course, setCourse] = useState<any>(null)
     const [isPurchased, setIsPurchased] = useState<boolean | null>(null)
     const [selectedSection, setSelectedSection] = useState<string | null>(null)
     const [comments, setComments] = useState<any[]>([])
-    const [razorpayLoaded, setRazorpayLoaded] = useState(false)
+    const [selectedAnswers, setSelectedAnswers] = useState<{
+        [key: string]: number | null
+    }>({})
+
+    const handleAnswerChange = (questionId: string, optionIndex: number) => {
+        setSelectedAnswers((prevState) => ({
+            ...prevState,
+            [questionId]: optionIndex, // Store index instead of string
+        }))
+    }
 
     useEffect(() => {
         const fetchCourseData = async () => {
@@ -54,70 +68,8 @@ const Page = () => {
         }
     }, [selectedSection])
 
-    useEffect(() => {
-        const loadRazorpay = () => {
-            const script = document.createElement("script")
-            script.src = "https://checkout.razorpay.com/v1/checkout.js"
-            script.onload = () => setRazorpayLoaded(true)
-            script.onerror = (error) =>
-                console.error("Failed to load Razorpay script:", error)
-            document.body.appendChild(script)
-        }
-        loadRazorpay()
-    }, [])
-
     const handleSectionSelect = (sectionId: string) => {
         setSelectedSection(sectionId)
-    }
-
-    const handleCommentAdded = (newComment: string) => {
-        setComments((prevComments) => [
-            ...prevComments,
-            { user: user?.user?.name, content: newComment },
-        ])
-    }
-
-    const handlePayment = async () => {
-        if (!razorpayLoaded) return alert("Payment gateway not loaded yet")
-
-        const { success, order } = await purchaseCourse(
-            course_id as string,
-            course?.price
-        )
-        if (!success || !order) return alert("Failed to initiate payment")
-
-        const options = {
-            key: process.env.RAZORPAY_KEY_ID,
-            amount: order.amount,
-            currency: "INR",
-            name: course.title,
-            description: "Course Purchase",
-            order_id: order.id,
-            handler: async (response: any) => {
-                const paymentResponse = await verifyPayment(
-                    order.id,
-                    response.razorpay_payment_id,
-                    course_id as string,
-                    user?.user?.id as string
-                )
-                if (paymentResponse.success) {
-                    alert("Payment successful")
-                    setIsPurchased(true)
-                } else {
-                    alert("Payment verification failed")
-                }
-            },
-            prefill: {
-                name: user?.user?.name || "User Name",
-                email: user?.user?.email || "user@example.com",
-                contact: "1234567890",
-            },
-            notes: { address: "User's address" },
-            theme: { color: "#F37254" },
-        }
-
-        const rzp1 = new window.Razorpay(options)
-        rzp1.open()
     }
 
     const selectedSectionData = course?.sections.find(
@@ -126,6 +78,79 @@ const Page = () => {
     const selectedSectionContent = selectedSectionData
         ? selectedSectionData.sectionContent
         : ""
+
+    // handle mcq test posting
+    const handleSubmit = async () => {
+        if (!selectedSection || !course || !user?.id) {
+            console.error("Missing required data for submission.")
+            return
+        }
+
+        const selectedSectionData = course.sections.find(
+            (section: any) => section.sectionId === selectedSection
+        )
+
+        if (!selectedSectionData) {
+            console.error("Selected section not found in the course.")
+            return
+        }
+
+        const questions =
+            selectedSectionData?.sectionContent[0]?.data?.questions
+        if (!questions) {
+            console.error("No questions found in the selected section.")
+            return
+        }
+
+        const results = Object.entries(selectedAnswers)
+            .map(([questionId, selectedIndex]) => {
+                const question = questions.find(
+                    (q: any) => q.questionId === questionId
+                )
+                if (!question) {
+                    console.warn(`Question with ID ${questionId} not found.`)
+                    return null
+                }
+
+                const correctIndex = question?.question.correctAnswer
+                const isCorrect = correctIndex === selectedIndex
+
+                return {
+                    studentId: user.id,
+                    sectionId: selectedSection,
+                    questionId,
+                    answer:
+                        selectedIndex !== null ? selectedIndex.toString() : "",
+                    marks: isCorrect ? 1 : 0, // 1 for correct, 0 for incorrect
+                }
+            })
+            .filter(Boolean)
+        if (results.length > 0) {
+            try {
+                await submitAnswers(results)
+                setIsTestSubmitted(true)
+                toast.success("Submission successful!")
+            } catch (error) {
+                console.error("Error submitting answers:", error)
+            }
+        } else {
+            console.warn("No valid results to submit.")
+        }
+    }
+    const [answers, setAnswers] = useState<any>([])
+    useEffect(() => {
+        const check = async () => {
+            const answers = await checkTest(selectedSection as string, user?.id)
+            setAnswers(answers)
+            if (answers.length > 0) {
+                setIsTestSubmitted(true)
+                toast.success("Test already submitted!")
+            }
+        }
+        if (selectedSection) {
+            check()
+        }
+    }, [selectedSection])
 
     return (
         <div className="flex pt-28 pb-16 px-20 w-full max-h-150">
@@ -150,18 +175,21 @@ const Page = () => {
                         <p className="text-gray-600">{course.description}</p>
                     </div>
                 ) : selectedSection === null ? (
-                    <div className="mt-4">
+                    <div className="mt-4 flex flex-col gap-4">
                         <h2 className="text-2xl font-bold">Course Locked 🔒</h2>
                         <p className="text-gray-600">
                             You need to purchase this course to access its
                             content.
                         </p>
-                        <button
-                            onClick={handlePayment}
-                            className="bg-blue text-white px-4 py-2 rounded mt-2"
+                        <Link
+                            href={`/categories/${course?.category
+                                .split(" ")
+                                .join("-")
+                                .toLowerCase()}/${course?.id}`}
+                            className="bg-blue w-fit text-white  px-4 py-2 rounded "
                         >
                             Buy Now
-                        </button>
+                        </Link>
                     </div>
                 ) : null}
 
@@ -194,22 +222,22 @@ const Page = () => {
                                         {" > "}
                                         {selectedSectionContent[0].data.title}
                                     </h2>
-                                    {selectedSectionContent[0].data.questions.map(
+                                    {selectedSectionContent[0]?.data?.questions?.map(
                                         (question: any, index: number) => (
-                                            <div key={question.questionId}>
-                                                {question.questionType ===
+                                            <div key={question?.questionId}>
+                                                {question?.questionType ===
                                                     "mcq" && (
                                                     <div className="flex flex-col gap-2">
                                                         <p className="text-lg font-semibold">
                                                             {index + 1} :{" "}
                                                             {
                                                                 question
-                                                                    .question
+                                                                    ?.question
                                                                     .title
                                                             }
                                                         </p>
                                                         <ul className="flex flex-col gap-2">
-                                                            {question.question.options.map(
+                                                            {question?.question?.options.map(
                                                                 (
                                                                     option: String,
                                                                     index: number
@@ -224,6 +252,24 @@ const Page = () => {
                                                                             type="radio"
                                                                             name={`${question.questionId}`}
                                                                             id={`${question.questionId}${index}`}
+                                                                            checked={
+                                                                                isTestSubmitted
+                                                                                    ? question
+                                                                                          ?.question
+                                                                                          .correctAnswer ===
+                                                                                      index
+                                                                                    : selectedAnswers[
+                                                                                          question
+                                                                                              .questionId
+                                                                                      ] ===
+                                                                                      index
+                                                                            }
+                                                                            onChange={() =>
+                                                                                handleAnswerChange(
+                                                                                    question.questionId,
+                                                                                    index
+                                                                                )
+                                                                            }
                                                                             className="w-4 h-4"
                                                                         />
                                                                         <p>
@@ -235,6 +281,23 @@ const Page = () => {
                                                                 )
                                                             )}
                                                         </ul>
+                                                        {isTestSubmitted && (
+                                                            <p className="text-sm">
+                                                                {
+                                                                    // Find the answer from the answers array
+                                                                    answers.find(
+                                                                        (
+                                                                            ans: any
+                                                                        ) =>
+                                                                            ans.questionId ===
+                                                                            question.questionId
+                                                                    )?.marks ===
+                                                                    1
+                                                                        ? "Your Answer: Correct"
+                                                                        : "Your Answer: Incorrect"
+                                                                }
+                                                            </p>
+                                                        )}
                                                     </div>
                                                 )}
                                                 {question.questionType ===
@@ -263,9 +326,18 @@ const Page = () => {
                                         )
                                     )}
                                     {/* <pre>{JSON.stringify(selectedSectionContent, null, 2)}</pre> */}
-                                    <button className="my-4 bg-yellow text-black w-fit py-2 px-6 rounded">
-                                        Submit test
-                                    </button>
+                                    {isTestSubmitted ? (
+                                        <button className="my-4 bg-gray-500 text-white w-fit py-2 px-6 rounded-lg">
+                                            Test submitted
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={handleSubmit}
+                                            className="my-4 bg-yellow text-black w-fit py-2 px-6 rounded"
+                                        >
+                                            Submit test
+                                        </button>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="flex flex-col gap-6">
@@ -289,16 +361,18 @@ const Page = () => {
                         </div>
                     </div>
                 ) : (
-                    <div className="mt-8 text-gray-500">
-                        Please select a section to view its content.
-                    </div>
+                    isPurchased && (
+                        <div className="mt-8 text-gray-500">
+                            Please select a section to view its content.
+                        </div>
+                    )
                 )}
 
                 {isPurchased && selectedSection && (
                     <>
                         <CommentSection
                             comments={comments}
-                            userID={user?.user?.id as string}
+                            userID={user?.id as string}
                         />
                         <CommentInput
                             sectionId={selectedSection}

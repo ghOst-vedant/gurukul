@@ -8,6 +8,7 @@ import { getStudentCount } from "@/actions/getActions"
 import Loader from "@/components/ui/Loader"
 import { Pencil } from "lucide-react"
 import { updateUser } from "@/actions/user"
+import Link from "next/link"
 type UserData = {
     id: string
     role: string
@@ -104,12 +105,6 @@ export const Teacher = ({ user, isOwner }: teacherProps) => {
                             </span>
                             <span>Students Enrolled</span>
                         </span>
-                        {/* <span className=" flex flex-col justify-center items-center">
-                            <span className=" flex items-center gap-2">
-                                <FaBook size={27} />3
-                            </span>
-                            <span>Students Enrolled</span>
-                        </span> */}
                     </div>
                 </div>
                 <span className="px-5 p-4">
@@ -119,7 +114,17 @@ export const Teacher = ({ user, isOwner }: teacherProps) => {
             </div>
             <div className="lg:w-[70%]  rounded-3xl w-full  lg:mt-0 mt-[15vw]">
                 <div>
-                    <h1 className="text-2xl">{user?.name}'s Courses</h1>
+                    <span className="flex justify-between items-center">
+                        <h1 className="text-2xl">{user?.name}'s Courses</h1>
+                        {isOwner && (
+                            <Link
+                                href={"/addnewcourse"}
+                                className="px-5 py-2 bg-blue text-white  rounded-xl"
+                            >
+                                Create Course
+                            </Link>
+                        )}
+                    </span>
                     <div className="mt-5 overflow-x-scroll  flex gap-5 p-1 ">
                         {user?.courses?.map((course: any) => (
                             <CourseCard
