@@ -16,6 +16,7 @@ import CommentSection from "@/components/ui/CommentSection"
 import CommentInput from "@/components/ui/CommentInputSection"
 import { userSessionAtom } from "@/recoil/Atoms/userSession"
 import { VideoComponent } from "@/components/ui/VideoComponent"
+import { Test } from "@/app/addnewcourse/page"
 
 const Page = () => {
     const { course_id } = useParams()
@@ -127,7 +128,7 @@ const Page = () => {
         : ""
 
     return (
-        <div className="flex pt-28 pb-16 px-20 w-full max-h-150 min-h-[80vh]">
+        <div className="flex pt-28 pb-16 px-20 w-full max-h-150">
             {isPurchased && (
                 <div className="sticky top-28 w-1/4 h-fit overflow-y-auto border  bg-gray-100 rounded-xl">
                     <CourseNavigation
@@ -165,26 +166,125 @@ const Page = () => {
                 ) : null}
 
                 {isPurchased && selectedSectionContent ? (
-                    <div className="mt-8 ">
-                        <h3 className="text-xl font-semibold">
-                            {selectedSectionData?.sectionTitle}
-                        </h3>
-                        <div className="mt-4">
+                    <div className="">
+                        <div className="">
                             {typeof selectedSectionContent === "string" ? (
                                 <p>{selectedSectionContent}</p>
                             ) : selectedSectionContent[0].type.toLowerCase() ===
                               "lecture" ? (
-                                <VideoComponent
-                                    VideoContent={selectedSectionContent}
-                                />
-                            ) : (
-                                <pre className="text-wrap">
-                                    {JSON.stringify(
-                                        selectedSectionContent,
-                                        null,
-                                        2
+                                <div className="flex flex-col gap-6">
+                                    <h2 className="text-2xl font-semibold">
+                                        {selectedSectionData?.sectionTitle}
+                                        {" > "}
+                                        {
+                                            selectedSectionContent[0].data
+                                                .lectureTitle
+                                        }
+                                    </h2>
+                                    {/* <pre>{JSON.stringify(selectedSectionContent, null, 2)}</pre> */}
+                                    <VideoComponent
+                                        VideoContent={selectedSectionContent}
+                                    />
+                                </div>
+                            ) : selectedSectionContent[0].type.toLowerCase() ===
+                              "test" ? (
+                                <div className="flex flex-col gap-6">
+                                    <h2 className="text-2xl font-semibold">
+                                        {selectedSectionData?.sectionTitle}
+                                        {" > "}
+                                        {selectedSectionContent[0].data.title}
+                                    </h2>
+                                    {selectedSectionContent[0].data.questions.map(
+                                        (question: any, index: number) => (
+                                            <div key={question.questionId}>
+                                                {question.questionType ===
+                                                    "mcq" && (
+                                                    <div className="flex flex-col gap-2">
+                                                        <p className="text-lg font-semibold">
+                                                            {index + 1} :{" "}
+                                                            {
+                                                                question
+                                                                    .question
+                                                                    .title
+                                                            }
+                                                        </p>
+                                                        <ul className="flex flex-col gap-2">
+                                                            {question.question.options.map(
+                                                                (
+                                                                    option: String,
+                                                                    index: number
+                                                                ) => (
+                                                                    <span
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                        className="flex gap-2 items-center"
+                                                                    >
+                                                                        <input
+                                                                            type="radio"
+                                                                            name={`${question.questionId}`}
+                                                                            id={`${question.questionId}${index}`}
+                                                                            className="w-4 h-4"
+                                                                        />
+                                                                        <p>
+                                                                            {
+                                                                                option
+                                                                            }
+                                                                        </p>
+                                                                    </span>
+                                                                )
+                                                            )}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                                {question.questionType ===
+                                                    "descriptive" && (
+                                                    <div className="flex flex-col gap-4">
+                                                        <p className="text-lg font-semibold">
+                                                            {index + 1} :{" "}
+                                                            {
+                                                                question
+                                                                    .question
+                                                                    .title
+                                                            }
+                                                        </p>
+                                                        <textarea
+                                                            name="answer"
+                                                            id={
+                                                                question.questionId
+                                                            }
+                                                            placeholder="Write your answer here"
+                                                            cols={3}
+                                                            className="border-[1px] border-black/60 rounded-lg px-4 py-3 outline-none"
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )
                                     )}
-                                </pre>
+                                    {/* <pre>{JSON.stringify(selectedSectionContent, null, 2)}</pre> */}
+                                    <button className="my-4 bg-yellow text-black w-fit py-2 px-6 rounded">
+                                        Submit test
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col gap-6">
+                                    <h2 className="text-2xl font-semibold">
+                                        {selectedSectionData?.sectionTitle}
+                                        {" > "}
+                                        {
+                                            selectedSectionContent[0].data
+                                                .assignmentTitle
+                                        }
+                                    </h2>
+                                    <pre>
+                                        {JSON.stringify(
+                                            selectedSectionContent,
+                                            null,
+                                            2
+                                        )}
+                                    </pre>
+                                </div>
                             )}
                         </div>
                     </div>
