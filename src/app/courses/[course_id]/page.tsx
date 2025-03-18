@@ -26,8 +26,8 @@ const Page = () => {
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [comments, setComments] = useState<any[]>([]);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
-  const [userAnswers, setUserAnswers] = useState<
-    { questionId: string; answer: string }[]
+  const [descriptiveAnswers, setDescriptiveAnswers] = useState<
+    { questionId: string; question: string; userAnswer: string }[]
   >([]);
 
   useEffect(() => {
@@ -80,26 +80,24 @@ const Page = () => {
     ]);
   };
 
-  const handleMCQSelect = (questionId: string, selectedOption: string) => {
-    setUserAnswers((prevAnswers) => {
+  const handleDescriptiveChange = (
+    questionId: string,
+    question: string,
+    userAnswer: string
+  ) => {
+    setDescriptiveAnswers((prevAnswers) => {
       const updatedAnswers = prevAnswers.filter(
         (ans) => ans.questionId !== questionId
       );
-      return [...updatedAnswers, { questionId, answer: selectedOption }];
-    });
-  };
-
-  const handleDescriptiveChange = (questionId: string, text: string) => {
-    setUserAnswers((prevAnswers) => {
-      const updatedAnswers = prevAnswers.filter(
-        (ans) => ans.questionId !== questionId
-      );
-      return [...updatedAnswers, { questionId, answer: text }];
+      return [
+        ...updatedAnswers,
+        { questionId, question, userAnswer: userAnswer },
+      ];
     });
   };
 
   const handleSubmitTest = () => {
-    console.log("User Answers:", userAnswers);
+    console.log("User Answers:", descriptiveAnswers);
     // Send `userAnswers` to the backend for evaluation. Create two parts one for mcq and one for descriptive. You do for mcq and I will do for descriptive.
   };
 
@@ -220,22 +218,16 @@ const Page = () => {
                             </p>
                             <ul className="flex flex-col gap-2">
                               {question.question.options.map(
-                                (option: string, idx: number) => (
+                                (option: String, index: number) => (
                                   <span
-                                    key={idx}
+                                    key={index}
                                     className="flex gap-2 items-center"
                                   >
                                     <input
                                       type="radio"
                                       name={`${question.questionId}`}
-                                      id={`${question.questionId}-${idx}`}
+                                      id={`${question.questionId}${index}`}
                                       className="w-4 h-4"
-                                      onChange={() =>
-                                        handleMCQSelect(
-                                          question.questionId,
-                                          option
-                                        )
-                                      }
                                     />
                                     <p>{option}</p>
                                   </span>
@@ -258,6 +250,7 @@ const Page = () => {
                               onChange={(e) =>
                                 handleDescriptiveChange(
                                   question.questionId,
+                                  question.question.title,
                                   e.target.value
                                 )
                               }
