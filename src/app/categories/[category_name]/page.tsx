@@ -92,7 +92,7 @@ const page = ({ params }: { params: Params }) => {
                     </span>
                 </div>
                 <div className="mt-5 flex gap-5 lg:gap-10 flex-wrap justify-evenly">
-                    {courses.map((course: any, key: number) => (
+                    {courses?.map((course: any, key: number) => (
                         <Link
                             href={`/categories/${category_name}/${course.id}`}
                             key={key}
