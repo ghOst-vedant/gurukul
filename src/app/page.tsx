@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image"
 import Link from "next/link"
 import { LearnerDataCard } from "@/components/cards/learnerDataCard"
@@ -13,106 +14,17 @@ import home_ad_img from "@/assets/images/home_ad_img.png"
 import userProfile from "@/assets/images/user.png"
 import CourseCarousel from "@/components/ui/course/CourseCarousel"
 import { getCourses } from "@/actions/getActions"
+import { useEffect, useState } from "react"
 
-const Home = async () => {
-    const learnersData = [
-        {
-            number: 1.2,
-            domain: "Web Development",
-        },
-        {
-            number: 2.2,
-            domain: "UI/UX Designing",
-        },
-        {
-            number: 3.2,
-            domain: "Cloud Computing",
-        },
-        {
-            number: 4.2,
-            domain: "Cyber Security",
-        },
-        {
-            number: 5.2,
-            domain: "Blockchain",
-        },
-        {
-            number: 6.2,
-            domain: "Machine Learning",
-        },
-        {
-            number: 7.2,
-            domain: "Artificial Intelligence",
-        },
-        {
-            number: 8.2,
-            domain: "Frontend Development",
-        },
-        {
-            number: 9.2,
-            domain: "Backend Development",
-        },
-    ]
-
-    const testimonials = [
-        {
-            name: "Aarav Patel",
-            image: userProfile,
-            role: "Full Stack Development",
-            testimonial:
-                "Gurukul transformed my learning experience. The AI-powered assessments and structured courses helped me master both frontend and backend development with ease.",
-        },
-        {
-            name: "Neha Sharma",
-            image: userProfile,
-            role: "Data Structures & Algorithms",
-            testimonial:
-                "The interactive coding challenges and AI-driven feedback on Gurukul helped me crack top tech interviews. Highly recommended for aspiring developers!",
-        },
-        {
-            name: "Rohan Verma",
-            image: userProfile,
-            role: "Machine Learning",
-            testimonial:
-                "Gurukul’s AI-driven evaluation made learning ML super intuitive. The descriptive answer checking feature saved me hours of manual work!",
-        },
-        {
-            name: "Sneha Kapoor",
-            image: userProfile,
-            role: "Cybersecurity",
-            testimonial:
-                "The hands-on labs and real-world scenarios on Gurukul made cybersecurity concepts much easier to grasp. It’s the best platform for practical learning.",
-        },
-        {
-            name: "Amit Joshi",
-            image: userProfile,
-            role: "Frontend Development",
-            testimonial:
-                "From React to Next.js, Gurukul provided a structured roadmap with AI-powered guidance, helping me build production-ready applications.",
-        },
-        {
-            name: "Priya Deshmukh",
-            image: userProfile,
-            role: "AI & Deep Learning",
-            testimonial:
-                "Gurukul’s personalized learning paths helped me dive deep into AI concepts. The AI-powered tests were spot on for self-evaluation.",
-        },
-        {
-            name: "Karan Malhotra",
-            image: userProfile,
-            role: "DevOps & Cloud",
-            testimonial:
-                "The cloud computing and DevOps courses on Gurukul are industry-aligned. The practical projects helped me land my first job in cloud engineering!",
-        },
-        {
-            name: "Ananya Roy",
-            image: userProfile,
-            role: "Backend Development",
-            testimonial:
-                "Gurukul made backend development easy with real-world projects and AI-assisted learning. I now have confidence in building scalable applications!",
-        },
-    ]
-    const courses = await getCourses()
+const Home = () => {
+    const [courses, setCourses] = useState<any>([])
+    useEffect(() => {
+        const getCo = async () => {
+            const data = await getCourses()
+            setCourses(data)
+        }
+        getCo()
+    }, [])
     return (
         <div className="overflow-x-hidden flex flex-col gap-16">
             {/* Hero section */}
@@ -157,7 +69,7 @@ const Home = async () => {
                         <Marquee pauseOnHover className="[--duration:20s]">
                             {learnersData.map((learnerData, index) => (
                                 <LearnerDataCard
-                                    key={index}
+                                    key={learnerData.number} // unique key here
                                     number={learnerData.number}
                                     domain={learnerData.domain}
                                 />
@@ -198,7 +110,7 @@ const Home = async () => {
                             {learnersData.slice(0, 4).map((data, index) => (
                                 <button
                                     className="min-w-fit hover:border-blue rounded-full px-5 py-2 border-[2px] border-black/40 sm:text-lg lg:text-base sm:px-7 sm:py-3 lg:px-5 lg:py-2"
-                                    key={index}
+                                    key={data.domain} // unique key here
                                 >
                                     {data.domain}
                                 </button>
@@ -213,8 +125,8 @@ const Home = async () => {
                     </div>
                 </div>
                 <div className="mt-5 overflow-x-scroll lg:hidden flex gap-5 px-4 ">
-                    {courses.map((course) => (
-                        <CourseCard course_id={course.id} />
+                    {courses?.map((course: any) => (
+                        <CourseCard key={course.id} course_id={course.id} /> // unique key here
                     ))}
                 </div>
                 <span className="mt-5 hidden lg:block">
@@ -257,8 +169,8 @@ const Home = async () => {
                     with Top Courses
                 </h2>
                 <div className="mt-5 overflow-x-scroll lg:hidden flex gap-5">
-                    {courses.map((course) => (
-                        <CourseCard course_id={course.id} />
+                    {courses?.map((course: any) => (
+                        <CourseCard key={course.id} course_id={course.id} /> // unique key here
                     ))}
                 </div>
                 <span className="mt-5 hidden lg:block">
@@ -275,13 +187,12 @@ const Home = async () => {
                 {/*Marquee for only mobile */}
                 <span className="flex flex-col mt-5 sm:hidden">
                     <div className="overflow-x-scroll lg:overflow-x-hidden lg:flex lg:justify-center">
-                        <span className="flex gap-5 py-2">
-                            <Marquee pauseOnHover className="[--duration:10s]">
-                                {testimonials
-                                    .slice(0, testimonials.length / 2)
-                                    .map((testimonial, index) => (
+                        <span className="flex gap-5 lg:gap-10 py-2">
+                            <Marquee pauseOnHover className="[--duration:20s]">
+                                {testimonials?.map(
+                                    (testimonial: any, index) => (
                                         <TestimonialCard
-                                            key={index}
+                                            key={testimonial.name} // unique key here
                                             name={testimonial.name}
                                             image=""
                                             role={testimonial.role}
@@ -289,53 +200,25 @@ const Home = async () => {
                                                 testimonial.testimonial
                                             }
                                         />
-                                    ))}
-                            </Marquee>
-                        </span>
-                    </div>
-                    <div className="overflow-x-scroll lg:overflow-x-hidden lg:justify-center">
-                        <span className="flex gap-5 py-2">
-                            <Marquee
-                                reverse
-                                pauseOnHover
-                                className="[--duration:10s]"
-                            >
-                                {testimonials
-                                    .slice(
-                                        testimonials.length / 2,
-                                        testimonials.length
                                     )
-                                    .map((testimonial, index) => (
-                                        <TestimonialCard
-                                            key={index}
-                                            name={testimonial.name}
-                                            image=""
-                                            role={testimonial.role}
-                                            testimonial={
-                                                testimonial.testimonial
-                                            }
-                                        />
-                                    ))}
+                                )}
                             </Marquee>
                         </span>
                     </div>
                 </span>
-
-                {/* Marquee for tablet and desktop */}
-                <div className="overflow-x-scroll lg:overflow-x-hidden lg:justify-center hidden sm:block">
-                    <span className="flex gap-5 py-2">
-                        <Marquee pauseOnHover className="[--duration:20s]">
-                            {testimonials.map((testimonial, index) => (
-                                <TestimonialCard
-                                    key={index}
-                                    name={testimonial.name}
-                                    image=""
-                                    role={testimonial.role}
-                                    testimonial={testimonial.testimonial}
-                                />
-                            ))}
-                        </Marquee>
-                    </span>
+                {/* Large screen testimonials */}
+                <div className="hidden sm:flex">
+                    <div className="w-full flex justify-center gap-10">
+                        {testimonials?.map((testimonial: any) => (
+                            <TestimonialCard
+                                key={testimonial?.name} // unique key here
+                                name={testimonial.name}
+                                image=""
+                                role={testimonial.role}
+                                testimonial={testimonial.testimonial}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
@@ -343,3 +226,100 @@ const Home = async () => {
 }
 
 export default Home
+const learnersData = [
+    {
+        number: 1.2,
+        domain: "Web Development",
+    },
+    {
+        number: 2.2,
+        domain: "UI/UX Designing",
+    },
+    {
+        number: 3.2,
+        domain: "Cloud Computing",
+    },
+    {
+        number: 4.2,
+        domain: "Cyber Security",
+    },
+    {
+        number: 5.2,
+        domain: "Blockchain",
+    },
+    {
+        number: 6.2,
+        domain: "Machine Learning",
+    },
+    {
+        number: 7.2,
+        domain: "Artificial Intelligence",
+    },
+    {
+        number: 8.2,
+        domain: "Frontend Development",
+    },
+    {
+        number: 9.2,
+        domain: "Backend Development",
+    },
+]
+
+const testimonials = [
+    {
+        name: "Aarav Patel",
+        image: userProfile,
+        role: "Full Stack Development",
+        testimonial:
+            "Gurukul transformed my learning experience. The AI-powered assessments and structured courses helped me master both frontend and backend development with ease.",
+    },
+    {
+        name: "Neha Sharma",
+        image: userProfile,
+        role: "Data Structures & Algorithms",
+        testimonial:
+            "The interactive coding challenges and AI-driven feedback on Gurukul helped me crack top tech interviews. Highly recommended for aspiring developers!",
+    },
+    {
+        name: "Rohan Verma",
+        image: userProfile,
+        role: "Machine Learning",
+        testimonial:
+            "Gurukul’s AI-driven evaluation made learning ML super intuitive. The descriptive answer checking feature saved me hours of manual work!",
+    },
+    {
+        name: "Sneha Kapoor",
+        image: userProfile,
+        role: "Cybersecurity",
+        testimonial:
+            "The hands-on labs and real-world scenarios on Gurukul made cybersecurity concepts much easier to grasp. It’s the best platform for practical learning.",
+    },
+    {
+        name: "Amit Joshi",
+        image: userProfile,
+        role: "Frontend Development",
+        testimonial:
+            "From React to Next.js, Gurukul provided a structured roadmap with AI-powered guidance, helping me build production-ready applications.",
+    },
+    {
+        name: "Priya Deshmukh",
+        image: userProfile,
+        role: "AI & Deep Learning",
+        testimonial:
+            "Gurukul’s personalized learning paths helped me dive deep into AI concepts. The AI-powered tests were spot on for self-evaluation.",
+    },
+    {
+        name: "Karan Malhotra",
+        image: userProfile,
+        role: "DevOps & Cloud",
+        testimonial:
+            "The cloud computing and DevOps courses on Gurukul are industry-aligned. The practical projects helped me land my first job in cloud engineering!",
+    },
+    {
+        name: "Ananya Roy",
+        image: userProfile,
+        role: "Backend Development",
+        testimonial:
+            "Gurukul made backend development easy with real-world projects and AI-assisted learning. I now have confidence in building scalable applications!",
+    },
+]

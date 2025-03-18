@@ -25,3 +25,23 @@ export async function updateUser(
         console.error("Error updating all users:", error)
     }
 }
+export async function getStudentCount(tid: string) {
+    if (!tid) {
+        throw new Error("No userId found!")
+    }
+    try {
+        const result = await db.course.findMany({
+            where: {
+                userId: tid,
+            },
+        })
+        const totalStudents = result.reduce((total, course) => {
+            return total + (course.students?.length || 0) // Add the number of students in each course
+        }, 0)
+        console.log(totalStudents)
+
+        return totalStudents
+    } catch (error) {
+        console.error("Error fetching user courses:", error)
+    }
+}

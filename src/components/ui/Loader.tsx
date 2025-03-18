@@ -1,10 +1,13 @@
 import React from "react"
 
-const Loader = () => {
+type loaderProps = {
+    size?: number
+}
+const Loader = ({ size }: loaderProps) => {
     return (
         <div>
             <svg
-                className="animate-spin h-10 w-10 text-blue"
+                className={`animate-spin text-blue ${size ? `h-${size} w-${size}` : "h-10 w-10"}`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"

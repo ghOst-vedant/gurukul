@@ -5,28 +5,21 @@ import Image from "next/image"
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"
 import Loader from "@/components/ui/Loader"
 import { getCourseDetails } from "@/actions/getActions"
-
-export function CourseContent({ id }: any) {
+type contentParams = {
+    sections: any[]
+}
+export function CourseContent({ sections }: contentParams) {
     const [expandedSection, setExpandedSection] = useState<string | null>(null)
-    const [course, setCourse] = useState<any>()
-    useEffect(() => {
-        const fetchCourse = async () => {
-            const course = await getCourseDetails(id)
-            setCourse(course)
-        }
-        fetchCourse()
-    }, [id])
-    if (!course) {
+    if (!sections) {
         return <Loader />
     }
     return (
         <div className="border rounded-lg shadow-md p-4 w-full max-w-3xl">
             <div>
-                {/* Sections */}
                 <div>
                     <h3 className="text-lg font-semibold">Course Sections</h3>
                     <div className="mt-2">
-                        {course?.sections.map((section: any) => (
+                        {sections?.map((section: any) => (
                             <div key={section?.sectionId} className=" py-2">
                                 <button
                                     className="w-full flex justify-between items-center text-left font-medium py-2 px-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition"

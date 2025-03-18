@@ -22,7 +22,11 @@ type UserData = {
     createdAt: string
     updatedAt: string
 }
-export const Student = (data: UserData) => {
+type studentProps = {
+    data: UserData
+    isOwner?: boolean
+}
+export const Student = ({ data, isOwner }: studentProps) => {
     if (!data) {
         return <Loader />
     }
@@ -70,7 +74,6 @@ export const Student = (data: UserData) => {
             setUser(data)
         }, [data])
     }
-    console.log(user)
     return (
         <div className="flex justify-between w-full lg:flex-row flex-col">
             <div className="lg:w-[25%] border flex flex-col  items-center pt-10 rounded-3xl shadow-sm pb-3 px-4 h-fit">
@@ -105,151 +108,159 @@ export const Student = (data: UserData) => {
                         ))}
                     </div>
                 </div>
-                <div className="mt-10">
-                    <div className="flex gap-6 items-center">
-                        <h1 className="text-2xl font-light">Edit Profile</h1>
-                    </div>
-                    <div className="mt-6 border shadow-sm rounded-3xl py-8 px-4">
-                        <h2 className="font-medium text-lg">Basic Info</h2>
-                        <div className="mt-10 flex flex-col gap-6 font-light">
-                            {/* Name */}
-                            <span className="flex justify-between border-b border-black px-2 pb-2">
-                                <p>Name</p>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={user.name}
-                                        onChange={handleChange}
-                                        className="border px-2 py-1 rounded-md"
-                                        autoFocus
-                                    />
-                                ) : (
-                                    <p className="text-lg font-medium">
-                                        {user.name}
-                                    </p>
-                                )}
-                                <Pencil
-                                    size={20}
-                                    className="hover:text-blue cursor-pointer"
-                                    onClick={() => setIsEditing(true)}
-                                />
-                            </span>
-
-                            {/* Gender */}
-                            <span className="flex justify-between border-b border-black px-2 pb-2">
-                                <p>Gender</p>
-                                {isEditing ? (
-                                    <select
-                                        name="gender"
-                                        value={user?.gender}
-                                        onChange={handleChange}
-                                        className="border px-2 py-1 rounded-md"
-                                    >
-                                        <option value="">Select Gender</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                ) : (
-                                    <p>{user?.gender || "Not Set"}</p>
-                                )}
-                                <Pencil
-                                    size={20}
-                                    className="hover:text-blue cursor-pointer"
-                                    onClick={() => setIsEditing(true)}
-                                />
-                            </span>
-
-                            {/* Age */}
-                            <span className="flex justify-between border-b border-black px-2 pb-2">
-                                <p>Age</p>
-                                {isEditing ? (
-                                    <input
-                                        type="number"
-                                        name="age"
-                                        value={user?.age || ""}
-                                        onChange={handleChange}
-                                        className="border px-2 py-1 rounded-md"
-                                    />
-                                ) : (
-                                    <p>
-                                        {user?.age !== undefined
-                                            ? user?.age
-                                            : "Not Set"}
-                                    </p>
-                                )}
-                                <Pencil
-                                    size={20}
-                                    className="hover:text-blue cursor-pointer"
-                                    onClick={() => setIsEditing(true)}
-                                />
-                            </span>
-
-                            {/* Mobile Number */}
-                            <span className="flex justify-between border-b border-black px-2 pb-2">
-                                <p>Mobile No</p>
-                                {isEditing ? (
-                                    <input
-                                        type="tel"
-                                        name="mobile"
-                                        value={
-                                            user?.mobile === null
-                                                ? ""
-                                                : user?.mobile
-                                        }
-                                        onChange={handleChange}
-                                        className="border px-2 py-1 rounded-md"
-                                    />
-                                ) : (
-                                    <p>{user?.mobile || "Not Set"}</p>
-                                )}
-                                <Pencil
-                                    size={20}
-                                    className="hover:text-blue cursor-pointer"
-                                    onClick={() => setIsEditing(true)}
-                                />
-                            </span>
-
-                            {/* Email (Non-Editable) */}
-                            <span className="flex justify-between px-2 pb-2">
-                                <p>Email</p>
-                                <p>{user?.email}</p>
-                            </span>
-
-                            {/* About */}
-                            <span className="flex flex-col gap-2 border-b border-black px-2 pb-2">
-                                <p>About</p>
-                                {isEditing ? (
-                                    <textarea
-                                        name="about"
-                                        value={user?.about}
-                                        onChange={handleChange}
-                                        className="border px-2 py-1 rounded-md w-full"
-                                        rows={3}
-                                    />
-                                ) : (
-                                    <p>{user?.about || "Not Set"}</p>
-                                )}
-                                <Pencil
-                                    size={20}
-                                    className="hover:text-blue cursor-pointer self-end"
-                                    onClick={() => setIsEditing(true)}
-                                />
-                            </span>
+                {isOwner && (
+                    <div className="mt-10">
+                        <div className="flex gap-6 items-center">
+                            <h1 className="text-2xl font-light">
+                                Edit Profile
+                            </h1>
                         </div>
-                        {isEditing && (
-                            <div className="flex justify-center mt-6">
-                                <button
-                                    className="bg-blue text-white px-4 py-2 rounded-lg"
-                                    onClick={handleSave}
-                                >
-                                    Save Changes
-                                </button>
+                        <div className="mt-6 border shadow-sm rounded-3xl py-8 px-4">
+                            <h2 className="font-medium text-lg">Basic Info</h2>
+                            <div className="mt-10 flex flex-col gap-6 font-light">
+                                {/* Name */}
+                                <span className="flex justify-between border-b border-black px-2 pb-2">
+                                    <p>Name</p>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={user.name}
+                                            onChange={handleChange}
+                                            className="border px-2 py-1 rounded-md"
+                                            autoFocus
+                                        />
+                                    ) : (
+                                        <p className="text-lg font-medium">
+                                            {user.name}
+                                        </p>
+                                    )}
+                                    <Pencil
+                                        size={20}
+                                        className="hover:text-blue cursor-pointer"
+                                        onClick={() => setIsEditing(true)}
+                                    />
+                                </span>
+
+                                {/* Gender */}
+                                <span className="flex justify-between border-b border-black px-2 pb-2">
+                                    <p>Gender</p>
+                                    {isEditing ? (
+                                        <select
+                                            name="gender"
+                                            value={user?.gender}
+                                            onChange={handleChange}
+                                            className="border px-2 py-1 rounded-md"
+                                        >
+                                            <option value="">
+                                                Select Gender
+                                            </option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">
+                                                Female
+                                            </option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    ) : (
+                                        <p>{user?.gender || "Not Set"}</p>
+                                    )}
+                                    <Pencil
+                                        size={20}
+                                        className="hover:text-blue cursor-pointer"
+                                        onClick={() => setIsEditing(true)}
+                                    />
+                                </span>
+
+                                {/* Age */}
+                                <span className="flex justify-between border-b border-black px-2 pb-2">
+                                    <p>Age</p>
+                                    {isEditing ? (
+                                        <input
+                                            type="number"
+                                            name="age"
+                                            value={user?.age || ""}
+                                            onChange={handleChange}
+                                            className="border px-2 py-1 rounded-md"
+                                        />
+                                    ) : (
+                                        <p>
+                                            {user?.age !== undefined
+                                                ? user?.age
+                                                : "Not Set"}
+                                        </p>
+                                    )}
+                                    <Pencil
+                                        size={20}
+                                        className="hover:text-blue cursor-pointer"
+                                        onClick={() => setIsEditing(true)}
+                                    />
+                                </span>
+
+                                {/* Mobile Number */}
+                                <span className="flex justify-between border-b border-black px-2 pb-2">
+                                    <p>Mobile No</p>
+                                    {isEditing ? (
+                                        <input
+                                            type="tel"
+                                            name="mobile"
+                                            value={
+                                                user?.mobile === null
+                                                    ? ""
+                                                    : user?.mobile
+                                            }
+                                            onChange={handleChange}
+                                            className="border px-2 py-1 rounded-md"
+                                        />
+                                    ) : (
+                                        <p>{user?.mobile || "Not Set"}</p>
+                                    )}
+                                    <Pencil
+                                        size={20}
+                                        className="hover:text-blue cursor-pointer"
+                                        onClick={() => setIsEditing(true)}
+                                    />
+                                </span>
+
+                                {/* Email (Non-Editable) */}
+                                <span className="flex justify-between px-2 pb-2">
+                                    <p>Email</p>
+                                    <p>{user?.email}</p>
+                                </span>
+
+                                {/* About */}
+                                <span className="flex flex-col gap-2 border-b border-black px-2 pb-2">
+                                    <p>About</p>
+                                    {isEditing ? (
+                                        <textarea
+                                            name="about"
+                                            value={user?.about}
+                                            onChange={handleChange}
+                                            className="border px-2 py-1 rounded-md w-full"
+                                            rows={3}
+                                        />
+                                    ) : (
+                                        <p>{user?.about || "Not Set"}</p>
+                                    )}
+                                    <Pencil
+                                        size={20}
+                                        className="hover:text-blue cursor-pointer self-end"
+                                        onClick={() => setIsEditing(true)}
+                                    />
+                                </span>
                             </div>
-                        )}
+                            {isEditing && (
+                                <div className="flex justify-center mt-6">
+                                    <button
+                                        className="bg-blue text-white px-4 py-2 rounded-lg"
+                                        onClick={handleSave}
+                                    >
+                                        Save Changes
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     )
