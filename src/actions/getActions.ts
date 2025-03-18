@@ -34,7 +34,6 @@ export const getSignedInUser = async (id: string) => {
         console.error(error)
     }
 }
-
 export const getCategoryCourses = async (category: string) => {
     try {
         const courses = await db.course.findMany({
@@ -45,5 +44,24 @@ export const getCategoryCourses = async (category: string) => {
         return courses
     } catch (error) {
         console.error(error)
+    }
+}
+
+export async function getStudentCount(teacherId: string) {
+    try {
+        if (!teacherId) throw new Error("Teacher ID is required")
+        const courses = await db.course.findMany({
+            where: { userId: teacherId },
+        })
+
+        const totalStudents = courses.reduce(
+            (acc, course) => acc + course.students.length,
+            0
+        )
+        console.log(totalStudents)
+        return totalStudents
+    } catch (error) {
+        console.error("Error fetching student count:", error)
+        throw new Error("Failed to fetch student count")
     }
 }

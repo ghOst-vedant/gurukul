@@ -23,7 +23,6 @@ type pageParams = {
 
 const Page = ({ params }: pageParams) => {
     const { course_id, category_name } = params
-    console.log(course_id, category_name)
     const [course, setCourse] = useState<any>()
     const [catCourses, setCatCourses] = useState<any>([])
     const [isPurchased, setIsPurchased] = useState<boolean | null>(null)
@@ -86,14 +85,9 @@ const Page = ({ params }: pageParams) => {
                 >
                     <li>{course?.sections.length} sections</li>
                 </ul>
-                {isPurchased && (
-                    <div className="lg:w-[40vw] h-fit mt-4 flex items-center justify-center rounded-xl p-6 ">
-                        <CourseContent
-                            course={course}
-                            // brought={isPurchased}
-                        />
-                    </div>
-                )}
+                <div className="lg:w-[40vw] h-fit mt-4 flex items-center justify-center rounded-xl p-6 ">
+                    <CourseContent sections={course?.sections} />
+                </div>
             </div>
             <div className="lg:px-[3vw] flex flex-col gap-16 lg:flex-row lg:justify-between mt-6">
                 <div className="w-full lg:w-[57%] flex flex-col gap-6">
@@ -121,7 +115,9 @@ const Page = ({ params }: pageParams) => {
                     <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold">
                         About the Instructor
                     </h2>
-                    <InstructorCard />
+                    <Link href={`/profile/${course?.userId}`}>
+                        <InstructorCard id={course?.userId} />
+                    </Link>
                 </div>
             </div>
             <div className="flex flex-col gap-4 sm:gap-8 px-4 sm:px-12 lg:px-[3vw] mt-6 lg:mt-10">

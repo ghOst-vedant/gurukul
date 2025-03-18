@@ -5,7 +5,6 @@ const Logout = () => {
     <div>
       <button
         onClick={() => {
-          console.log("Hello");
         }}
       >
         logout

@@ -127,21 +127,16 @@ const Page = () => {
         : ""
 
     return (
-        <div className="flex pt-28 pb-16 px-20 w-full max-h-150">
+        <div className="flex pt-28 pb-16 px-20 w-full max-h-150 min-h-[80vh]">
             {isPurchased && (
-                <div className="sticky top-28 w-1/4 max-h-96 overflow-y-auto border  bg-gray-100 rounded-xl">
+                <div className="sticky top-28 w-1/4 h-fit overflow-y-auto border  bg-gray-100 rounded-xl">
                     <CourseNavigation
                         sections={course?.sections || []}
                         onSectionSelect={handleSectionSelect}
-                        
                     />
                 </div>
             )}
             <div className="w-3/4 pl-8 max-h-120 overflow-y-auto overflow-x-hidden">
-                {/* <span className="text-2xl">
-                    courseId: <span className="text-xl">{course_id}</span>
-                </span> */}
-
                 {isPurchased === null ? (
                     <p className="mt-4 text-gray-500">
                         Checking purchase status...

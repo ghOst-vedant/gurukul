@@ -87,7 +87,7 @@ const Register = () => {
                                 />
                                 <div className="w-10 h-4 bg-gray-200 rounded-full shadow-inner"></div>
                                 <div
-                                    className={`dot absolute w-6 h-6 bg-blue-500 rounded-full shadow -left-1 -top-1 transition ${
+                                    className={`dot absolute w-6 h-6 bg-blue rounded-full shadow -left-1 -top-1 transition ${
                                         role === "TEACHER"
                                             ? "transform translate-x-full"
                                             : ""

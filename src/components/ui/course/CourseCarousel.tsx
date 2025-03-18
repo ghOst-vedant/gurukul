@@ -37,7 +37,7 @@ const CourseCarousel = ({ courses }: carouselProps) => {
                         transitionDuration: "500ms",
                     }}
                 >
-                    {courses.map((course: any, key: number) => (
+                    {courses?.map((course: any, key: number) => (
                         <Link
                             href={`/categories/${course.category
                                 .split(" ")

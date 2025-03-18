@@ -34,6 +34,7 @@ const DesktopNavbar = () => {
     const handleLogout = async () => {
         await logout()
         setSession(null)
+        setUSer(null)
         toast.success("Logged out successfully")
         router.push("/")
     }
