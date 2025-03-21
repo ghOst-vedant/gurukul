@@ -37,3 +37,26 @@ export const checkTest = async (sectionId: string, studentId: string) => {
         throw new Error("Failed to check test")
     }
 }
+
+export const submitAssignment = async (
+    studentId: string,
+    courseId: string,
+    sectionId: string,
+    answer: string
+) => {
+    try {
+        const data = await db.studentAssignments.create({
+            data: {
+                studentId,
+                courseId,
+                sectionId,
+                answer,
+            },
+        })
+
+        console.log("Assignment successfully submitted!", data)
+    } catch (error) {
+        console.error("Error submitting assignment:", error)
+        throw new Error("Failed to submit assignment")
+    }
+}

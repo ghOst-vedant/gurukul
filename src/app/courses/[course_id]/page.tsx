@@ -19,7 +19,11 @@ import { VideoComponent } from "@/components/ui/VideoComponent"
 import { Test } from "@/app/addnewcourse/page"
 import Link from "next/link"
 import { UserAtom } from "@/recoil/Atoms/UserAtom"
-import { checkTest, submitAnswers } from "@/actions/assessment"
+import {
+    checkTest,
+    submitAnswers,
+    submitAssignment,
+} from "@/actions/assessment"
 import toast from "react-hot-toast"
 import { uploadFileToAWS } from "@/lib/awsUtil"
 import { IoCloudUploadOutline } from "react-icons/io5"
@@ -207,14 +211,24 @@ const Page = () => {
         }
     }, [selectedSection])
     const [assignmentUrl, setAssignmentUrl] = useState<String | null>("")
+    console.log(selectedSection)
+
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const selectedFile = e.target.files[0]
             try {
                 console.log(selectedFile)
                 const assignment = await uploadFileToAWS(selectedFile)
-                setAssignmentUrl(assignment)
-                toast.success("Assignment uploaded successfully!")
+                if (assignment) {
+                    setAssignmentUrl(assignment)
+                    await submitAssignment(
+                        user.id as string,
+                        course_id as string,
+                        selectedSection as string,
+                        assignment
+                    )
+                    toast.success("Assignment uploaded successfully!")
+                }
             } catch (error) {
                 console.error("Error uploading the image:", error)
             }
@@ -459,7 +473,7 @@ const Page = () => {
                                         className="font-medium text-lg bg-white text-blue cursor-pointer rounded-lg h-40 flex  gap-2 items-center justify-center border-black border"
                                     >
                                         <span>
-                                            Upload Your Assignment here.....
+                                            Upload Your Assignment here.
                                         </span>
                                         <IoCloudUploadOutline className="text-5xl" />
                                     </label>
