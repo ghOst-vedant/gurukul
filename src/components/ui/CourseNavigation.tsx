@@ -21,7 +21,6 @@ const CourseNavigation: React.FC<CourseNavigationProps> = ({
     onSectionSelect,
 }) => {
     const [expandedSection, setExpandedSection] = useState<string | null>(null)
-    console.log(sections)
 
     return (
         <div className="p-4 w-full">

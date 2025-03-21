@@ -146,6 +146,17 @@ model Course {
     sections               Json?
 }
 
+model StudentAssignments {
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    studentId    String
+    assignmentId String
+    sectionId    String
+    answer       String
+    marks        Int?
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+}
+
 model StudentAnswer {
     id         String   @id @default(auto()) @map("_id") @db.ObjectId
     studentId  String

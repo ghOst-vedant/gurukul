@@ -46,7 +46,6 @@ const CoursePurchaseCard = ({ course }: CoursePurchaseCardProps) => {
     }, [])
     const handlePayment = async () => {
         if (!razorpayLoaded) return alert("Payment gateway not loaded yet")
-
         const { success, order } = await purchaseCourse(
             course.id as string,
             course?.price
