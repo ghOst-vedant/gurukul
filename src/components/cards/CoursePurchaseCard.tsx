@@ -32,6 +32,7 @@ const CoursePurchaseCard = ({ course }: CoursePurchaseCardProps) => {
             checkPurchaseStatus()
         }
     }, [course?.id])
+    console.log(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID)
 
     useEffect(() => {
         const loadRazorpay = () => {
@@ -53,7 +54,8 @@ const CoursePurchaseCard = ({ course }: CoursePurchaseCardProps) => {
         if (!success || !order) return alert("Failed to initiate payment")
 
         const options = {
-            key: process.env.RAZORPAY_KEY_ID,
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+            key_secret: process.env.NEXT_PUBLIC_RAZORPAY_KEY_SECRET,
             amount: order.amount,
             currency: "INR",
             name: course.title,

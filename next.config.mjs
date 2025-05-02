@@ -4,6 +4,7 @@ const nextConfig = {
         domains: [
             "res.cloudinary.com",
             "gurukul-webapp.s3.ap-south-1.amazonaws.com",
+            "lh3.googleusercontent.com",
         ],
     },
 }
