@@ -201,15 +201,17 @@ const Home = () => {
         {/* Large screen testimonials */}
         <div className="hidden sm:flex">
           <div className="w-full flex justify-center gap-10">
-            {testimonials?.map((testimonial: any) => (
-              <TestimonialCard
-                key={testimonial?.name} // unique key here
-                name={testimonial.name}
-                image=""
-                role={testimonial.role}
-                testimonial={testimonial.testimonial}
-              />
-            ))}
+            <Marquee pauseOnHover className="[--duration:20s]">
+              {testimonials?.map((testimonial: any) => (
+                <TestimonialCard
+                  key={testimonial?.name}
+                  name={testimonial.name}
+                  image=""
+                  role={testimonial.role}
+                  testimonial={testimonial.testimonial}
+                />
+              ))}
+            </Marquee>
           </div>
         </div>
       </div>
